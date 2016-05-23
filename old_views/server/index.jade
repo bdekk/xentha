@@ -1,0 +1,21 @@
+extends ./layout.jade
+
+block scripts
+  script.
+    var con = new Connection({url: 'http://localhost', port: 3000}, function onConnected() {
+    console.log('connected to server...');
+    });
+  script.
+    var createRoom = function(field_id) {
+      var element = (field_id) ? document.getElementById(field_id) : 'room_name';
+      var room = con.createRoom(element.value);
+    }
+block content
+  .container
+    .jumbotron(class='text-center')
+        h1 Welcome to Xentha
+        p Gaming with friends!
+        div(class='input-group')
+          input(type='text' class='form-control' id='room_name' placeholder='enter room  name...')
+          span(class='input-group-btn')
+            button(type='button' class='btn btn-secondary btn-success' onclick="createRoom('room_name');") create Room.
