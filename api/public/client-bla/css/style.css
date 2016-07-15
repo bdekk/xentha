@@ -1,0 +1,30 @@
+/*body {
+  background-color: #3a7bd5;
+  background-size: 100% auto;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1, h2, h3, p, pre, span {
+  color: #fff;
+}
+
+.component-padding {
+  padding: 45px 15px 15px;
+}
+
+.input-padding {
+  padding-bottom: 15px;
+}
+
+.component-block-margin {
+  margin-bottom: 15px;
+}*/
+
+#screen {
+    position: relative;
+}
+
+#screen input {
+    position: absolute;
+    z-index: 2;
+}

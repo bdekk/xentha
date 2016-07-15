@@ -4,7 +4,7 @@ var models = require("./models");
 //http server with sockets.
 //var ioserver = require('./ioserver');
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var io = require('socket.io')(server, {'pingInterval': 45000});
 
 // io.sockets.on('connection', function ( socket ) {
 //   console.log('client connected ', socket.id);

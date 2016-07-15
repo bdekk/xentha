@@ -16,8 +16,9 @@ methods.join = function(iosockets, socket, data) {
         // var user = _.where(users, {"id": data.player_id});
         if(user) {
           socket.join( rawRoom.roomCode ); // use same id as the api room id.
+          socket.emit('roomJoined', {room_code: rawRoom.roomCode, player: user}); //send the joining player that he has joined.
           console.log({room_code: rawRoom.roomCode, player: user});
-          socket.broadcast.to( rawRoom.roomCode ).emit('playerJoined', {room_code: rawRoom.roomCode, player: user});
+          socket.broadcast.to( rawRoom.roomCode ).emit('playerJoined', {room_code: rawRoom.roomCode, player: user}); // send others that a player joien.
         } else {
           socket.emit('error', {error: "User could not be found in the room data of the database."});
         }

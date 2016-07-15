@@ -1,0 +1,38 @@
+body {
+  background-color: #3a7bd5;
+  background-size: 100% auto;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1, h2, h3, p, pre, span {
+  color: #fff;
+}
+
+.component-padding {
+  padding: 45px 15px 15px;
+}
+
+.input-padding {
+  padding-bottom: 15px;
+}
+
+.component-block-margin {
+  margin-bottom: 15px;
+}
+
+#preform {
+  -webkit-transition-duration: 0.3s;
+  -moz-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -o-transition-duration: 0.3s;
+
+  max-height: 0px; /* approximate max height */
+}
+
+#preform.slide-in {
+  max-height: 100%;
+}
+
+.margin-top {
+  margin-top: 0.5em;
+}
