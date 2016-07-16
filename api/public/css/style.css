@@ -1,0 +1,89 @@
+.navbar-brand img {
+  height: 28px;
+  width: 28px;
+}
+
+.navbar {
+  padding-top: 5em;
+}
+
+body {
+  background: #FF6F00;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.btn-orange {
+  color: #fff;
+  background-color: #DA6F00;
+  border-color: #FFF
+}
+
+.btn-orange:hover {
+  color: #fff;
+  background-color: #FF6F00;
+  border-color: #FFF
+}
+
+li > a {
+  color: #ccc
+}
+
+.nav > li > a:focus,
+.nav > li > a:hover
+{
+  background-color: transparent;
+  color: #fff;
+  border-bottom: 1px solid #fff;
+  padding-bottom: 10px;
+  transition: all .1s ease-out;
+}
+
+
+
+.nav > li:hover {
+  background-color: transparent;
+}
+
+.nav > li > a:active {
+  color: #FFF;
+}
+
+.content {
+  /*background: #eee;*/
+  padding-top: 5em;
+  color: #fff;
+  padding-bottom: 5em;
+}
+
+.content .center-content {
+    text-align: center;
+    text-shadow: 0 1px 0 rgba(0,0,0,.1);
+}
+
+h2 {
+  font-weight: lighter;
+  font-size: 24px;
+  color: #FFFFFF;
+  line-height: 50px;
+  margin-top: 52px;
+}
+
+h3 {
+  font-weight: lighter;
+  font-size: 24px;
+  color: #FFFFFF;
+  line-height: 50px;
+  margin-top: 52px;
+}
+
+p {
+  font-weight: lighter;
+  font-size: 18px;
+  color: #ccc;
+}
+
+footer {
+  border-top: 2px solid #fff;
+  background-color: ##262F36;
+  padding: 1em;
+}
