@@ -25,6 +25,12 @@ module.exports = function(io) {
 
     // GENERAL COMMANDS
 
+    // ping command.
+    socket.on('ping', function(data) {
+        socket.emit('pong', new Date());
+    });
+
+
 // player cmmand : join room (do not also create) (duplicate join)
     socket.on('joinRoom', function(data) {
       console.log('join', data);
@@ -41,17 +47,19 @@ module.exports = function(io) {
                 roomdata.set(socket, "score", 0);
                 roomdata.set(socket, "state", 0);
                 roomdata.set(socket, "roomCode", room.roomCode);
+                roomdata.set(socket, "host", socket.id);
               }
 
               var players = roomdata.get(socket, "players");
               var state = roomdata.get(socket, "state");
               var score = roomdata.get(socket, "score");
               var roomCode = roomdata.get(socket, "roomCode");
+              var host = roomdata.get(socket, "host");
 
               if(data.type == 'game') {
                 roomdata.set(socket, "gameSocketId", socket.id);
               } else {
-                var player = {"id": socket.id, "name": data.name, "color": randomColor()};
+                var player = {"id": socket.id, "name": data.name, "color": randomColor(), "host": host == socket.id};
                 players.push(player);
                 roomdata.set(socket, "players", players);
                 socket.broadcast.to( room.roomCode ).emit('playerJoined', {roomCode: room.roomCode, player: player}); // send others that a player joien.
@@ -145,31 +153,114 @@ module.exports = function(io) {
       // leave(data);
     });
 
-    socket.on('disconnect', function(data) {
-      // leave(data);
+    // send by the game to one player
+    socket.on('game.score', function(data) {
+      io.sockets.connected[data.id].emit('game.score', {score: data.score});
+    });
+
+    // send by the game to players
+    socket.on('game.die', function(data) {
+      io.sockets.connected[data.id].emit('game.die', {die: true});
+    });
+
+    // send by the game to players
+    socket.on('game.end', function(data) {
+      var roomCode = roomdata.get(socket, "roomCode");
+      socket.broadcast.to(roomCode).emit('game.end', {
+        time: data.time,
+        players: data.players,
+        score: data.score
+      });
+    });
+
+    // send custom event to player(s).
+    socket.on('game.send', function(obj) {
+      var roomCode = roomdata.get(socket, "roomCode");
+      if(obj.event && obj.data && obj.player) {
+        io.sockets.connected[obj.player].emit(obj.event, obj.data);
+      } else if(obj.event && obj.data) {
+        socket.broadcast.to(roomCode).emit(obj.event, obj.data);
+      } else {
+        console.log('could not send custom even to player.');
+      }
+    });
+
+    // send custom event to game.
+    socket.on('player.send', function(obj) {
+      var gameSocketId = roomdata.get(socket, "gameSocketId");
+      if(gameSocketId && io.sockets.connected[gameSocketId]!=null) {
+        if(obj.event && obj.data) {
+          io.sockets.connected[gameSocketId].emit(obj.event, obj.data);
+        } else {
+          console.log('could not send custom even to player.');
+        }
+      }
+    });
+
+    // send by the game to players
+    socket.on('game.start', function(data) {
+      var roomCode = roomdata.get(socket, "roomCode");
+      socket.broadcast.to(roomCode).emit('game.start', {
+        players: data.players
+      });
+    });
+
+    socket.on('player.restart', function(data) {
+      //send arrow up game.
+      var roomCode = roomdata.get(socket, "roomCode");
+      var gameSocketId = roomdata.get(socket, "gameSocketId");
+      if(gameSocketId && io.sockets.connected[gameSocketId]!=null) {
+        io.sockets.connected[gameSocketId].emit('player.restart', {player: socket.id, restart: true});
+      } else {
+        // socket.broadcast.to(roomCode).emit('playerMoveLeft', {player: socket.id});
+          socket.broadcast.to(roomCode).emit('game.error', {message: "Please open the game / lobby."});
+      }
     })
 
-    var leave = function(data) {
-      // io_room_controller.leave(io.sockets, socket, data);
-      var players = roomdata.get(socket, "players");
+    socket.on('disconnect', function(data) {
       var roomCode = roomdata.get(socket, "roomCode");
-      index = _.findIndex(players, function(player) { return player.id == socket.id });
-      if(index != -1) {
-        socket.broadcast.to(roomCode).emit('playerLeft', {player: player});
-        var newPlayers = players.slice(index);
-        roomdata.set(socket, "players", newPlayers);
+      var gameSocketId = roomdata.get(socket, "gameSocketId");
+      var players = roomdata.get(socket, "players");
+
+      if(gameSocketId && gameSocketId == socket.id) {
+        socket.broadcast.to(roomCode).emit('game.error', {message: "Please open the game / lobby."});
+      } else {
+        index = _.findIndex(players, function(player) { return player.id == socket.id });
+        if(index != -1) {
+          socket.broadcast.to(roomCode).emit('playerLeft', {player: players[index]});
+          var newPlayers = players.slice(index);
+          // our leaving player was the host :(
+          if(players[index].host && newPlayers.length > 0) {
+            newPlayers[0].host = true;
+          }
+          roomdata.set(socket, "players", newPlayers);
+        }
       }
       socket.emit('roomLeft', {success: true});
-      roomdata.leaveRoom(socket);
-      //send leave to game.
-    }
+      // roomdata.leaveRoom(socket); // authomatisch bij disconnect.
+    })
 
-    socket.on('changeState', function(data) {
-      // io_room_controller.changeState(io.sockets, socket, data);
-
-
-      //send change state. to game.
-    });
+    // var leave = function(data) {
+    //   // io_room_controller.leave(io.sockets, socket, data);
+    //   var players = roomdata.get(socket, "players");
+    //   var roomCode = roomdata.get(socket, "roomCode");
+    //   index = _.findIndex(players, function(player) { return player.id == socket.id });
+    //   if(index != -1) {
+    //     socket.broadcast.to(roomCode).emit('playerLeft', {player: player});
+    //     var newPlayers = players.slice(index);
+    //     roomdata.set(socket, "players", newPlayers);
+    //   }
+    //   socket.emit('roomLeft', {success: true});
+    //   roomdata.leaveRoom(socket);
+    //   //send leave to game.
+    // }
+    //
+    // socket.on('changeState', function(data) {
+    //   // io_room_controller.changeState(io.sockets, socket, data);
+    //
+    //
+    //   //send change state. to game.
+    // });
 
     // CLIENT COMMANDS
     // socket.on('player.input', function(data) {
@@ -186,7 +277,7 @@ module.exports = function(io) {
           io.sockets.connected[gameSocketId].emit('player.input', {player: socket.id, input: data});
         } else {
           // socket.broadcast.to(roomCode).emit('playerMoveLeft', {player: socket.id});
-            socket.broadcast.to(roomCode).emit('error', {message: "Please open the game / lobby."});
+            socket.broadcast.to(roomCode).emit('game.error', {message: "Please open the game / lobby."});
         }
     });
 

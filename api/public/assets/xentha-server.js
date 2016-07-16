@@ -23,6 +23,9 @@ var XENTHA = {
       showHowTo:!0,
       sound:!0
     }
+  },
+  layouts: {
+    CONTROLLER: 'controller'
   }
 };
 
@@ -164,9 +167,51 @@ XENTHA.connect = function(url) {
   //   XENTHA.playerMoveDown(a);
   // });
 
+  // CONVENIENCE METHOD.
+
+  // {data: , player (optional): , event: .. }
+  XENTHA.send = function(obj) {
+    if(!obj.event || !obj.data) return;
+    XENTHA.socket.emit('game.send', obj);
+  }
+
+    // NOT USED YET.
+  XENTHA.die = function(data) {
+      // XENTHA.socket.emit('game.die', {id: data.id});
+      XENTHA.send({event: 'game.die', player: data.id, data: {die: true}});
+  }
+
+// {id: data.id, score: data.score}
+  XENTHA.score = function(data) {
+      // XENTHA.socket.emit('game.score', data);
+      XENTHA.send({event: 'game.score', player: data.id, data: {score: data.score}});
+  }
+
+  // NOT USED YET.
+// {players: data.players, time: data.time}
+  XENTHA.end = function(data) {
+      // XENTHA.socket.emit('game.end', data);
+      XENTHA.send({event: 'game.end', data: {players: data.players, time: data.time}});
+  }
+
+    // NOT USED YET.
+  XENTHA.start = function(data) {
+    XENTHA.socket.emit('game.start', {players: data.players});
+  }
+
+    // NOT USED YET.
+  XENTHA.onPlayerRestart = function(data) {};
+  XENTHA.socket.on('player.restart', function(data) {
+    XENTHA.onPlayerRestart(data);
+  });
+
   // set player layout (type: button, input, id: .. position: x, y, width, height)
   XENTHA.setLayout = function(data) {
     XENTHA.socket.emit('game.layout', data);
+  }
+
+  XENTHA.addLayout = function(data) {
+    XENTHA.send(data);
   }
 
 

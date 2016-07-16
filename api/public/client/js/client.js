@@ -1,4 +1,15 @@
+
+XENTHA.callbacks = [
+  {'game.end': 'onGameEnd'},
+  {'game.start': 'onGameStart'},
+  {'game.restart': 'onGameRestart'}
+];
+
 XENTHA.connect();
+
+// XENTHA.onGameEnd = function(bla) {
+//
+// }
 
 var createRoom = function() {
   var roomName = document.getElementById('roomName').value;
@@ -22,6 +33,7 @@ var joinRoom = function() {
 
 XENTHA.roomCreated = function(data) {
   console.log(data);
+  document.getElementById('roomCreatedText').innerHTML = 'Go to xentha.com and enter roomcode: <strong>' + data.roomCode + '</strong>';
     // var name = document.getElementById('name').value;
     // if(name) {
     //   XENTHA.socket.emit('joinRoom', {roomCode: data.roomCode, name: name});
@@ -39,6 +51,30 @@ XENTHA.roomJoined = function(data) {
 };
 
 XENTHA.buildLayout = function(layout) {
+  for (var i = stage.children.length - 1; i >= 0; i--) {	stage.removeChild(stage.children[i]);};
+  if(layout == 'controller') {
+    buildControllerLayout();
+  } else {
+    for(var i =0; i < layout.length; i++) {
+      if(layout[i].type == 'button') {
+        stage.addChild(createButton(layout[i].id, layout[i].x, layout[i].y,layout[i].width,layout[i].height,'button-a.png',  {
+          mousedown: function() {
+            XENTHA.input({id: this.XENTHA_ID, pressed: true});
+          },
+          mouseup: function() {
+              XENTHA.input({id: this.XENTHA_ID, pressed: false});
+          }
+
+        }));
+      } else if(layout[i].type == 'input') {
+
+      }
+    }
+  }
+}
+
+XENTHA.addLayout = function(layout) {
+  console.log(layout);
   for(var i =0; i < layout.length; i++) {
     if(layout[i].type == 'button') {
       stage.addChild(createButton(layout[i].id, layout[i].x, layout[i].y,layout[i].width,layout[i].height,'button-a.png',  {
@@ -51,7 +87,7 @@ XENTHA.buildLayout = function(layout) {
 
       }));
     } else if(layout[i].type == 'input') {
-
+      
     }
   }
 }
@@ -69,25 +105,7 @@ requestAnimationFrame( animate );
 
 
 // add it to the stage
-stage.addChild(createButton(0, window.innerWidth - 250, window.innerHeight - 100,80,80, 'button-a.png', {
-  mousedown: function() {
-    XENTHA.buttonClick();
-  },
 
-  mousemove: function() {
-
-  },
-
-  mouseup: function() {
-
-  }
-}));
-stage.addChild(createButton(1, window.innerWidth - 150,window.innerHeight - 100,80,80, 'button-b.png'));
-
-stage.addChild(createButton(2, 70,window.innerHeight - 150,50,50, 'button-up.png'));
-stage.addChild(createButton(3, 70,window.innerHeight - 50,50,50, 'button-down.png'));
-stage.addChild(createButton(4, 20,window.innerHeight - 100,50,50, 'button-left.png'));
-stage.addChild(createButton(5, 120,window.innerHeight - 100,50,50, 'button-right.png'));
 
 if(controller && form) {
   if(!XENTHA.roomCode) {
@@ -105,6 +123,89 @@ if(controller && form) {
 
 
   // controller.style.display = 'inline';
+
+function buildControllerLayout() {
+  stage.addChild(createButton('a', window.innerWidth - 250, window.innerHeight - 100,80,80, 'button-a.png', {
+    mousedown: function() {
+      console.log(this.XENTHA_ID);
+      XENTHA.input({id: this.XENTHA_ID, pressed: true});
+    },
+
+    mousemove: function() {
+
+    },
+
+    mouseup: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: false});
+    }
+  }));
+  stage.addChild(createButton('b', window.innerWidth - 150,window.innerHeight - 100,80,80, 'button-b.png', {
+    mousedown: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: true});
+    },
+
+    mousemove: function() {
+
+    },
+
+    mouseup: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: false});
+    }
+  }));
+
+stage.addChild(createButton('up', 70,window.innerHeight - 150,50,50, 'button-up.png', {
+    mousedown: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: true});
+    },
+
+    mousemove: function() {
+
+    },
+
+    mouseup: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: false});
+    }
+  }));
+  stage.addChild(createButton('down', 70,window.innerHeight - 50,50,50, 'button-down.png', {
+    mousedown: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: true});
+    },
+
+    mousemove: function() {
+
+    },
+
+    mouseup: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: false});
+    }
+  }));
+  stage.addChild(createButton('left', 20,window.innerHeight - 100,50,50, 'button-left.png', {
+    mousedown: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: true});
+    },
+
+    mousemove: function() {
+
+    },
+
+    mouseup: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: false});
+    }
+  }));
+  stage.addChild(createButton('right', 120,window.innerHeight - 100,50,50, 'button-right.png', {
+    mousedown: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: true});
+    },
+
+    mousemove: function() {
+
+    },
+
+    mouseup: function() {
+      XENTHA.input({id: this.XENTHA_ID, pressed: false});
+    }
+  }));
+}
 
 function animate() {
 
@@ -129,8 +230,9 @@ function createButton(id, x,y,width,height,image, events) {
   });
 
   button.mousedown = events.mousedown;
-  button.touchstart = events.touchstart;
+  button.touchstart = events.mousedown;
   button.mouseup = events.mouseup;
+  button.touchend = events.touchend;
   button.mousemove = events.mousemove;
 
   // move the sprite to its designated position

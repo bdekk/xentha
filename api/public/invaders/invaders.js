@@ -29,6 +29,8 @@ var firingTimer = 0;
 var stateText;
 var livingEnemies = [];
 
+var state = 0;
+
 function create() {
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -115,32 +117,74 @@ XENTHA.connect();
 XENTHA.roomJoined = function(data) {
 
   for(var i = 0; i < data.players.length; i++) {
+
+      // set start button if host.
+      if(data.players[i].host) {
+        XENTHA.send({
+          player: data.players[i].id,
+          event: 'game.layout.add',
+          data: {
+            layout: [{
+                type: 'button',
+                width: 100,
+                height: 100,
+                x: 100,
+                y: 100,
+                id: 'start'
+            }]
+          }
+        })
+      }
+
       data.players[i] = addSpriteToData(data.players[i]);
   }
   players = data.players;
 
-  var layout = [{
-      type: 'button',
-      id: 'attack',
-      x: 100,
-      y: 100,
-      width: 100,
-      height: 100
-  }, {
-      type: 'button',
-      id: 'stop',
-      x: 200,
-      y: 100,
-      width: 100,
-      height: 100
-  }];
+  // var layout = [{
+  //     type: 'button',
+  //     id: 'attack',
+  //     x: 100,
+  //     y: 100,
+  //     width: 100,
+  //     height: 100,
+  //     img: 'a'
+  // }, {
+  //     type: 'button',
+  //     id: 'stop',
+  //     x: 200,
+  //     y: 100,
+  //     width: 100,
+  //     height: 100,
+  //     img: 'b'
+  // }, {
+  //     type: 'button',
+  //     id: 'stop',
+  //     x: 200,
+  //     y: 100,
+  //     width: 100,
+  //     height: 100,
+  //     img: 'button-left'
+  // }, {
+  //     type: 'button',
+  //     id: 'stop',
+  //     x: 200,
+  //     y: 100,
+  //     width: 100,
+  //     height: 100,
+  //     img: 'button-down'
+  // }, ];
 
-  XENTHA.setLayout(layout);
+  // XENTHA.setLayout(XENTHA.layouts.CONTROLLER);
 }
+
+// XENTHA.events = [{
+//   ''
+// }];
 
 XENTHA.playerJoined = function(data) {
   var player = addSpriteToData(data);
   players.push(player);
+  XENTHA.setLayout(XENTHA.layouts.CONTROLLER);
 }
 
 XENTHA.playerLeft = function(data) {
@@ -154,11 +198,16 @@ XENTHA.playerLeft = function(data) {
 }
 XENTHA.onInput = function(data) {
     console.log(data);
-    for(var i = 0; i < players.length; i++){
-      if(players[i].id == data.player) {
-        players[i].player.input.push({id: data.input.id, pressed: data.input.pressed});
-          // players[i]
-          // zet input van player op true.
+    if(data.input.id == 'start') {
+        XENTHA.setLayout(XENTHA.layouts.CONTROLLER);
+        state = 1;
+    } else {
+      for(var i = 0; i < players.length; i++){
+        if(players[i].id == data.player) {
+          players[i].player.input.push({id: data.input.id, pressed: data.input.pressed});
+            // players[i]
+            // zet input van player op true.
+        }
       }
     }
 }
@@ -209,44 +258,58 @@ function descend() {
 }
 
 function update() {
-
-    //  Scroll the background
-    starfield.tilePosition.y += 2;
-    for(var i = 0; i < players.length; i++) {
-      var player = players[i].player;
-      if (player.alive)
-      {
-          //  Reset the player, then check for movement keys
-          // player.body.velocity.setTo(0, 0);
-          //
-          // if (cursors.left.isDown)
-          // {
-          //     player.body.velocity.x = -200;
-          // }
-          // else if (cursors.right.isDown)
-          // {
-          //     player.body.velocity.x = 200;
-          // }
-          for(var j = 0; j < player.input.length; j++) {
-              if(player.input[j].id == 'attack' && player.input[j].pressed) {
+    if(state == 1) {
+      //  Scroll the background
+      starfield.tilePosition.y += 2;
+      for(var i = 0; i < players.length; i++) {
+        var player = players[i].player;
+        if (player.alive)
+        {
+            //  Reset the player, then check for movement keys
+            // player.body.velocity.setTo(0, 0);
+            //
+            // if (cursors.left.isDown)
+            // {
+            var input = player.input[0];
+            if(input) {
+              if(input.id == 'left') {
+                if(input.pressed == true) {
+                  player.body.velocity.x = -200;
+                } else {
+                  player.body.velocity.x = 0;
+                }
+              } else if(input.id == 'right') {
+                if(input.pressed == true) {
+                  player.body.velocity.x = 200;
+                } else {
+                  player.body.velocity.x = 0;
+                }
+              }
+              // }
+              // else if (cursors.right.isDown)
+              // {
+              //     player.body.velocity.x = 200;
+              // }
+              if(input.id == 'a' && input.pressed == true) {
                 fireBullet();
               }
+              player.input.shift();
+            }
+            //  Firing?
+            // if (fireButton.isDown)
+            // {
+                // fireBullet();
+            // }
 
-          }
-          //  Firing?
-          // if (fireButton.isDown)
-          // {
-              // fireBullet();
-          // }
+            if (game.time.now > firingTimer)
+            {
+                enemyFires();
+            }
 
-          if (game.time.now > firingTimer)
-          {
-              enemyFires();
-          }
-
-          //  Run collision
-          game.physics.arcade.overlap(bullets, aliens, collisionHandler, null, this);
-          game.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer, null, this);
+            //  Run collision
+            game.physics.arcade.overlap(bullets, aliens, collisionHandler, null, this);
+            game.physics.arcade.overlap(enemyBullets, player, enemyHitsPlayer, null, this);
+        }
       }
     }
 }
@@ -286,6 +349,11 @@ function collisionHandler (bullet, alien) {
 
         //the "click to restart" handler
         game.input.onTap.addOnce(restart,this);
+
+        for(var i = 0 ; i < players.length; i++) {
+          players[i].score = 100;
+        }
+        XENTHA.end({players: players, time: 0});
     }
 
 }
