@@ -130,10 +130,25 @@ XENTHA.roomJoined = function(data) {
                 height: 100,
                 x: 100,
                 y: 100,
+                text: 'Start!',
                 id: 'start'
             }]
           }
+        });
+
+        XENTHA.send({
+          event: 'game.layout.add',
+          data: {
+            layout: [{
+                type: 'text',
+                x: 200,
+                y: 200,
+                size: 20,
+                value: 'Ready to play some invaders?'
+            }]
+          }
         })
+
       }
 
       data.players[i] = addSpriteToData(data.players[i]);

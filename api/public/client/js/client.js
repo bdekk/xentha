@@ -57,7 +57,7 @@ XENTHA.buildLayout = function(layout) {
   } else {
     for(var i =0; i < layout.length; i++) {
       if(layout[i].type == 'button') {
-        stage.addChild(createButton(layout[i].id, layout[i].x, layout[i].y,layout[i].width,layout[i].height,'button-a.png',  {
+        stage.addChild(createButton(layout[i].id, layout[i].x, layout[i].y,layout[i].width,layout[i].height, 'button-a.png', null,  {
           mousedown: function() {
             XENTHA.input({id: this.XENTHA_ID, pressed: true});
           },
@@ -68,6 +68,15 @@ XENTHA.buildLayout = function(layout) {
         }));
       } else if(layout[i].type == 'input') {
 
+      } else if(layout[i].type == 'text') {
+        textOptions = {};
+        if(!layout[i].size) layout[i].size = 50;
+        textOptions.font = layout[i].size + "px Arial";
+        textOptions.fill = layout[i].color || "#fff";
+        var text = new PIXI.Text(layout[i].value, textOptions);
+        text.x = layout[i].x;
+        text.y = layout[i].y;
+        stage.addChild(text);
       }
     }
   }
@@ -77,7 +86,8 @@ XENTHA.addLayout = function(layout) {
   console.log(layout);
   for(var i =0; i < layout.length; i++) {
     if(layout[i].type == 'button') {
-      stage.addChild(createButton(layout[i].id, layout[i].x, layout[i].y,layout[i].width,layout[i].height,'button-a.png',  {
+      var image = layout[i].image || 'button-square.png';
+      stage.addChild(createButton(layout[i].id, layout[i].x, layout[i].y,layout[i].width,layout[i].height, image, layout[i].text,  {
         mousedown: function() {
           XENTHA.input({id: this.XENTHA_ID, pressed: true});
         },
@@ -87,7 +97,16 @@ XENTHA.addLayout = function(layout) {
 
       }));
     } else if(layout[i].type == 'input') {
-      
+
+    } else if(layout[i].type == 'text') {
+      textOptions = {};
+      if(!layout[i].size) layout[i].size = 50;
+      textOptions.font = layout[i].size + "px Arial";
+      textOptions.fill = layout[i].color || "#fff";
+      var text = new PIXI.Text(layout[i].value, textOptions);
+      text.x = layout[i].x;
+      text.y = layout[i].y;
+      stage.addChild(text);
     }
   }
 }
@@ -98,7 +117,7 @@ XENTHA.error = function(data) {
 
 var form = document.getElementById('preform');
 var controller = document.getElementById("controller");
-var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, { transparent: false });
+var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, { transparent: true });
 // var loader = new PIXI.AssetLoader([  "img/button-a.png",  "img/button-b.png",  "img/button-button-down.png", "img/button-up.png"]); loader.onComplete = setup;loader.load();
 var stage = new PIXI.Container();
 requestAnimationFrame( animate );
@@ -125,7 +144,7 @@ if(controller && form) {
   // controller.style.display = 'inline';
 
 function buildControllerLayout() {
-  stage.addChild(createButton('a', window.innerWidth - 250, window.innerHeight - 100,80,80, 'button-a.png', {
+  stage.addChild(createButton('a', window.innerWidth - 250, window.innerHeight - 100,80,80, 'button-a.png', null, {
     mousedown: function() {
       console.log(this.XENTHA_ID);
       XENTHA.input({id: this.XENTHA_ID, pressed: true});
@@ -139,7 +158,7 @@ function buildControllerLayout() {
       XENTHA.input({id: this.XENTHA_ID, pressed: false});
     }
   }));
-  stage.addChild(createButton('b', window.innerWidth - 150,window.innerHeight - 100,80,80, 'button-b.png', {
+  stage.addChild(createButton('b', window.innerWidth - 150,window.innerHeight - 100,80,80, 'button-b.png', null, {
     mousedown: function() {
       XENTHA.input({id: this.XENTHA_ID, pressed: true});
     },
@@ -153,7 +172,7 @@ function buildControllerLayout() {
     }
   }));
 
-stage.addChild(createButton('up', 70,window.innerHeight - 150,50,50, 'button-up.png', {
+stage.addChild(createButton('up', 70,window.innerHeight - 150,50,50, 'button-up.png', null, {
     mousedown: function() {
       XENTHA.input({id: this.XENTHA_ID, pressed: true});
     },
@@ -166,7 +185,7 @@ stage.addChild(createButton('up', 70,window.innerHeight - 150,50,50, 'button-up.
       XENTHA.input({id: this.XENTHA_ID, pressed: false});
     }
   }));
-  stage.addChild(createButton('down', 70,window.innerHeight - 50,50,50, 'button-down.png', {
+  stage.addChild(createButton('down', 70,window.innerHeight - 50,50,50, 'button-down.png', null, {
     mousedown: function() {
       XENTHA.input({id: this.XENTHA_ID, pressed: true});
     },
@@ -179,7 +198,7 @@ stage.addChild(createButton('up', 70,window.innerHeight - 150,50,50, 'button-up.
       XENTHA.input({id: this.XENTHA_ID, pressed: false});
     }
   }));
-  stage.addChild(createButton('left', 20,window.innerHeight - 100,50,50, 'button-left.png', {
+  stage.addChild(createButton('left', 20,window.innerHeight - 100,50,50, 'button-left.png', null, {
     mousedown: function() {
       XENTHA.input({id: this.XENTHA_ID, pressed: true});
     },
@@ -192,7 +211,7 @@ stage.addChild(createButton('up', 70,window.innerHeight - 150,50,50, 'button-up.
       XENTHA.input({id: this.XENTHA_ID, pressed: false});
     }
   }));
-  stage.addChild(createButton('right', 120,window.innerHeight - 100,50,50, 'button-right.png', {
+  stage.addChild(createButton('right', 120,window.innerHeight - 100,50,50, 'button-right.png', null, {
     mousedown: function() {
       XENTHA.input({id: this.XENTHA_ID, pressed: true});
     },
@@ -214,16 +233,29 @@ function animate() {
 }
 
 
-function createButton(id, x,y,width,height,image, events) {
+function createButton(id, x,y,width,height,image, text, events) {
   var events = events || {};
 	var texture = PIXI.Texture.fromImage("img/" + image);
   var button = new PIXI.Sprite(texture);
+
+  // if(text) {
+  //   button.addChild(new PIXI.Text(text, {font: '20px Arial', fill: '#fff'}));
+  // }
+
   button.interactive = true;
   button.buttonMode = true;
   button.XENTHA_ID = id;
 
-  // button.anchor.x = width/2;
-  // button.anchor.y = height/2;
+  if(text) {
+    var text = new PIXI.Text(text, {font: '20px Arial', fill: '#fff'});
+    text.x = button.width / 2;
+    text.y = button.height / 2;
+    button.addChild(text);
+  }
+
+  button.scale.x = width / button.width;
+  button.scale.y = height / button.height;
+
   button.texture.baseTexture.on('loaded', function(){
     button.scale.x = width / button.width;
     button.scale.y = height / button.height;
