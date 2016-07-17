@@ -13,6 +13,8 @@
   line-height: 2.5;
   overflow: hidden;
   opacity: 0;
+  z-index: 100;
+  background: #fff;
 }
 
 #xNotification.deactive {
@@ -33,6 +35,27 @@
   text-shadow:0px -1px 1px #fff,0px 1px 1px #fff;
 }
 
+#playerList {
+  width: auto;
+  background:linear-gradient(top, rgba(247,247,247,1) 0%,rgba(229,229,229,1) 100%);
+  line-height:0;
+  box-shadow:0px 3px 5px rgba(0,0,0,.2);
+  position: absolute;
+  z-index: 101;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  padding: 1em;
+  z-index: 100;
+  background: transparent;
+}
+
+#playerList {
+}
+
+#playerList li {
+  list-style-type: none;
+}
 
 @keyframes fadeout {
     from { opacity:1; }

@@ -2,22 +2,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
 
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
   <body>
-
     <div id="preform" class="container slide-in">
       <!-- <input value="ButtonClick" type="button" onclick="XENTHA.arrowLeft()"></input> -->
-      <h1 class="">Create / Join game</h1>
-        <p>Please fill in your name. Then create or join one of the game rooms to start your game!</p>
-      <div class="row">
-        <fieldset class="form-group component-block-margin col-sm-12">
+        <!-- <fieldset class="form-group component-block-margin col-sm-12">
           <input type="text" class="form-control" id="name" placeholder="Enter name...">
         </fieldset>
         <div class="col-lg-6 col-sm-12">
@@ -27,27 +20,25 @@
             </span>
             <input type="text" class="form-control" id="roomName" placeholder="Room name...">
           </div>
+        </div> -->
+        <div class="formWrapper">
+          <h1 class="">Create / Join game</h1>
+          <form id="joinForm">
+            <input type="text" class="xinput" name="roomCode" id="roomCode" placeholder="Enter roomcode.."><br>
+            <button type="button" class="mbtn orange" onclick="joinRoom()"><span>JOIN ROOM</span></button>
+          </form>
         </div>
-        <div class="col-lg-6 col-sm-12">
-          <div class="input-group">
-            <span class="input-group-btn">
-              <button class="btn btn-default" onclick="joinRoom()" type="button">Join Room</button>
-            </span>
-            <input type="text" class="form-control" id="roomCode" placeholder="Room code...">
-          </div>
-        </div>
+        <!-- <div class="input-group">
+          <span class="input-group-btn">
+            <button class="btn btn-default" onclick="joinRoom()" type="button">Join Room</button>
+          </span>
+          <input type="text" class="form-control" id="roomCode" placeholder="Room code...">
+        </div> -->
+      <div>
+        <h3 id="roomCreatedText"></h3>
       </div>
-      <div class="row">
-        <div class=" col-sm-12">
-          <h3 id="roomCreatedText"></h3>
-        </div>
-      </div>
-      <div class="row">
-        <div class=" col-sm-12">
-          <div class="alert alert-warning margin-top">
-            <span id="error"></span>
-          </div>
-        </div>
+      <div class="alert">
+        <span id="error"></span>
       </div>
     </div>
     <div id="controller"></div>

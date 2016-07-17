@@ -22,12 +22,11 @@ var createRoom = function() {
 }
 
 var joinRoom = function() {
-  var name = document.getElementById('name').value;
   var roomCode = document.getElementById('roomCode').value;
-  if(name && roomCode) {
-    XENTHA.socket.emit('joinRoom', {roomCode: roomCode, name: name});
+  if(roomCode) {
+    XENTHA.socket.emit('joinRoom', {roomCode: roomCode});
   } else {
-      document.getElementById('error').textContent = 'Please enter name and roomCode.';
+      document.getElementById('error').textContent = 'Please enter roomCode.';
   }
 }
 
@@ -252,9 +251,6 @@ function createButton(id, x,y,width,height,image, text, events) {
     text.y = button.height / 2;
     button.addChild(text);
   }
-
-  button.scale.x = width / button.width;
-  button.scale.y = height / button.height;
 
   button.texture.baseTexture.on('loaded', function(){
     button.scale.x = width / button.width;

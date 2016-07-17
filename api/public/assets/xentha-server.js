@@ -18,9 +18,11 @@ var XENTHA = {
     version:"0",
     host: "localhost",
     port:"3000",
+    standalone: true,
     ui:{
       showNotifications:!0,
       showHowTo:!0,
+      showPlayerList: true,
       sound:!0
     }
   },
@@ -31,13 +33,29 @@ var XENTHA = {
 
 
 var init = function() {
-  // document.body.innerHTML += '<div id="xNotification" class=""><p></p></div>';
-  //
-  // // to make sure that people can close this ;)
+  var canvas = document.getElementsByTagName('canvas')[0];
+  // if(canvas) {
+  //   var oldHTML = canvas.innerHTML;
+  //   var newHTML = '<div class="canvasWrapper"><div id="xNotification" class=""><p></p></div>' + oldHTML + '</div>';
+  //   canvas = newHTML;
+  // }
+  // document.body.innerHTML += '';
+  var xNote = document.createElement('div');
+  var text = document.createElement('p');
+  xNote.setAttribute('id', 'xNotification');
+  xNote.appendChild(text);
+  // '<div id="xNotification" class=""><p></p></div>'
+  document.body.insertBefore(xNote, document.body.firstChild);
+  // to make sure that people can close this ;)
   // var xNote = document.getElementById("xNotification");
-  // xNote.addEventListener('click', function() {
-  //  xNote.className = ' deactive';
-  // }, false);
+  xNote.addEventListener('click', function() {
+   xNote.className = ' deactive';
+  }, false);
+
+  // add player list
+  if(XENTHA.settings.ui.showPlayerList) {
+    XENTHA.createPlayerList([]);
+  }
 
   addCss('http://' + XENTHA.settings.host + ":" + XENTHA.settings.port + "/assets/xentha-server.css");
 }
@@ -64,8 +82,37 @@ XENTHA.showNotification = function(message, duration) {
   if(xNote) {
     xNote.getElementsByTagName("p")[0].innerHTML = message;
     xNote.className = 'active'
-    setTimeout(function(){ xNote.className = 'deactive'; }, duration);
+    setTimeout(function() {
+      xNote.className = 'deactive';
+    }, duration);
   }
+}
+
+XENTHA.createPlayerList = function(players) {
+  var ul = document.createElement('ul');
+  ul.setAttribute('id', 'playerList');
+  var list = XENTHA.setPlayerItems(ul, players);
+  document.body.insertBefore(list, document.body.firstChild);
+}
+
+XENTHA.setPlayerItems = function(parent, players) {
+  for(var i =0; i < players.length; i++) {
+    var li = document.createElement('li');
+    var name = (players[i].host) ? players[i].name + '*' : players[i].name;
+    li.innerHTML = name;
+    li.style.color = players[i].color;
+    parent.appendChild(li);
+  }
+  return parent;
+}
+
+XENTHA.setPlayerList = function(players) {
+  var playerList = document.getElementById('playerList');
+  // playerList.removeAll();
+  while (playerList.firstChild) {
+    playerList.removeChild(playerList.firstChild);
+  }
+  XENTHA.setPlayerItems(playerList, players);
 }
 
 // create / join room.
@@ -84,9 +131,11 @@ XENTHA.connect = function(url) {
   })
 
   XENTHA.socket.on('connect', function(data) {
-    XENTHA.showNotification('connected', 5000);
+    // XENTHA.showNotification('connected', 5000);
     XENTHA.vars.connected = 1;
-    if(XENTHA.vars.roomCode) {
+    if(XENTHA.settings.standalone) {
+      XENTHA.socket.emit('createRoom', {});
+    } else if(XENTHA.vars.roomCode) {
       XENTHA.socket.emit('joinRoom', {type: 'game', roomCode: XENTHA.vars.roomCode});
     }
   })
@@ -97,6 +146,7 @@ XENTHA.connect = function(url) {
       XENTHA.vars.connectedPlayers = data.players;
       XENTHA.vars.roomCode = data.roomCode;
       XENTHA.vars.state = data.state;
+      XENTHA.showNotification('Go to xentha.com and enter code ' + data.roomCode, 50000);
       XENTHA.roomJoined(data);
   });
 
@@ -112,6 +162,9 @@ XENTHA.connect = function(url) {
     XENTHA.vars.connectedPlayers = data.players;
     XENTHA.vars.roomCode = data.roomCode;
     XENTHA.vars.state = data.state;
+    if(XENTHA.settings.standalone) {
+      XENTHA.socket.emit('joinRoom', {type: 'game', roomCode: XENTHA.vars.roomCode});
+    }
     XENTHA.roomCreated(data);
   });
 
@@ -135,6 +188,11 @@ XENTHA.connect = function(url) {
   XENTHA.playerJoined = function(a) {};
   XENTHA.socket.on('player.joined', function(data) {
     XENTHA.vars.connectedPlayers.push(data.player);
+    if(XENTHA.settings.ui.showPlayerList) {
+      XENTHA.setPlayerList(XENTHA.vars.connectedPlayers);
+    }
+
+    XENTHA.showNotification(data.player.name + ' joined the game.', 3000);
     XENTHA.playerJoined(data);
   });
 
@@ -142,6 +200,7 @@ XENTHA.connect = function(url) {
   XENTHA.socket.on('player.left', function(data) {
     var index = XENTHA.vars.connectedPlayers.map(function(player) {return player.id; }).indexOf(data.player.id);
     XENTHA.vars.connectedPlayers.splice(index);
+    XENTHA.showNotification(data.player.name + ' left the game.', 3000);
     XENTHA.playerLeft(data);
   });
 

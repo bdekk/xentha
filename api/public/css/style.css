@@ -3,8 +3,16 @@
   width: 28px;
 }
 
-.navbar {
-  padding-top: 5em;
+@media only screen and (min-width: 767px) {
+  .navbar {
+    padding-top: 5em;
+
+  }
+}
+
+html,body {
+    margin: 0;
+    padding: 0;
 }
 
 body {
@@ -25,11 +33,12 @@ body {
 }
 
 li > a {
-  color: #ccc
+  color: #fff
 }
 
 .nav > li > a:focus,
-.nav > li > a:hover
+.nav > li > a:hover,
+.nav > li > a:active
 {
   background-color: transparent;
   color: #fff;
@@ -38,7 +47,19 @@ li > a {
   transition: all .1s ease-out;
 }
 
+.nav .open>a,
+.nav .open>a:focus,
+.nav .open>a:hover {
+  background-color: transparent;
+  border-bottom: none;
+  color: #fff;
+  transition: all .1s ease-out;
 
+}
+
+.navbar-toggle .icon-bar {
+  background: #fff;
+}
 
 .nav > li:hover {
   background-color: transparent;
@@ -53,6 +74,7 @@ li > a {
   padding-top: 5em;
   color: #fff;
   padding-bottom: 5em;
+  border-bottom: 1px solid #eee;
 }
 
 .content .center-content {
@@ -60,30 +82,76 @@ li > a {
     text-shadow: 0 1px 0 rgba(0,0,0,.1);
 }
 
-h2 {
-  font-weight: lighter;
-  font-size: 24px;
-  color: #FFFFFF;
+div.polaroid {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align: center;
+  position: relative;
+}
+
+div.polaroid .overlay {
+  display: none;
+}
+
+div.polaroid:hover .overlay {
+    position: absolute;
+    left: 0;
+    top:0;
+    width: 100%;
+    height: 100%;
+    background-color: #eee;
+    opacity: 0.5;
+    display: inline;
+}
+
+div.polaroid .overlay > span {
+  font-weight: 300;
+  font-size: 400%;
+  color: #FF6F00;
+  position: absolute;
+  bottom: 10;
+  right: 10;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-weight:300;
+  color:#FFF;
   line-height: 50px;
   margin-top: 52px;
 }
 
-h3 {
-  font-weight: lighter;
-  font-size: 24px;
-  color: #FFFFFF;
-  line-height: 50px;
-  margin-top: 52px;
+a{
+  color:#FFF;
+  -webkit-transition: border .1s ease-out;
+  -moz-transition:border .1s ease-out;
+  -o-transition:border .1s ease-out;
+  transition:border .1s ease-out
 }
 
-p {
+a:hover{
+  border-bottom-color:#fff
+}
+
+ul {
+  font-size:18px
+}
+
+a:hover{
+  color:#FFF;text-decoration:none
+}
+
+p{
+  font-size:18px
   font-weight: lighter;
   font-size: 18px;
-  color: #ccc;
+  color: #eee;
+}
+
+small {
+  color: #fff;
 }
 
 footer {
-  border-top: 2px solid #fff;
-  background-color: ##262F36;
+  /*background-color: #262F36;*/
   padding: 1em;
+  padding-bottom: 5em;
 }

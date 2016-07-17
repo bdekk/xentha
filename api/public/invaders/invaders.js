@@ -1,4 +1,4 @@
-var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
+var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
 
@@ -112,6 +112,7 @@ var addSpriteToData = function(data) {
   data.player.input = [];
   return data;
 };
+
 XENTHA.connect();
 
 XENTHA.roomJoined = function(data) {
@@ -197,9 +198,40 @@ XENTHA.roomJoined = function(data) {
 // }];
 
 XENTHA.playerJoined = function(data) {
-  var player = addSpriteToData(data);
+  console.log(data.player);
+  if(data.player.host) {
+    XENTHA.send({
+      player: data.player.id,
+      event: 'game.layout.add',
+      data: {
+        layout: [{
+            type: 'button',
+            width: 100,
+            height: 100,
+            x: 100,
+            y: 100,
+            image: 'start.png',
+            id: 'start'
+        }]
+      }
+    });
+  };
+
+  XENTHA.send({
+    event: 'game.layout.add',
+    data: {
+      layout: [{
+          type: 'text',
+          x: 200,
+          y: 200,
+          size: 20,
+          value: 'Connected!'
+      }]
+    }
+  });
+
+  var player = addSpriteToData(data.player);
   players.push(player);
-  XENTHA.setLayout(XENTHA.layouts.CONTROLLER);
 }
 
 XENTHA.playerLeft = function(data) {

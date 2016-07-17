@@ -2,7 +2,6 @@
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/slider.css">
 
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -20,7 +19,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">
-            <img alt="Brand" src="img/logo.png">
+            <img alt="Brand" src="img/logo-2.png">
           </a>
         </div>
 
@@ -28,7 +27,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-right">
             <li><a href="#">About</a></li>
-            <li><a href="games.html">Games</a></li>
+            <li><a href="#">Games</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Developer <span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -41,48 +40,37 @@
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-    <ul class="slider">
-        <li>
-            <h1>Invaders</h1>
-            <a class="btn btn-info" href="invaders" role="button"><strong>PLAY</strong></a>
-            <input type="radio" id="slide1" name="slide" checked>
-            <label for="slide1"></label>
-            <img src="img/invaders.png">
-        </li>
-        <li>
-            <input type="radio" id="slide2" name="slide">
-            <label for="slide2"></label>
-            <img src="http://wowslider.com/sliders/demo-5/data/images/sur.jpg">
-        </li>
-        <li>
-            <input type="radio" id="slide3" name="slide">
-            <label for="slide3"></label>
-            <img src="http://www.menucool.com/slider/prod/image-slider-5.jpg">
-        </li>
-        <li>
-            <input type="radio" id="slide4" name="slide">
-            <label for="slide4"></label>
-            <img src="http://www.menucool.com/slider/prod/image-slider-5.jpg">
-        </li>
-    </ul>
     <div class="container content">
-      <h3>Xentha</h3>
-      <p>Welcome to the new local gaming platform. Xentha tries to become an open source initiative to couch gaming. Look at our games section to find just the games you want to play right now.</p>
+      <h3>Games</h3>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="polaroid">
+            <img src="img/couch.jpg" alt="Norway" style="width:100%">
+          </div>
+        </div>
 
-      <p class="lead text-center">
-        <button type="button" class="btn btn-orange btn-outline-inverse btn-lg">Start exploring</button>
-      </p>
+        <div class="col-lg-4">
+          <div class="polaroid">
+            <div class="overlay">
+              <!-- <span class="glyphicon glyphicon-play" aria-hidden="true"></span> -->
+            </div>
+            <img src="img/couch.jpg" alt="Norway" style="width:100%">
+          </div>
+        </div>
 
+        <div class="col-lg-4">
+          <div class="polaroid">
 
-      <h3>Open Source</h3>
-      <p>We try to be as open as possible. All our code is on github. Next to that, we have a slack channel where developers are waiting for you to give you help in creating your own games.</p>
+            <div class="overlay"></div>
+            <img src="img/couch.jpg" alt="Norway" style="width:100%">
+          </div>
+        </div>
 
-      <h3>Developers wanted!</h3>
-      <p>Would you also like to develop a game? Or would you rather help us improve our API and support all those game developers out there? Feel free to browse through our developer documentation and API documentation.</p>
-      <div class="text-center">
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-orange btn-outline-inverse btn-lg">I want to develop <strong>GAMES</strong></button>
-          <button type="button" class="btn btn-orange btn-outline-inverse btn-lg">I want to help with the <strong>API</strong></button>
+        <div class="col-lg-4">
+          <div class="polaroid">
+            <div class="overlay"></div>
+            <img src="img/couch.jpg" alt="Norway" style="width:100%">
+          </div>
         </div>
       </div>
     </div>

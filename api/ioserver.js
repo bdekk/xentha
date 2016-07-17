@@ -34,7 +34,7 @@ module.exports = function(io) {
 // player cmmand : join room (do not also create) (duplicate join)
     socket.on('joinRoom', function(data) {
       console.log('join', data);
-      if((data.name || data.type == 'game') && data.roomCode) {
+      if(data.roomCode) {
       //  io_room_controller.join(io.sockets, socket, data);
         Room.findOne({where: {roomCode: data.roomCode}}).then(function(room) {
           if(room) {
@@ -47,7 +47,7 @@ module.exports = function(io) {
                 roomdata.set(socket, "score", 0);
                 roomdata.set(socket, "state", 0);
                 roomdata.set(socket, "roomCode", room.roomCode);
-                roomdata.set(socket, "host", socket.id);
+                roomdata.set(socket, "host", null);
               }
 
               var players = roomdata.get(socket, "players");
@@ -59,10 +59,16 @@ module.exports = function(io) {
               if(data.type == 'game') {
                 roomdata.set(socket, "gameSocketId", socket.id);
               } else {
-                var player = {"id": socket.id, "name": data.name, "color": randomColor(), "host": host == socket.id};
+                if(!host) {
+                  roomdata.set(socket, "host", socket.id);
+                  host = socket.id;
+                }
+                var name = data.name || 'player ' + players.length + 1; //if the player did not fill in a name, make one up.
+                var player = {"id": socket.id, "name": name, "color": randomColor(), "host": host == socket.id};
                 players.push(player);
                 roomdata.set(socket, "players", players);
-                socket.broadcast.to( room.roomCode ).emit('playerJoined', {roomCode: room.roomCode, player: player}); // send others that a player joien.
+                console.log(room.roomCode, player);
+                socket.broadcast.to( room.roomCode ).emit('player.joined', {roomCode: room.roomCode, player: player}); // send others that a player joien.
               }
               socket.emit('roomJoined', {roomCode: room.roomCode, players: players, player: player, state: state}); //send the joining player that he has joined.
               // console.log({room_code: rawRoom.roomCode, player: user});
@@ -126,27 +132,23 @@ module.exports = function(io) {
 
 // player command : create room (and join)
     socket.on('createRoom', function(data) {
-      if(data.name) {
-          Room.create({name: data.name}).then(function(room) {
-              // roomdata.joinRoom(socket, room.roomCode); // use same id as the api room id.
-              //
-              // console.log(roomdata.rooms);
-              // // // socket.join(data.roomCode);
-              // //
-              // // var player = {"id": socket.id, "name": data.name, "color": randomColor()};
-              // roomdata.set(socket, "players", []);
-              // roomdata.set(socket, "score", 0);
-              // roomdata.set(socket, "state", 0);
-              // roomdata.set(socket, "roomCode", room.roomCode);
-              // if(data.type == 'game') {
-              //   roomdata.set(socket, "gameSocketId", socket.id);
-              // }
+      Room.create({name: data.name}).then(function(room) {
+          // roomdata.joinRoom(socket, room.roomCode); // use same id as the api room id.
+          //
+          // console.log(roomdata.rooms);
+          // // // socket.join(data.roomCode);
+          // //
+          // // var player = {"id": socket.id, "name": data.name, "color": randomColor()};
+          // roomdata.set(socket, "players", []);
+          // roomdata.set(socket, "score", 0);
+          // roomdata.set(socket, "state", 0);
+          // roomdata.set(socket, "roomCode", room.roomCode);
+          // if(data.type == 'game') {
+          //   roomdata.set(socket, "gameSocketId", socket.id);
+          // }
 
-              socket.emit('roomCreated', {roomCode: room.roomCode}); //send the joining player that he has joined.
-          })
-      } else {
-        socket.emit("createRoomFailed", {message: "Supply the right arguments to create a room."});
-      }
+          socket.emit('roomCreated', {roomCode: room.roomCode}); //send the joining player that he has joined.
+      })
     });
 
     socket.on('leave', function(data) {
@@ -227,7 +229,7 @@ module.exports = function(io) {
       } else {
         index = _.findIndex(players, function(player) { return player.id == socket.id });
         if(index != -1) {
-          socket.broadcast.to(roomCode).emit('playerLeft', {player: players[index]});
+          socket.broadcast.to(roomCode).emit('player.left', {player: players[index]});
           var newPlayers = players.slice(index);
           // our leaving player was the host :(
           if(players[index].host && newPlayers.length > 0) {
