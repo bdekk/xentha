@@ -1,0 +1,18 @@
+{
+  "name": "client",
+  "version": "0.0.1",
+  "description": "Client for the Xentha gaming api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Bram Dekker",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-webserver": "^0.9.1"
+  },
+  "dependencies": {
+    "gulp-sass": "^2.3.2"
+  }
+}
