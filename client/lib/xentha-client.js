@@ -19,8 +19,8 @@ var XENTHA = {
   settings:{
     apiKey:"",
     version:"0",
-    host: "192.168.178.28",
-    port:"3000",
+    ws: "192.168.178.28:3000",
+    api: "192.168.178.28:3000/api",
     ui:{
       showNotifications:!0,
       sound:!0
@@ -35,7 +35,7 @@ var XENTHA = {
 // create / join room.
 XENTHA.connect = function(url) {
   // XENTHA.socket =;
-  XENTHA.socket = io.connect("http://" + XENTHA.settings.host+":"+XENTHA.settings.port);
+  XENTHA.socket = io.connect("http://" + XENTHA.settings.ws);
   XENTHA.callbacks = XENTHA.callbacks || [];
   // XENTHA.socket.on("*",function(event,data) {
   //   console.log(event);

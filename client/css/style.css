@@ -33,7 +33,7 @@ h1, h2, h3, p, pre, span {
   /*max-height: 100%;*/
 }
 
-#joinForm .xinput {
+.xinput {
   font-size:18px;
   padding:10px 10px 10px 5px;
   display:block;
@@ -43,13 +43,13 @@ h1, h2, h3, p, pre, span {
   background: transparent;
 }
 
-#joinForm .xinput:focus     {
+.xinput:focus     {
   outline:none;
   border-bottom:1px solid #fff;
   color: #fff;
 }
 
-#joinForm label {
+label {
     color: #fff;
 }
 
@@ -142,4 +142,35 @@ h1, h2, h3, p, pre, span {
 
 .mbtn.orange:hover, .mbtn.orange:focus {
   background-color: #d35400;
+}
+
+/** navigation bar **/
+ul.topnav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+ul.topnav li a:hover:not(.active) {
+  border-bottom: 1px solid #fff;
+}
+
+ul.topnav li a.active {background-color: #4CAF50;}
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px){
+    ul.topnav li.right,
+    ul.topnav li {float: none;}
 }

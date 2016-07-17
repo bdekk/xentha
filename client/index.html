@@ -8,32 +8,33 @@
   <script src="bower_components/jquery/dist/jquery.js"></script>
 
   <body>
-    <div id="preform" class="container slide-in">
-      <!-- <input value="ButtonClick" type="button" onclick="XENTHA.arrowLeft()"></input> -->
-        <!-- <fieldset class="form-group component-block-margin col-sm-12">
-          <input type="text" class="form-control" id="name" placeholder="Enter name...">
-        </fieldset>
-        <div class="col-lg-6 col-sm-12">
-          <div class="input-group">
-            <span class="input-group-btn">
-              <button class="btn btn-default" onclick="createRoom()" type="button">Create Room</button>
-            </span>
-            <input type="text" class="form-control" id="roomName" placeholder="Room name...">
-          </div>
-        </div> -->
-        <div class="formWrapper">
+    <div id="content">
+      <ul class="topnav">
+        <li class="right"><a href="#" onclick="showForm('registerForm')">Register</a></li>
+        <li class="right"><a href="#" onclick="showForm('loginForm')">Login</a></li>
+        <li class="right"><a href="#" onclick="showForm('joinForm')">Play</a></li>
+      </ul>
+      <div class="formWrapper">
+        <form id="joinForm" style="display: none;">
           <h1 class="">Create / Join game</h1>
-          <form id="joinForm">
-            <input type="text" class="xinput" name="roomCode" id="roomCode" placeholder="Enter roomcode.."><br>
-            <button type="button" class="mbtn orange" onclick="joinRoom()"><span>JOIN ROOM</span></button>
-          </form>
-        </div>
-        <!-- <div class="input-group">
-          <span class="input-group-btn">
-            <button class="btn btn-default" onclick="joinRoom()" type="button">Join Room</button>
-          </span>
-          <input type="text" class="form-control" id="roomCode" placeholder="Room code...">
-        </div> -->
+          <input type="text" class="xinput" name="roomCode" id="roomCode" placeholder="Enter roomcode.."><br>
+          <button type="button" class="mbtn orange" onclick="joinRoom()"><span>JOIN ROOM</span></button>
+        </form>
+        <form id="loginForm"  style="display: none;">
+          <h1 class="">Login</h1>
+          <input type="text" class="xinput" name="username" id="username" placeholder="Username"><br>
+          <input type="text" class="xinput" name="password" id="password" placeholder="Password"><br>
+          <button type="button" class="mbtn orange" onclick="login()"><span>LOGIN</span></button>
+        </form>
+        <form id="registerForm"  style="display: none;">
+          <h1 class="">Register</h1>
+          <input type="text" class="xinput" name="username" id="username" placeholder="Username"><br>
+          <input type="text" class="xinput" name="firstname" id="firstname" placeholder="Firstname"><br>
+          <input type="text" class="xinput" name="lastname" id="lastname" placeholder="Lastname"><br>
+          <input type="text" class="xinput" name="password" id="password" placeholder="Password"><br>
+          <button type="button" class="mbtn orange" onclick="register()"><span>REGISTER</span></button>
+        </form>
+      </div>
       <div>
         <h3 id="roomCreatedText"></h3>
       </div>
@@ -42,13 +43,14 @@
       </div>
     </div>
     <div id="controller"></div>
+
     <script src="bower_components/socket.io-client/socket.io.js"></script>
     <script src="lib/xentha-client.js"></script>
 
     <script src="bower_components/pixi.js/bin/pixi.js"></script>
     <script src="js/client.js"></script>
+    <script src="js/user.js"></script>
     <script>
     </script>
   </body>
-
 </html>

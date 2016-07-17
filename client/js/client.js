@@ -11,6 +11,25 @@ XENTHA.connect();
 //
 // }
 
+var showForm = function(form) {
+  var forms = document.getElementsByTagName('form');
+  for(var i =0; i  < forms.length; i++) {
+        forms[i].style.display = 'none';
+  }
+  document.getElementById(form).style.display = 'inline';
+}
+
+window.onload = function() {
+  showForm('joinForm');
+
+  var user = JSON.parse(localStorage.getItem('user'));
+  if(user) {
+      var el = document.createElement('h3');
+      el.innerHTML = 'Hello, ' + user.firstname + ' ' + user.lastname;
+      document.getElementById('content').appendChild(el);
+  }
+}
+
 var createRoom = function() {
   var roomName = document.getElementById('roomName').value;
   var name = document.getElementById('name').value;
@@ -114,7 +133,7 @@ XENTHA.error = function(data) {
     document.getElementById('error').textContent = data;
 }
 
-var form = document.getElementById('preform');
+var content = document.getElementById('content');
 var controller = document.getElementById("controller");
 var renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, { transparent: true });
 // var loader = new PIXI.AssetLoader([  "img/button-a.png",  "img/button-b.png",  "img/button-button-down.png", "img/button-up.png"]); loader.onComplete = setup;loader.load();
@@ -125,18 +144,18 @@ requestAnimationFrame( animate );
 // add it to the stage
 
 
-if(controller && form) {
+if(controller && content) {
   if(!XENTHA.roomCode) {
     controller.style.display = 'none';
   } else {
-    form.style.display = 'none';
+    content.style.display = 'none';
   }
   controller.appendChild(renderer.view);
   renderer.view.style.position = "absolute";
 	renderer.view.style.top = "0px";
 	renderer.view.style.left = "0px";
 } else {
-  console.error('Could not find element with id controller and preform.');
+  console.err('Could not find element with id controller and content.');
 }
 
 
