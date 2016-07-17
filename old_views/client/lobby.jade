@@ -1,0 +1,14 @@
+extends ./layout.jade
+
+block scripts
+block content
+  .container
+    .jumbotron(class='text-center')
+        h1 Lobby #{room.roomId}
+        p waiting for game to start ...
+    span connected players
+    ul(class='list-group')
+    each player in players
+        li(class='list-group-item')
+          h4(class='list-group-item-heading') #{player.username}
+          p #{player.firstname} #{player.lastname}

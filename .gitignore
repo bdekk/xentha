@@ -1,3 +1,2 @@
-api/node_modules/*
-api/old_views/*
-client/node_modules/*
+node_modules/*
+old_views/*
