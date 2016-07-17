@@ -1,2 +1,6 @@
-node_modules/*
-old_views/*
+api/node_modules/*
+client/node_modules/*
+site/node_modules/*
+
+client/bower_components/*
+site/bower_components/*
