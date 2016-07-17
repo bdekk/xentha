@@ -16,4 +16,8 @@ router.post('/', function(req, res, next) {
 	return user_controller.create(req, res, next);
 })
 
+router.post('/login', function(req, res, next) {
+	return user_controller.login(req, res, next);
+})
+
 module.exports = router
