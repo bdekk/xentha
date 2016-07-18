@@ -4,7 +4,8 @@ module.exports = function(sequelize, DataTypes) {
   var Game = sequelize.define("Game", {
     id: { type: DataTypes.INTEGER, primaryKey: true,  autoIncrement: true },
     apiKey: { type: DataTypes.STRING },
-    name: DataTypes.STRING
+    name: DataTypes.STRING,
+    image: DataTypes.STRING
   }, {
     hooks: {
       beforeCreate: function(game, options) {

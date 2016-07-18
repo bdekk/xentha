@@ -1,4 +1,5 @@
-var API = 'http://localhost:3000/api';
+var HOST = 'http://localhost:3000';
+var API = HOST + '/api';
 
 var GAMES_ROUTE = '/games';
 
@@ -18,8 +19,8 @@ function getGames() {
         }).append($('<div />', {
           "class": 'polaroid'
         }).append($('<img />', {
-          "src": data.games[i].image || 'img/no_game_image.png',
-          // "style": "width:100%"
+          "src": HOST + data.games[i].image || 'img/no_game_image.png',
+          "style": "width:100%"
         }), $('<div />', {
           "class": 'overlay'
         }), $('<h3 />', {

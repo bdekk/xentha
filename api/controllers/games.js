@@ -24,4 +24,22 @@ methods.create = function(req, res, next) {
 	}
 }
 
+methods.addImage = function(req, res, next) {
+	if(req.params.id && req.file) {
+		var filepath = req.file.path.replace('public','');
+		Game.update({
+    	image: filepath
+	  }, {
+	    where: { id : req.params.id }
+		})
+	  .then(function (result) {
+			return res.send({image: filepath});
+	  }, function(rejectedPromiseError){
+					return res.send(400, {error: "Could not update game model."});
+	  });
+	} else {
+		return res.send(400, {error: "Could not upload file"});
+	}
+}
+
 module.exports = methods

@@ -16,14 +16,21 @@ app.set('view engine', 'jade')
 //   res.sendFile(__dirname + '/public/server/index.html');
 // });
 
+
 app.use(express.static(__dirname + '/public'))
-app.use(bodyParser.json())
+app.use(bodyParser({limit: '10mb'}));
 app.use(bodyParser.urlencoded({extended: true}))
 
-app.use(function(req, res, next) {
+app.all('*', function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  // Set custom headers for CORS
+  res.header('Access-Control-Allow-Headers', 'Content-type,Accept,Authorization');
+  if (req.method == 'OPTIONS') {
+    res.status(200).end();
+  } else {
+    next();
+  }
 });
 
 app.use('/api', require('./routes'))
