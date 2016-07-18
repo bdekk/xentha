@@ -28,11 +28,28 @@ methods.create = function(req, res, next) {
 
 methods.login = function(req, res, next) {
   if(req.body.user) {
-    var user = req.body.user;
-    // NEED TO SALT THE PASSWORD :D
-  	User.findOne({where: {username: user.username, password: user.password}}).then(function(user) {
-  		return res.send({user: user});
-  	});
+  	User.findOne({where: {username: req.body.user.username}})
+		.then(function (user) {
+			if (!user) {
+				// wrong username
+				return res.status(401).json({
+					error: "wrong emailaddress"
+				});
+			} else if (!User.checkPassword(req.body.user.password, user.password)) {
+				// wrong password
+				return res.status(401).json({
+					error: "wrong password"
+				});
+			} else if (user) {
+				user.password = undefined; //remove password.
+				res.status(200).json({user: user});
+			} else {
+				// errror
+				res.status(400).json({
+					error: 'Something went wrong.'
+				});
+			}
+		});
   }
 }
 
