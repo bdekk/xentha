@@ -5,7 +5,8 @@ module.exports = function(sequelize, DataTypes) {
     id: { type: DataTypes.INTEGER, primaryKey: true,  autoIncrement: true },
     apiKey: { type: DataTypes.STRING },
     name: DataTypes.STRING,
-    image: DataTypes.STRING
+    image: DataTypes.STRING,
+    url: DataTypes.STRING
   }, {
     hooks: {
       beforeCreate: function(game, options) {
