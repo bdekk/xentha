@@ -11,30 +11,12 @@ XENTHA.connect();
 //
 // }
 
-var showForm = function(form) {
-  var forms = document.getElementsByTagName('form');
-  for(var i =0; i  < forms.length; i++) {
-        forms[i].style.display = 'none';
-  }
-  document.getElementById(form).style.display = 'inline';
-}
-
-window.onload = function() {
-  showForm('joinForm');
-
-  var user = JSON.parse(localStorage.getItem('user'));
-  if(user) {
-      var el = document.createElement('h3');
-      el.innerHTML = 'Hello, ' + user.firstname + ' ' + user.lastname;
-      document.getElementById('content').appendChild(el);
-  }
-}
-
 var createRoom = function() {
   var roomName = document.getElementById('roomName').value;
   var name = document.getElementById('name').value;
   if(roomName && name) {
     XENTHA.socket.emit('createRoom', {name: 'Brams Room', });
+    XENTHA.createRoom({name: 'Brams room'});
   } else {
       document.getElementById('error').textContent = 'Please enter roomName and name.';
   }
@@ -43,7 +25,8 @@ var createRoom = function() {
 var joinRoom = function() {
   var roomCode = document.getElementById('roomCode').value;
   if(roomCode) {
-    XENTHA.socket.emit('joinRoom', {roomCode: roomCode});
+    XENTHA.joinRoom({roomCode: roomCode});
+    // XENTHA.socket.emit('joinRoom', {roomCode: roomCode});
   } else {
       document.getElementById('error').textContent = 'Please enter roomCode.';
   }
@@ -62,7 +45,7 @@ XENTHA.roomCreated = function(data) {
 
 XENTHA.roomJoined = function(data) {
     // present lobby or gamepad.
-    form.style.display = 'none';
+    content.style.display = 'none';
     controller.style.display = 'inline';
     // renderer.backgroundColorString = data.player.color;
 

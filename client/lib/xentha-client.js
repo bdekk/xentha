@@ -14,7 +14,8 @@ var XENTHA = {
     connectedPlayers: [],
     connected:0,
     state: 1,
-    player: null
+    player: null,
+    user: null
   },
   settings:{
     apiKey:"",
@@ -88,6 +89,15 @@ XENTHA.connect = function(url) {
     XENTHA.roomCreated(data);
   });
 
+  XENTHA.createRoom = function(data) {
+    XENTHA.socket.emit('createRoom', data);
+  }
+
+  XENTHA.joinRoom = function(data) {
+    data.user = data.user || XENTHA.vars.user;
+    XENTHA.socket.emit('joinRoom', data);
+  }
+
   XENTHA.buildLayout = function(a) {};
   XENTHA.socket.on('game.layout', function(data){
       XENTHA.buildLayout(data.layout);
@@ -123,22 +133,22 @@ XENTHA.connect = function(url) {
 XENTHA.input = function(data) {
     XENTHA.socket.emit('player.input', data);
 };
-
-XENTHA.arrowUp = function(event) {
-    XENTHA.socket.emit('player.arrowUp', {player: XENTHA.vars.player});
-};
-
-XENTHA.arrowDown = function(event) {
-    XENTHA.socket.emit('player.arrowDown', {player: XENTHA.vars.player});
-};
-
-XENTHA.arrowLeft = function(event) {
-    XENTHA.socket.emit('player.arrowLeft', {player: XENTHA.vars.player});
-};
-
-XENTHA.arrowRight = function(event) {
-    XENTHA.socket.emit('player.arrowRight', {player: XENTHA.vars.player});
-};
+//
+// XENTHA.arrowUp = function(event) {
+//     XENTHA.socket.emit('player.arrowUp', {player: XENTHA.vars.player});
+// };
+//
+// XENTHA.arrowDown = function(event) {
+//     XENTHA.socket.emit('player.arrowDown', {player: XENTHA.vars.player});
+// };
+//
+// XENTHA.arrowLeft = function(event) {
+//     XENTHA.socket.emit('player.arrowLeft', {player: XENTHA.vars.player});
+// };
+//
+// XENTHA.arrowRight = function(event) {
+//     XENTHA.socket.emit('player.arrowRight', {player: XENTHA.vars.player});
+// };
 
 XENTHA.restart = function() {
   XENTHA.socket.emit('player.restart', {player: XENTHA.vars.player});

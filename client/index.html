@@ -6,13 +6,46 @@
 
 
   <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script>
+    function showForm(form) {
+      var forms = document.getElementsByTagName('form');
+      for(var i =0; i  < forms.length; i++) {
+            forms[i].style.display = 'none';
+      }
+      document.getElementById(form).style.display = 'inline';
+    }
 
+    function init() {
+
+      showForm('joinForm');
+
+      var user = JSON.parse(localStorage.getItem('user'));
+      if(user) {
+        var el = document.createElement('h3');
+        el.innerHTML = 'Hello, ' + user.firstname + ' ' + user.lastname;
+        document.getElementById('content').appendChild(el);
+
+        document.getElementById('loginNav').style.display = 'none';
+        document.getElementById('registerNav').style.display = 'none';
+        document.getElementById('logoutNav').style.display = 'inline';
+      } else {
+        document.getElementById('loginNav').style.display = 'inline';
+        document.getElementById('registerNav').style.display = 'inline';
+        document.getElementById('logoutNav').style.display = 'none';
+      }
+    }
+
+  window.onload = function() {
+    init();
+  }
+
+  </script>
   <body>
     <div id="content">
       <ul class="topnav">
-        <li class="right"><a href="#" onclick="showForm('registerForm')">Register</a></li>
-        <li class="right"><a href="#" onclick="showForm('loginForm')">Login</a></li>
-        <li class="right"><a href="#" onclick="showForm('joinForm')">Play</a></li>
+        <li class="right" id="registerNav"><a href="#" onclick="showForm('registerForm')">Register</a></li>
+        <li class="right" id="loginNav"><a href="#" onclick="showForm('loginForm')">Login</a></li>
+        <li class="right" id="logoutNav"><a href="#" onclick="logout()">Logout</a></li>
       </ul>
       <div class="formWrapper">
         <form id="joinForm" style="display: none;">
