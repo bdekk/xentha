@@ -112,6 +112,14 @@ div.polaroid .overlay > span {
   right: 10;
 }
 
+div.polaroid > h3 {
+  color: #FFF;
+  position: absolute;
+  z-index: 30;
+  left: 20;
+  bottom: 0;
+}
+
 h1,h2,h3,h4,h5,h6{
   font-weight:300;
   color:#FFF;

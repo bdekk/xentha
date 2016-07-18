@@ -2,7 +2,7 @@ var methods = {};
 var Game = require('../models').Game;
 
 methods.get = function(req, res, next) {
-	Game.find().then(function(games) {
+	Game.findAll().then(function(games) {
 		return res.send({games: games});
 	});
 }
