@@ -63,7 +63,10 @@ module.exports = function(io) {
                   roomdata.set(socket, "host", socket.id);
                   host = socket.id;
                 }
-                var name = data.name || 'player ' + players.length + 1; //if the player did not fill in a name, make one up.
+                if(data.user) { // user is logged in :)
+
+                }
+                var name = (data.user) ? data.user.username : 'player ' + players.length + 1; //if the player did not fill in a name, make one up.
                 var player = {"id": socket.id, "name": name, "color": randomColor(), "host": host == socket.id};
                 players.push(player);
                 roomdata.set(socket, "players", players);

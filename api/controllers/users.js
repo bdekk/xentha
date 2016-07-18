@@ -41,7 +41,7 @@ methods.login = function(req, res, next) {
 					error: "wrong password"
 				});
 			} else if (user) {
-				user.password = undefined; //remove password.
+				user.password = undefined; //remove password.d
 				res.status(200).json({user: user});
 			} else {
 				// errror
