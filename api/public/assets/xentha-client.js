@@ -20,8 +20,8 @@ var XENTHA = {
   settings:{
     apiKey:"",
     version:"0",
-    ws: "192.168.178.28:3000",
-    api: "192.168.178.28:3000/api",
+    ws: "192.168.140.111:3000",
+    api: "192.168.140.111:3000/api",
     ui:{
       showNotifications:!0,
       sound:!0
@@ -38,23 +38,6 @@ XENTHA.connect = function(url) {
   // XENTHA.socket =;
   XENTHA.socket = io.connect("http://" + XENTHA.settings.ws);
   XENTHA.callbacks = XENTHA.callbacks || [];
-  // XENTHA.socket.on("*",function(event,data) {
-  //   console.log(event);
-  //   console.log(data);
-  //   XENTHA.on(event, data);
-  // });
-
-  // XENTHA.error = function(a) {};
-  // XENTHA.socket.on('connect_failed', function(data){
-  //     XENTHA.error(data);
-  // });
-
-  // for(var i =0; i < XENTHA.callbacks.length; i++) {
-  //   XENTHA.socket.on(Object.keys(XENTHA.callbacks[i])[0],
-  //   window['XENTHA'][
-  //     XENTHA.callbacks[i][Object.keys(XENTHA.callbacks[i])[0]]
-  //   ]);
-  // }
 
   XENTHA.socket.on('connect', function(data) {
     XENTHA.vars.connected = 1;
@@ -117,38 +100,12 @@ XENTHA.connect = function(url) {
   XENTHA.socket.on('game.error', function(data){
       XENTHA.error(data);
   });
-
-  // XENTHA.on = function(type, func) {
-  //     return XENTHA.socket.on(type, func);
-  // };
 }
-
-// XENTHA.on = function(type, data) {};
-
-// XENTHA.emit = function(type, data) {
-//     XENTHA.socket.emit(type, data);
-// };
 
 // normal events!
 XENTHA.input = function(data) {
     XENTHA.socket.emit('player.input', data);
 };
-//
-// XENTHA.arrowUp = function(event) {
-//     XENTHA.socket.emit('player.arrowUp', {player: XENTHA.vars.player});
-// };
-//
-// XENTHA.arrowDown = function(event) {
-//     XENTHA.socket.emit('player.arrowDown', {player: XENTHA.vars.player});
-// };
-//
-// XENTHA.arrowLeft = function(event) {
-//     XENTHA.socket.emit('player.arrowLeft', {player: XENTHA.vars.player});
-// };
-//
-// XENTHA.arrowRight = function(event) {
-//     XENTHA.socket.emit('player.arrowRight', {player: XENTHA.vars.player});
-// };
 
 XENTHA.restart = function() {
   XENTHA.socket.emit('player.restart', {player: XENTHA.vars.player});

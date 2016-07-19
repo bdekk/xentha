@@ -8,7 +8,8 @@ gulp.task('webserver', function() {
       livereload: true,
       directoryListing: true,
       open: true,
-      port: 8001
+      port: 8001,
+      host: '0.0.0.0'
     }));
 });
 

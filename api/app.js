@@ -18,7 +18,7 @@ app.set('view engine', 'jade')
 
 
 app.use(express.static(__dirname + '/public'))
-app.use(bodyParser({limit: '10mb'}));
+app.use(bodyParser.json({limit: '10mb'}));
 app.use(bodyParser.urlencoded({extended: true}))
 
 app.all('*', function (req, res, next) {

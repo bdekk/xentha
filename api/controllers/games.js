@@ -7,13 +7,22 @@ methods.get = function(req, res, next) {
 	});
 }
 
-
+/**
+ * Get one game by id.
+ * @param {req} the request object.
+ * @returns {res} the res object.
+ */
 methods.getOne = function(req, res, next) {
 	Game.findOne({where: {id: req.params.id}}).then(function(game) {
 		return res.send({game: game});
 	});
 }
 
+/**
+ * Create one game by passing a JSON game object.
+ * @param {req} the request object.
+ * @returns {res} the res object.
+ */
 methods.create = function(req, res, next) {
 	if(req.body.game) {
 		Game.create(req.body.game).then(function(game) {
@@ -24,6 +33,12 @@ methods.create = function(req, res, next) {
 	}
 }
 
+
+/**
+ * Add an image to an existing game.
+ * @param {req} the request object.
+ * @returns {res} the res object.
+ */
 methods.addImage = function(req, res, next) {
 	if(req.params.id && req.file) {
 		var filepath = req.file.path.replace('public','');
