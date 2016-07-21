@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" $if(lang)$ lang="$lang$" xml:lang="$lang$" $endif$>
+  <head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--[if lt IE 9]> <script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script> <![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Style-Type" content="text/css"/>
+
+    <!-- <link rel="stylesheet" type="text/css" href="template.css" /> -->
+
+    <!--<link href="/templates/pandoc-bootstrap-template/menu/css/dcaccordion.css" rel="stylesheet" type="text/css" />-->
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <!-- <script type='text/javascript' src='/templates/pandoc-bootstrap-template/menu/js/jquery.cookie.js'></script> -->
+    <!-- <script type='text/javascript' src='/templates/pandoc-bootstrap-template/menu/js/jquery.hoverIntent.minified.js'></script> -->
+    <!-- <script type='text/javascript' src='/templates/pandoc-bootstrap-template/menu/js/jquery.dcjqaccordion.2.7.min.js'></script> -->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <!-- <link href="/templates/pandoc-bootstrap-template/menu/css/skins/blue.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <link href="/templates/pandoc-bootstrap-template/menu/css/skins/graphite.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <link href="/templates/pandoc-bootstrap-template/menu/css/skins/grey.css" rel="stylesheet" type="text/css" /> -->
+    <!-- <script src="/templates/pandoc-bootstrap-template/script.js"></script> -->
+    <!-- <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script> -->
+    <!-- <script src="/bower_components/sticky-kit/jquery.sticky-kit.js "></script> -->
+    <meta name="generator" content="pandoc"/>
+    $for(author-meta)$
+    <meta name="author" content="$author-meta$"/>
+    $endfor$ $if(date-meta)$
+    <meta name="date" content="$date-meta$"/>
+    $endif$
+    <title>$if(title-prefix)$$title-prefix$ - $endif$$pagetitle$</title>
+    <style type="text/css">
+      code {
+        white-space: pre;
+      }
+    </style>
+    $if(quotes)$
+    <style type="text/css">
+      q {
+        quotes: "“" "”" "‘" "’";
+      }
+    </style>
+    $endif$ $if(highlighting-css)$
+    <style type="text/css">
+      $highlighting-css$
+    </style>
+    $endif$ $if(math)$ $math$ $endif$ $for(header-includes)$ $header-includes$ $endfor$
+    <style>
+      /* CUSTOMIZATIONS */
+      .doc-title {
+        float: left;
+        display: block;
+        padding: 10px 20px;
+        margin-left: -20px;
+        font-size: 20px;
+        font-weight: 200;
+        color: #777777;
+        text-shadow: 0 1px 0 #ffffff;
+      }
+      .doc-info .navbar-text {
+        padding: 0 15px;
+      }
+      h3 {
+        margin-top: 50px;
+        border-top: 1px solid #ddd;
+        padding-top: 50px;
+      }
+      .toc {
+        margin-top: 10px;
+      }
+      .toc,
+      .toc ul {
+        padding: 0;
+        padding-left: 20px;
+      }
+      .toc ul {
+        margin-left: 0;
+        list-style: none;
+        margin-bottom: 20px !important;
+      }
+      .toc > ul > li > a {
+        font-weight: bold;
+        font-size: 1.2em;
+        border-top: 1px solid #ddd;
+        color: #222;
+        padding-top: 15px !important;
+      }
+      .toc > ul > li > ul > li > a {
+        font-weight: bold;
+        font-size: 1em;
+        color: #222;
+        padding-top: 5px !important;
+      }
+      .toc > ul > li > ul > li > ul > li > a {
+        font-size: 0.87em;
+        line-height: 1.1em;
+      }
+      .toc ul > li > a {
+        display: block;
+      }
+      .toc ul > li > a:hover,
+      .toc ul > li > a:focus {
+        text-decoration: none;
+        background-color: #eeeeee;
+      }
+      .toc ul {
+        margin-bottom: 0;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+      .toc ul > li > a,
+      .toc ul > li > a {
+        padding: 3px 15px;
+      }
+      .video-js {
+        min-width: 100%;
+        max-width: 100%;
+      }
+      .vjs-fullscreen {
+        padding-top: 0;
+      }
+      .toc .label {
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+
+    $if(title)$
+    <div class="navbar navbar-static-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <span class="doc-title">$title$</span>
+          <ul class="nav pull-right doc-info">
+            $for(author)$
+            <li>
+              <p class="navbar-text">$author$</p>
+            </li>
+            $endfor$ $if(date)$
+            <li>
+              <p class="navbar-text">$date$</p>
+            </li>
+            $endif$
+          </ul>
+        </div>
+      </div>
+    </div>
+    $endif$
+    <div class="container-fluid">
+      <div class="row">
+        $if(toc)$
+        <div id="$idprefix$TOC" class="col-md-4 col-lg-3">
+          <div class="toc">
+
+            $toc$
+          </div>
+        </div>
+        $endif$
+        <div class="col-md-8 col-lg-9">
+          $for(include-before)$ $include-before$ $endfor$ $body$ $for(include-after)$ $include-after$ $endfor$
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      $$(document).ready(function() {
+        $$('table').addClass('table table-striped table-hover');
+      });
+    </script>
+  </body>
+</html>

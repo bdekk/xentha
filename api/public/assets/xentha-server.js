@@ -4,14 +4,25 @@ var pathArray = window.location.pathname.split( 'room' );
 var XENTHA = {
   socket: null,
   vars: {
-    state: 0,
     connectedPlayers:[],
     roomCode: getParameterByName('room'),
     connected:0,
-    callbacks: [],
-    sounds:{
-      achievementUnlocked: "aunlocked.wav"
-    },
+    sounds: {},
+    soundFiles: [{
+      name: "achievement",
+      url: "http://localhost:3000/assets/sounds/achievement.mp3",
+      loop: false,
+      autoPlay: false,
+      play: function() {},
+      stop: function() {}
+    },{
+      name: "success",
+      url: "http://localhost:3000/assets/sounds/success.wav",
+      loop: false,
+      autoPlay: false,
+      play: function() {},
+      stop: function() {}
+    }]
   },
   settings:{
     apiKey:"", //key to identify game socket.
@@ -20,11 +31,10 @@ var XENTHA = {
     port:"3000",
     standalone: true,
     ui:{
-      showNotifications:!0,
-      showHowTo:!0,
-      showPlayerList: true,
-      sound:!0
-    }
+      showNotifications:true,
+      showPlayerList: true
+    },
+    sound:true
   },
   layouts: {
     CONTROLLER: 'controller'
@@ -33,17 +43,13 @@ var XENTHA = {
 
 
 var init = function() {
-  var canvas = document.getElementsByTagName('canvas')[0];
-  var xNote = document.createElement('div');
-  var text = document.createElement('p');
-  xNote.setAttribute('id', 'xNotification');
-  xNote.appendChild(text);
-  document.body.insertBefore(xNote, document.body.firstChild);
+  // var canvas = document.getElementsByTagName('canvas')[0];
+  if(XENTHA.settings.ui.showNotifications) {
+    XENTHA.createNotification();
+  }
 
-  // to make sure that people can close this ;)
-  xNote.addEventListener('click', function() {
-   xNote.className = ' deactive';
-  }, false);
+  // if the sound is off, the user should still be able to access his/her sounds.
+  XENTHA.loadSoundResources(XENTHA.vars.sounds);
 
   // add player list
   if(XENTHA.settings.ui.showPlayerList) {
@@ -80,11 +86,66 @@ XENTHA.showNotification = function(message, duration) {
   }
 }
 
+XENTHA.loadSoundResources = function(sounds) {
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+  if(!window.AudioContext) return;
+  var context = new AudioContext();
+
+  // source: http://www.html5rocks.com/en/tutorials/webaudio/intro/
+  // https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode
+  XENTHA.vars.soundFiles.forEach(function(soundFile, index) {
+    var request = new XMLHttpRequest();
+    request.open('GET', soundFile.url, true);
+    request.responseType = 'arraybuffer';
+
+    var sound = {};
+    sound.play = function() {};
+
+    // Decode asynchronously
+    request.onload = function() {
+      context.decodeAudioData(request.response, function(buffer) {
+        sound.play = function () {
+          if(XENTHA.settings.sound) {
+            var source = context.createBufferSource();
+            source.buffer = buffer;
+            source.connect(context.destination);
+            if (!source.start)
+                source.start = source.noteOn;
+            source.start(0);
+            source.loop = soundFile.loop;
+            source.autoPlay = soundFile.autoPlay;
+          }
+        };
+        XENTHA.vars.sounds[soundFile.name] = sound;
+      });
+    }
+    request.send();
+  });
+}
+
+XENTHA.createAudioContext = function() {
+
+
+}
+
 XENTHA.createPlayerList = function(players) {
   var ul = document.createElement('ul');
   ul.setAttribute('id', 'playerList');
   var list = XENTHA.setPlayerItems(ul, players);
   document.body.insertBefore(list, document.body.firstChild);
+}
+
+XENTHA.createNotification = function() {
+  var xNote = document.createElement('div');
+  var text = document.createElement('p');
+  xNote.setAttribute('id', 'xNotification');
+  xNote.appendChild(text);
+  document.body.insertBefore(xNote, document.body.firstChild);
+
+  // to make sure that people can close this ;)
+  xNote.addEventListener('click', function() {
+   xNote.className = ' deactive';
+  }, false);
 }
 
 XENTHA.setPlayerItems = function(parent, players) {

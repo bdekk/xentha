@@ -1,0 +1,5 @@
+# install pandoc
+
+#call the following method from this folder.
+
+pandoc ./source/xentha.md -f markdown -t html -s -o ./build/xentha.html --template=./source/template.html
