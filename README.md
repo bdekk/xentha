@@ -1,26 +1,56 @@
-XENTHA Local gaming API.
+# XENTHA Local gaming API.
 
 Not stable yet. Working on it :)
 
-## Requirements
-npm
+## Functionality
+
+#### Client library: 
+
+1. receive server commands: roomJoined, playerLeft, playerJoined 
+2. send input to server (e.g. button clicks)
+3. Basic controller layout
+4. Join room & Login screens
+  
+#### Server library (to add to your game): 
+
+1. Receive player input 
+2. Define client layout and send to clients (buttons, text) 
+3. createRoom, joinRoom, playerJoined, playerLeft 
+4. Basic sounds and play functionality (using AudioContext)
+
+#### Website
+1. Frontpage
+2. Games list
+
+## TODO
+#### Client
+- Custom button definitions
+- Custom achievements per game (perhaps add them through website)
+
+#### Website
+1. Lobby
+2. Profile
+3. Leaderboard / Scoreboard
 
 ## Installation
 The project has been divided into three parts.
-1. the API which handles the websocket and api calls.
-2. the client which makes a connection to the api using websockets (socket.io)
-3. the website. 
+- the API which handles the websocket and api calls.
+- the client which makes a connection to the api using websockets (socket.io)
+- the website. 
 
-### api
+### Requirements
+npm
+
+#### api
 npm install
 node / nodemon server.js
 
-### client
+#### client
 npm install
 bower install
 gulp watch
 
-### site
+#### site
 npm install
 bower install
 gulp watch
