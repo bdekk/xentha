@@ -20,11 +20,12 @@ var XENTHA = {
   settings:{
     apiKey:"",
     version:"0",
+    host: "192.168.140.111:3000",
     ws: "192.168.140.111:3000",
     api: "192.168.140.111:3000/api",
     ui:{
-      showNotifications:!0,
-      sound:!0
+      showNotifications:true,
+      sound:false
     }
   },
   layouts: {

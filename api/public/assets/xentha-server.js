@@ -27,8 +27,9 @@ var XENTHA = {
   settings:{
     apiKey:"", //key to identify game socket.
     version:"0",
-    host: "localhost",
-    port:"3000",
+    host: "http://localhost:3000",
+    ws: "http://localhost:3000",
+    api: "http://localhost:3000/api",
     standalone: true,
     ui:{
       showNotifications:true,
@@ -56,7 +57,7 @@ var init = function() {
     XENTHA.createPlayerList([]);
   }
 
-  addCss('http://' + XENTHA.settings.host + ":" + XENTHA.settings.port + "/assets/xentha-server.css");
+  addCss(XENTHA.settings.host + "/assets/xentha-server.css");
 }
 
 function addCss(fileName) {
@@ -171,7 +172,7 @@ XENTHA.setPlayerList = function(players) {
 // create / join room.
 XENTHA.connect = function(url) {
   // XENTHA.socket =;
-  XENTHA.socket = io.connect("http://" + XENTHA.settings.host+":"+XENTHA.settings.port);
+  XENTHA.socket = io.connect(XENTHA.settings.ws);
 
   XENTHA.socket.on("gameError", function(data) {
     console.log(data.message);
