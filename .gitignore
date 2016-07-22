@@ -1,4 +1,5 @@
 node_modules/*
+documentation/build/*
 api/node_modules/*
 client/node_modules/*
 site/node_modules/*
