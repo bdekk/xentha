@@ -12,12 +12,12 @@ POST parameters:
 -	`string` lastname
 -	`string` password
 
-JSON response:
-user: {
+JSON response:  
+`object` user: {
 
 -	`string` name
 -	`string` firstname
--	`string` lastname
+-	`string` lastname  
 }
 
 
@@ -29,12 +29,12 @@ POST parameters:
 -	`string` username
 -	`string` password
 
-JSON response:
-user: {
+JSON response:  
+`object` user: {
 
 -	`string` name
 -	`string` firstname
--	`string` lastname
+-	`string` lastname  
 }
 
 ## Games
@@ -43,14 +43,14 @@ user: {
 ### **POST** /game
 Create a new game
 
-POST parameters:
+POST parameters:  
 
 -	`string` name
 
-JSON response:
-game: {
+JSON response:  
+`object` game: {
 -	`string` name
--	`string` apiKey
+-	`string` apiKey  
 }
 
 ### **GET** /game
@@ -60,8 +60,8 @@ POST parameters:
 
 -	`string` name
 
-JSON response:
-games: [{
+JSON response:  
+`object` games: [{
 
--	`string` name
+-	`string` name  
 }]
