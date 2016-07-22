@@ -20,9 +20,9 @@ var XENTHA = {
   settings:{
     apiKey:"",
     version:"0",
-    host: "http://145.107.178.231:3000",
-    ws: "http://145.107.178.231:3000",
-    api: "http://145.107.178.231:3000/api",
+    host: "http://192.168.2.5:3000",
+    ws: "http://192.168.2.5:3000",
+    api: "http://192.168.2.5:3000/api",
     ui:{
       showNotifications:true,
       sound:false
@@ -40,8 +40,10 @@ XENTHA.connect = function(url) {
   XENTHA.socket = io.connect(XENTHA.settings.ws);
   XENTHA.callbacks = XENTHA.callbacks || [];
 
+  XENTHA.connect = function(a) {};
   XENTHA.socket.on('connect', function(data) {
     XENTHA.vars.connected = 1;
+    XENTHA.connect(data);
   })
 
   XENTHA.roomJoined = function(a) {};
@@ -86,6 +88,16 @@ XENTHA.connect = function(url) {
   XENTHA.socket.on('game.layout', function(data){
       XENTHA.buildLayout(data.layout);
   });
+
+  XENTHA.disconnect = function(a) {};
+  XENTHA.socket.on('disconnect', function(data){
+      XENTHA.disconnect(data);
+  });
+
+  XENTHA.gameDisconnected = function(a) {}
+  XENTHA.socket.on('game.disconnect', function(data) {
+    XENTHA.gameDisconnected(data);
+  })
 
   XENTHA.addLayout = function(a) {};
   XENTHA.socket.on('game.layout.add', function(data) {

@@ -13,7 +13,7 @@ var User = require('./models').User;
 module.exports = function(io) {
 
   io.sockets.on('connection', function ( socket ) {
-  
+
     socket.on('ping', function(data) {
         socket.emit('pong', new Date());
     });
@@ -79,6 +79,10 @@ module.exports = function(io) {
 
     socket.on('leave', function(data) {
       // leave(data);
+    });
+
+    socket.on('game.disconnect', function(data) {
+      io.sockets.connected[data.id].emit('game.disconnect', data);
     });
 
     // send by the game to one player
@@ -151,7 +155,8 @@ module.exports = function(io) {
       var players = roomdata.get(socket, "players");
 
       if(gameSocketId && gameSocketId == socket.id) {
-        socket.broadcast.to(roomCode).emit('game.error', {message: "Please open the game / lobby."});
+        socket.broadcast.to(roomCode).emit('game.disconnect', {});
+        socket.broadcast.to(roomCode).emit('game.error', {message: "Please open the game."});
       } else {
         index = _.findIndex(players, function(player) { return player.id == socket.id });
         if(index != -1) {
