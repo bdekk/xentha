@@ -10,14 +10,14 @@ var XENTHA = {
     sounds: {},
     soundFiles: [{
       name: "achievement",
-      url: "http://localhost:3000/assets/sounds/achievement.mp3",
+      url: "http://145.107.178.231:3000/assets/sounds/achievement.mp3",
       loop: false,
       autoPlay: false,
       play: function() {},
       stop: function() {}
     },{
       name: "success",
-      url: "http://localhost:3000/assets/sounds/success.wav",
+      url: "http://145.107.178.231:3000/assets/sounds/success.wav",
       loop: false,
       autoPlay: false,
       play: function() {},
@@ -27,9 +27,9 @@ var XENTHA = {
   settings:{
     apiKey:"", //key to identify game socket.
     version:"0",
-    host: "http://localhost:3000",
-    ws: "http://localhost:3000",
-    api: "http://localhost:3000/api",
+    host: "http://145.107.178.231:3000",
+    ws: "http://145.107.178.231:3000",
+    api: "http://145.107.178.231:3000/api",
     standalone: true,
     ui:{
       showNotifications:true,
@@ -231,6 +231,7 @@ XENTHA.connect = function(url) {
 
   XENTHA.playerJoined = function(a) {};
   XENTHA.socket.on('player.joined', function(data) {
+    data.player.input = []; //create an empty input array.
     XENTHA.vars.connectedPlayers.push(data.player);
     if(XENTHA.settings.ui.showPlayerList) {
       XENTHA.setPlayerList(XENTHA.vars.connectedPlayers);
