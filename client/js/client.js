@@ -51,6 +51,11 @@ XENTHA.roomJoined = function(data) {
 
 };
 
+XENTHA.gameDisconnected = function(data) {
+  content.style.display = 'inline';
+  controller.style.display = 'none';
+}
+
 XENTHA.buildLayout = function(layout) {
   for (var i = stage.children.length - 1; i >= 0; i--) {	stage.removeChild(stage.children[i]);};
   if(layout == 'controller') {
@@ -141,13 +146,9 @@ if(controller && content) {
   console.err('Could not find element with id controller and content.');
 }
 
-
-  // controller.style.display = 'inline';
-
 function buildControllerLayout() {
   stage.addChild(createButton('a', window.innerWidth - 250, window.innerHeight - 100,80,80, 'button-a.png', null, {
     mousedown: function() {
-      console.log(this.XENTHA_ID);
       XENTHA.input({id: this.XENTHA_ID, pressed: true});
     },
 
@@ -259,11 +260,13 @@ function createButton(id, x,y,width,height,image, text, events) {
     button.scale.y = height / button.height;
   });
 
-  button.mousedown = events.mousedown;
-  button.touchstart = events.mousedown;
-  button.mouseup = events.mouseup;
-  button.touchend = events.touchend;
-  button.mousemove = events.mousemove;
+  button.on('mousedown', events.mousedown)
+  button.on('mouseup', events.mouseup)
+  button.on('mouseupoutside', events.mouseup)
+  button.on('touchstart', events.mousedown)
+  button.on('touchend', events.mouseup)
+  button.on('touchendoutside', events.mouseup);
+  button.on('mousemove', events.mousemove);
 
   // move the sprite to its designated position
   button.position.x = x;
