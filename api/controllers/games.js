@@ -1,5 +1,6 @@
 var methods = {};
 var Game = require('../models').Game;
+var Achievement = require('../models').Achievement;
 
 methods.get = function(req, res, next) {
 	Game.findAll().then(function(games) {
@@ -54,6 +55,29 @@ methods.addImage = function(req, res, next) {
 	  });
 	} else {
 		return res.send(400, {error: "Could not upload file"});
+	}
+}
+
+methods.getAchievements = function(req, res, next) {
+  if(req.params.gameId) {
+  	Achievement.findAll({where: {GameId: req.params.gameId}}).then(function(achievements) {
+  		return res.send({achievements: achievements});
+  	});
+	} else {
+		return res.sendStatus(400);
+	}
+}
+
+methods.createAchievementByGame = function(req, res, next) {
+	if(req.body.achievement && req.params.gameId) {
+    var achievement = req.body.achievement;
+    achievement['GameId'] = req.params.gameId;
+		console.log(achievement);
+		Achievement.create(achievement).then(function(achievement) {
+			return res.send({achievement: achievement});
+		});
+	} else {
+		return res.send(400, {error: "supply data"});
 	}
 }
 

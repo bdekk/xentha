@@ -15,6 +15,9 @@ module.exports = function(sequelize, DataTypes) {
       }
     },
     classMethods: {
+      associate:function(models){
+          Game.hasMany(models.Achievement, {as: "Achievements"});
+      }
     }
   });
   return Game;

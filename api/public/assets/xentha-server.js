@@ -75,7 +75,6 @@ window.onload = function() {
   init();
 }
 
-
 XENTHA.showNotification = function(message, duration) {
   var xNote = document.getElementById("xNotification");
   if(xNote) {
@@ -86,6 +85,8 @@ XENTHA.showNotification = function(message, duration) {
     }, duration);
   }
 }
+
+
 
 XENTHA.loadSoundResources = function(sounds) {
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -294,6 +295,10 @@ XENTHA.connect = function(url) {
     XENTHA.send(data);
   }
 
+// event, id, achievement {key: .., time: ..}
+  XENTHA.addAchievement = function (data) {
+      XENTHA.send({event: 'game.achievement', player: data.id, data: {achievement: data.achievement}});
+  }
 
   // type: button, input, id: .. leftArrow, pressed: true/false)
   XENTHA.onInput = function(data) {}

@@ -9,6 +9,7 @@ var io_room_controller = require('./controllers/io/rooms');
 var Room = require('./models').Room;
 var Game = require('./models').Game;
 var User = require('./models').User;
+var Achievement = require('./models').Achievement;
 
 module.exports = function(io) {
 
@@ -93,6 +94,11 @@ module.exports = function(io) {
     // send by the game to players
     socket.on('game.die', function(data) {
       io.sockets.connected[data.id].emit('game.die', {die: true});
+    });
+
+    socket.on('game.achievement', function(data) {
+        io.sockets.connected[data.id].emit('game.achievement', data.achievement);
+
     });
 
     // send by the game to players

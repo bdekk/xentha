@@ -26,4 +26,12 @@ router.post('/:id/image', upload.single('image'), function (req, res, next) {
   return games_controller.addImage(req,res,next);
 })
 
+router.get('/:gameId/achievement', function(req, res, next) {
+	return games_controller.getAchievements(req, res, next);
+})
+
+router.post('/:gameId/achievement', function (req, res, next) {
+  return games_controller.createAchievementByGame(req,res,next);
+})
+
 module.exports = router
