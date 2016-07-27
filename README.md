@@ -1,6 +1,6 @@
-# XENTHA Local gaming API.
+# [Xentha](http://www.xentha.com)
 
-Not stable yet. Working on it :)
+Xentha is a local gaming API for HTML5 games.
 
 ## Functionality
 
@@ -28,9 +28,12 @@ Not stable yet. Working on it :)
 - Custom achievements per game (perhaps add them through website)
 
 #### Website
-1. Lobby
-2. Profile
-3. Leaderboard / Scoreboard
+- Lobby
+- Profile
+- Leaderboard / Scoreboard
+
+## PROGRESS
+[Trello Board](https://trello.com/b/8gTCaTkN/xentha)
 
 ## Installation
 The project has been divided into three parts.
