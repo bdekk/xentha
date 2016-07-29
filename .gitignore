@@ -6,3 +6,6 @@ client/node_modules/*
 site/node_modules/*
 client/bower_components/*
 site/bower_components/*
+old_site/*
+site/node_modules/*
+site/dist/*
