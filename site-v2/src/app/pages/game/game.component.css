@@ -1,0 +1,9 @@
+.hero h1, .hero h2 {
+  color: #fff;
+}
+
+.hero {
+  padding: 5em;
+  min-height: 10em;
+  background: #eee;
+}

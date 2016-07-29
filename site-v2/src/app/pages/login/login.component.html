@@ -1,0 +1,32 @@
+<section class=" mdl-color--white-10">
+  <div class="login-form-div mdl-grid mdl-shadow--2dp">
+  	<div class="mdl-cell mdl-cell--12-col cell_con">
+  		<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+  			<input class="mdl-textfield__input" type="text" [(ngModel)]="data.username" id="username">
+  			<label class="mdl-textfield__label" for="username">Enter username</label>
+  			<span class="mdl-textfield__error">Invalid username...!</span>
+          </div>
+  	</div>
+  	<div class="mdl-cell mdl-cell--12-col cell_con">
+  		<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+  			<input class="mdl-textfield__input" type="text" [(ngModel)]="data.password" id="password">
+  			<label class="mdl-textfield__label" for="password">Enter Password</label>
+          </div>
+  	</div>
+  	<!-- <div class="mdl-cell mdl-cell--12-col cell_con">
+      <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-1">
+        <input type="checkbox" id="checkbox-1" class="mdl-checkbox__input" checked>
+        <span class="mdl-checkbox__label">Remember me</span>
+      </label>
+  	</div> -->
+  	<div class="mdl-cell mdl-cell--12-col  login-btn-con">
+  		<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary btn" (click)="login(data)">Login</button>
+  	</div>
+  	<div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet links">
+  		<a class="mdl-button--primary">Register now !</a>
+  	</div>
+  	<div class="mdl-cell mdl-cell--6-col mdl-cell--8-col-tablet links">
+  		<a class="mdl-button--primary">Forgot password ?</a>
+  	</div>
+  </div>
+</section>
