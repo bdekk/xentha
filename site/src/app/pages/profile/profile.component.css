@@ -1,0 +1,60 @@
+.layout-padding {
+  padding: 8px;
+  padding-top: 48px;
+}
+
+section:not(:last-of-type) {
+  position: relative;
+  margin-bottom: 48px;
+}
+section.section--center {
+  max-width: 860px;
+}
+
+#features section.section--center {
+  max-width: 620px;
+}
+
+section.section--footer {
+  margin: 0 -8px -8px -8px;
+}
+
+section.section--padding {
+  padding-top:0.5em;
+  padding-bottom: 1em;
+}
+
+.mdl-card {
+  height: auto;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.mdl-card > * {
+  height: auto;
+}
+
+.mdl-card .mdl-card__supporting-text {
+  margin: 40px;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  padding: 0;
+  color: inherit;
+  width: calc(100% - 80px);
+}
+
+.mdl-demo .mdl-card__supporting-text h4 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.mdl-card__actions {
+  margin: 0;
+  padding: 4px 40px;
+  color: inherit;
+}
