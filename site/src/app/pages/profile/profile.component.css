@@ -11,10 +11,6 @@ section.section--center {
   max-width: 860px;
 }
 
-#features section.section--center {
-  max-width: 620px;
-}
-
 section.section--footer {
   margin: 0 -8px -8px -8px;
 }
@@ -23,6 +19,12 @@ section.section--padding {
   padding-top:0.5em;
   padding-bottom: 1em;
 }
+
+#features section.section--center {
+  max-width: 620px;
+}
+
+
 
 .mdl-card {
   height: auto;

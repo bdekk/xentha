@@ -31,4 +31,7 @@ export class GamesComponent implements OnInit {
     this.router.navigate(['/games', game.id]);
   }
 
+  openGame(game: Game) {
+    window.open(game.url,game.name,"fullscreen=yes")
+  }
 }

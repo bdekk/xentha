@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { User } from '../../models/user';
+
 
 @Component({
   moduleId: module.id,
-  selector: 'app-drawer',
+  selector: 'drawer',
   templateUrl: 'drawer.component.html',
   styleUrls: ['drawer.component.css']
 })
-export class DrawerComponent implements OnInit {
+export class Drawer {
+  @Input('user') user: User;
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
   }
 
 }

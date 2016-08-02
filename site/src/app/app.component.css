@@ -5,3 +5,11 @@
 .xentha-header nav > a {
   color: #92989b;
 }
+
+.mdl-layout__content {
+  padding-bottom: 10em;
+}
+
+.no-drawer > .mdl-layout__content {
+  margin: 0 auto;
+}

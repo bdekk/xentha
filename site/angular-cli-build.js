@@ -17,7 +17,8 @@ module.exports = function(defaults) {
       'rxjs/**/*.+(js|js.map)',
       '@angular/**/*.+(js|js.map)',
       'material-design-lite/dist/*.js',
-      'material-design-lite/dist/material.css'
+      'material-design-lite/dist/material.css',
+      'angular2-localstorage/dist/*.js'
     ]
   });
 };

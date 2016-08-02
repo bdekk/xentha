@@ -8,7 +8,7 @@
         {{game.description}}
       </div>
       <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+        <a (click)="openGame(game)" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
           Play
         </a>
         <a (click)="onSelect(game)" class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">

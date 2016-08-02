@@ -6,11 +6,11 @@ import { GamesComponent } from './pages/games/games.component';
 import { GameComponent } from './pages/game/game.component';
 import { LoginComponent } from './pages/login/login.component';
 import { ProfileComponent } from './pages/profile/profile.component';
-// import { HomeComponent } from './pages/login/home.component';
+import { HomeComponent } from './pages/home/home.component';
 
 // Route Configuration
 export const routes: RouterConfig = [
-  // { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent },
   { path: 'games', component: GamesComponent },
   { path: 'login', component: LoginComponent },
   { path: 'games/:id', component: GameComponent },
