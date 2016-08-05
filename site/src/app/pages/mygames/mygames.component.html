@@ -33,8 +33,8 @@
       <input class="mdl-textfield__input" type="text" [(ngModel)]="gameData.url" id="name">
       <label class="mdl-textfield__label" for="name">URL</label>
     </div>
-      <input type="file" [(ngModel)]="gameImage"/>
-    <button (click)="createGame(gameData, gameImage)" class="mdl-button mdl-color--green mdl-js-button mdl-button--raised">
+      <input type="file" (change)="fileChangeEvent($event)" placeholder="Upload file..." />
+    <button (click)="createGame(gameData, filesToUpload[0])" class="mdl-button mdl-color--green mdl-js-button mdl-button--raised">
       Add Game
     </button>
   </form>

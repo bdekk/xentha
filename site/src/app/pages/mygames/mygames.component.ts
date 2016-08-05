@@ -17,16 +17,16 @@ export class MyGamesComponent implements OnInit {
   private user: User;
 
   private gameData: any;
-  private gameImage: any;
 
-  me: any;
+  private filesToUpload: Array<File>;
+  // me: any;
 
   constructor(private gameService: GameService, private constants: Configuration) {
       this.user = JSON.parse(localStorage.getItem('user'));
       this.gameData = {};
       this.myGames = [];
-
-      this.me = this;
+      this.filesToUpload = [];
+      // this.me = this;
   }
 
   ngOnInit() {
@@ -43,7 +43,7 @@ export class MyGamesComponent implements OnInit {
     this.gameService.create(data)
     .subscribe((game:Game) => {
         if(game) {
-          me.addImage(game, image);
+          this.addImage(game, image);
           // console.log(data);
           // me.myGames.push(data);
         }
@@ -52,18 +52,46 @@ export class MyGamesComponent implements OnInit {
       () => console.log('Register complete'));
   }
 
-  private addImage(game, image) {
+  private addImage(game:Game, image:File) {
     var g = game;
-    this.gameService.addImage(game.id, image)
-    .subscribe((url:string) => {
-        if(url) {
-          console.log(g, url);
-          g.image = url;
-          me.myGames.push(g);
-        }
-      },
-      error => console.log(error),
-      () => console.log('Register complete'));
+
+    // this.makeFileRequest(this.url + game.id + '/image', [], this.filesToUpload).then((result) => {
+    //   console.log(result);
+    // }, (error) => {
+    //   console.error(error);
+    // });
+    this.gameService.addImage(game.id, image).then((url:any) => {
+      if(url) {
+        console.log(g, url);
+        g["image"] = url;
+        this.myGames.push(g);
+      }
+    });
+  }
+
+  // public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {
+  //     return new Promise((resolve, reject) => {
+  //         var formData: any = new FormData();
+  //         var xhr = new XMLHttpRequest();
+  //         for(var i = 0; i < files.length; i++) {
+  //             formData.append("uploads[]", files[i], files[i].name);
+  //         }
+  //         xhr.onreadystatechange = function () {
+  //             if (xhr.readyState == 4) {
+  //                 if (xhr.status == 200) {
+  //                     resolve(JSON.parse(xhr.response));
+  //                 } else {
+  //                     reject(xhr.response);
+  //                 }
+  //             }
+  //         }
+  //         xhr.open("POST", url, true);
+  //         xhr.send(formData);
+  //     });
+  // }
+
+  public fileChangeEvent(fileInput: any){
+    this.filesToUpload = <Array<File>> fileInput.target.files;
   }
 
 }
