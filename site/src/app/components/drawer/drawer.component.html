@@ -1,26 +1,15 @@
 <!-- <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50" aria-hidden="true"> -->
-  <header class="demo-drawer-header">
-    <img src="images/user.jpg" class="demo-avatar">
-    <div class="demo-avatar-dropdown">
-      <span>{{user.firstname}} {{user.lastname}}</span>
-      <div class="mdl-layout-spacer"></div>
-      <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" data-upgraded=",MaterialButton,MaterialRipple">
-        <i class="material-icons" role="presentation">arrow_drop_down</i>
-        <span class="visuallyhidden">Accounts</span>
-      <span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 92.5097px; height: 92.5097px; transform: translate(-50%, -50%) translate(12px, 25px);"></span></span></button>
-      <div class="mdl-menu__container is-upgraded" style="right: 0px; top: 32px; width: 196.953px; height: 160px;"><div class="mdl-menu__outline mdl-menu--bottom-right" style="width: 196.953px; height: 160px;"></div><ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect mdl-js-ripple-effect--ignore-events" for="accbtn" data-upgraded=",MaterialMenu,MaterialRipple" style="clip: rect(0px 196.953px 0px 196.953px);">
-        <li class="mdl-menu__item mdl-js-ripple-effect" tabindex="-1" data-upgraded=",MaterialRipple" style="">hello@example.com<span class="mdl-menu__item-ripple-container"><span class="mdl-ripple"></span></span></li>
-        <li class="mdl-menu__item mdl-js-ripple-effect" tabindex="-1" data-upgraded=",MaterialRipple" style="">info@example.com<span class="mdl-menu__item-ripple-container"><span class="mdl-ripple"></span></span></li>
-        <li class="mdl-menu__item mdl-js-ripple-effect" tabindex="-1" data-upgraded=",MaterialRipple" style=""><i class="material-icons">add</i>Add another account...<span class="mdl-menu__item-ripple-container"><span class="mdl-ripple"></span></span></li>
-      </ul></div>
-    </div>
-  </header>
-  <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-    <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>Home</a>
-    <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">inbox</i>Inbox</a>
-    <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">videogame_asset</i>Games</a>
-    <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>Social</a>
-    <div class="mdl-layout-spacer"></div>
-    <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>Support</a>
-  </nav>
+<header class="demo-drawer-header">
+  <div class="mdl-grid">
+    <img src="images/default_profile.png" class="demo-avatar mdl-cell mdl-cell--4-col-desktop mdl-cell--12-col-phone">
+    <span  class="mdl-color-text--blue-grey-400 mdl-cell mdl-cell--6-col-desktop mdl-cell--12-col-phone">{{user.firstname}} {{user.lastname}}</span>
+  </div>
+</header>
+<nav class="demo-navigation mdl-navigation">
+  <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">home</i>My Profile</a>
+  <a [routerLink]="['/mygames']" class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">videogame_asset</i>My Games</a>
+  <!-- <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">people</i>Social</a> -->
+  <div class="mdl-layout-spacer"></div>
+  <a class="mdl-navigation__link" href=""><i class="mdl-color-text--blue-grey-400 material-icons" role="presentation">help_outline</i>Support</a>
+</nav>
 <!-- </div> -->

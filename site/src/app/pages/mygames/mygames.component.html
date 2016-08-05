@@ -1,0 +1,41 @@
+<section class="section--center" *ngIf="user">
+  <h2>My Games</h2>
+  <table *ngIf="myGames.length > 0" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+    <thead>
+      <tr>
+        <th class="mdl-data-table__cell--non-numeric"></th>
+        <th class="mdl-data-table__cell--non-numeric">Name</th>
+        <th class="mdl-data-table__cell--non-numeric">apiKey</th>
+        <th class="mdl-data-table__cell--non-numeric">url</th>
+        <th class="mdl-data-table__cell--non-numeric"></th>
+        <th class="mdl-data-table__cell--non-numeric"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let game of myGames">
+        <td class="mdl-data-table__cell--non-numeric"><img src="{{game.image}}"></td>
+        <td class="mdl-data-table__cell--non-numeric"><strong>{{game.name}}</strong></td>
+        <td class="mdl-data-table__cell--non-numeric mdl-color-text--blue">{{game.apiKey}}</td>
+        <td class="mdl-data-table__cell--non-numeric">{{game.url}}</td>
+        <td class="mdl-data-table__cell--non-numeric"><button (click)="removeGame(game);" class="mdl-button mdl-color--grey  mdl-color-text--white  mdl-js-button mdl-button--icon"><i class="material-icons">edit circle</i></button></td>
+        <td class="mdl-data-table__cell--non-numeric"><button (click)="editGame(game);" class="mdl-button mdl-color--red mdl-color-text--white mdl-js-button mdl-button--icon"><i class="material-icons">remove circle</i></button></td>
+      </tr>
+    </tbody>
+  </table>
+  <p *ngIf="myGames.length == 0">No games found</p>
+
+  <form action="#">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" [(ngModel)]="gameData.name" id="name">
+      <label class="mdl-textfield__label" for="name">Game name</label>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input class="mdl-textfield__input" type="text" [(ngModel)]="gameData.url" id="name">
+      <label class="mdl-textfield__label" for="name">URL</label>
+    </div>
+      <input type="file" [(ngModel)]="gameImage"/>
+    <button (click)="createGame(gameData, gameImage)" class="mdl-button mdl-color--green mdl-js-button mdl-button--raised">
+      Add Game
+    </button>
+  </form>
+</section>

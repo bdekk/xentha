@@ -11,6 +11,7 @@ export class GameService {
   private url:string;
   private http:Http;
   private headers: Headers;
+  private imageHeaders: Headers;
   private configuration: Configuration;
 
   constructor(http: Http, configuration: Configuration){
@@ -21,6 +22,10 @@ export class GameService {
       this.headers = new Headers();
       this.headers.append('Content-Type', 'application/json');
       this.headers.append('Accept', 'application/json');
+
+      this.imageHeaders = new Headers();
+      this.imageHeaders.append('mimeType', 'multipart/form-data');
+      this.imageHeaders.append('Content-Type', 'undefined');
   }
 
   public getAll(): Observable<Game[]> {
@@ -35,8 +40,8 @@ export class GameService {
           .catch(this.handleError);
   }
 
-  public create = (name: string): Observable<Game> => {
-    let toCreate = JSON.stringify({ name: name });
+  public create = (data: any): Observable<Game> => {
+    let toCreate = JSON.stringify({"game": data});
 
     return this.http.post(this.url, toCreate, { headers: this.headers })
         .map((response: Response) => <Game>response.json().game)
@@ -44,7 +49,7 @@ export class GameService {
   }
 
   public update = (id: number, gameToUpdate: Game): Observable<Game> => {
-      return this.http.put(this.url + id, JSON.stringify(gameToUpdate), { headers: this.headers })
+      return this.http.put(this.url + id, JSON.stringify({"game": gameToUpdate}), { headers: this.headers })
           .map((response: Response) => <Game>response.json().game)
           .catch(this.handleError);
   }
@@ -52,6 +57,12 @@ export class GameService {
   public delete = (id: number): Observable<Response> => {
       return this.http.delete(this.url + id)
           .catch(this.handleError);
+  }
+
+  public addImage = (gameId: number, image: any): Observable<string> => {
+    return this.http.post(this.url + gameId + '/image', image, { headers: this.imageHeaders })
+        .map((response: Response) => <string>response.json().image)
+        .catch(this.handleError);
   }
 
   private handleError(error: Response) {

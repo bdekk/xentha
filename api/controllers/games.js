@@ -60,7 +60,7 @@ methods.addImage = function(req, res, next) {
 
 methods.getAchievements = function(req, res, next) {
   if(req.params.gameId) {
-  	Achievement.findAll({where: {GameId: req.params.gameId}}).then(function(achievements) {
+  	Achievement.findAll({where: {gameId: req.params.gameId}}).then(function(achievements) {
   		return res.send({achievements: achievements});
   	});
 	} else {
@@ -71,8 +71,7 @@ methods.getAchievements = function(req, res, next) {
 methods.createAchievementByGame = function(req, res, next) {
 	if(req.body.achievement && req.params.gameId) {
     var achievement = req.body.achievement;
-    achievement['GameId'] = req.params.gameId;
-		console.log(achievement);
+    achievement['gameId'] = req.params.gameId;
 		Achievement.create(achievement).then(function(achievement) {
 			return res.send({achievement: achievement});
 		});

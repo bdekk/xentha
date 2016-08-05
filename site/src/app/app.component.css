@@ -1,5 +1,5 @@
 .xentha-header {
-  background: #fff;
+  z-index: 100;
 }
 
 .xentha-header nav > a {
@@ -10,6 +10,9 @@
   padding-bottom: 10em;
 }
 
-.no-drawer > .mdl-layout__content {
-  margin: 0 auto;
+.xentha-layout > header {
+  z-index: 100;
+}
+.xentha-layout > drawer {
+  padding-top:64px;
 }

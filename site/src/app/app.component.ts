@@ -5,6 +5,8 @@ import {AuthService} from './services/auth.service';
 import { Configuration } from './app.constants';
 import { Drawer } from './components/drawer';
 
+declare var componentHandler: any;
+
 @Component({
   moduleId: module.id,
   selector: 'app-root',
@@ -14,6 +16,7 @@ import { Drawer } from './components/drawer';
   providers: [AuthService, Configuration]
 
 })
+
 export class AppComponent {
 
   private user: User;
@@ -29,6 +32,10 @@ export class AppComponent {
     this.user = undefined;
     localStorage.removeItem('user');
     this.snackbar.MaterialSnackbar.showSnackbar('signed out..');
+  }
+
+  ngAfterViewInit(){
+      componentHandler.upgradeAllRegistered();
   }
 
 }

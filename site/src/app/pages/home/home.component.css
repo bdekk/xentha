@@ -2,3 +2,7 @@
   font-size: 500%;
   color: #aaa;
 }
+
+.section--center {
+  margin: 0 auto;
+}

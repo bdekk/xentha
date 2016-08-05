@@ -16,7 +16,8 @@ module.exports = function(sequelize, DataTypes) {
     },
     classMethods: {
       associate:function(models){
-          Game.hasMany(models.Achievement, {as: "Achievements"});
+          Game.hasMany(models.Achievement, {as: "achievements", foreignKey: "gameId"});
+          Game.belongsTo(models.User, {as: "author"});
       }
     }
   });
