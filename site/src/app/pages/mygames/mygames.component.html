@@ -13,12 +13,12 @@
     </thead>
     <tbody>
       <tr *ngFor="let game of myGames">
-        <td class="mdl-data-table__cell--non-numeric"><img src="{{game.image}}"></td>
+        <td class="mdl-data-table__cell--non-numeric"><img *ngIf="game.image" src="{{constants.url}}{{game.image}}"></td>
         <td class="mdl-data-table__cell--non-numeric"><strong>{{game.name}}</strong></td>
         <td class="mdl-data-table__cell--non-numeric mdl-color-text--blue">{{game.apiKey}}</td>
         <td class="mdl-data-table__cell--non-numeric">{{game.url}}</td>
-        <td class="mdl-data-table__cell--non-numeric"><button (click)="removeGame(game);" class="mdl-button mdl-color--grey  mdl-color-text--white  mdl-js-button mdl-button--icon"><i class="material-icons">edit circle</i></button></td>
-        <td class="mdl-data-table__cell--non-numeric"><button (click)="editGame(game);" class="mdl-button mdl-color--red mdl-color-text--white mdl-js-button mdl-button--icon"><i class="material-icons">remove circle</i></button></td>
+        <td class="mdl-data-table__cell--non-numeric"><button (click)="editGame(game);" class="mdl-button mdl-color--grey  mdl-color-text--white  mdl-js-button mdl-button--icon"><i class="material-icons">edit circle</i></button></td>
+        <td class="mdl-data-table__cell--non-numeric"><button (click)="showDeletePopup(game)" class="mdl-button mdl-color--red mdl-color-text--white mdl-js-button mdl-button--icon"><i class="material-icons">remove circle</i></button></td>
       </tr>
     </tbody>
   </table>
@@ -38,4 +38,17 @@
       Add Game
     </button>
   </form>
+
+  <dialog class="mdl-dialog" #dialog>
+    <h4 class="mdl-dialog__title">Are you sure?</h4>
+    <div class="mdl-dialog__content">
+      <p>
+        Are you sure that you want to delete this game and all related data?
+      </p>
+    </div>
+    <div class="mdl-dialog__actions">
+      <button type="button" class="mdl-button mdl-color-text--red" (click)="deleteGame(deleteDialog.gameId)">Yes, I am sure</button>
+      <button type="button" class="mdl-button close" (click)="deleteDialog.nativeElement.close()">No, not really</button>
+    </div>
+  </dialog>
 </section>

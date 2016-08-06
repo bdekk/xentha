@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import {Http, Response, Headers} from '@angular/http';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/map'
@@ -13,7 +13,10 @@ export class AuthService {
   private headers: Headers;
   private configuration: Configuration;
 
-  constructor(http: Http, configuration: Configuration){
+  private user: User;
+  private zoneImpl: NgZone;
+
+  constructor(http: Http, configuration: Configuration, zone: NgZone){
       this.http = http;
       this.configuration = configuration;
       this.url = configuration.apiUrl + configuration.userRoute;
@@ -21,6 +24,10 @@ export class AuthService {
       this.headers = new Headers();
       this.headers.append('Content-Type', 'application/json');
       this.headers.append('Accept', 'application/json');
+
+
+      this.user = JSON.parse(localStorage.getItem('user'));
+      this.zoneImpl = zone;
   }
 
   public getAll(): Observable<User[]> {
@@ -39,16 +46,36 @@ export class AuthService {
     let toCreate = JSON.stringify({user: data});
 
     return this.http.post(this.url, toCreate, { headers: this.headers })
-        .map((response: Response) => <User>response.json().game)
+        .map((response: Response) => {
+            let user = <User>response.json().user;
+            localStorage.setItem('user', JSON.stringify(user));
+            this.zoneImpl.run(() => this.user = user);
+            return user;
+        })
         .catch(this.handleError);
+  }
+
+  public getUser = (): User => {
+    return this.user;
   }
 
   public login = (data: any): Observable<User> => {
     let loginData = JSON.stringify({user: data});
 
     return this.http.post(this.url + 'login', loginData, { headers: this.headers })
-        .map((response: Response) => <User>response.json().user)
-        .catch(this.handleError);
+      .map((response: Response) => {
+        let user = <User>response.json().user;
+        localStorage.setItem('user', JSON.stringify(user));
+        this.zoneImpl.run(() => this.user = user);
+        return user;
+      })
+      .catch(this.handleError);
+  }
+
+  public logout = (): boolean => {
+    localStorage.removeItem('user');
+    this.zoneImpl.run(() => this.user = null);
+    return true;
   }
 
   public update = (id: number, userToUpdate: User): Observable<User> => {

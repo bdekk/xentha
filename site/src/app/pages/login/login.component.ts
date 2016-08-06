@@ -33,8 +33,8 @@ export class LoginComponent implements OnInit {
       this.authService.login(data)
       .subscribe((data:User) => {
         if(data) {
-          this.user = data;
-          localStorage.setItem('user', JSON.stringify(data));
+          // this.user = data;
+          // localStorage.setItem('user', JSON.stringify(data));
           this.router.navigate(['/profile', data.id]);
         }
       },
@@ -45,8 +45,9 @@ export class LoginComponent implements OnInit {
   register(data) {
     this.authService.create(data)
     .subscribe((data:User) => {
-        this.user = data
-        localStorage.setItem('user', JSON.stringify(data));
+        // this.user = data
+        // localStorage.setItem('user', JSON.stringify(data));
+        this.router.navigate(['/']);
       },
       error => console.log(error),
       () => console.log('Register complete'));

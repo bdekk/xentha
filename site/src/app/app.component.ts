@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { ROUTER_DIRECTIVES } from '@angular/router';
 import {User} from './models/user';
 import {AuthService} from './services/auth.service';
@@ -20,17 +20,19 @@ declare var componentHandler: any;
 export class AppComponent {
 
   private user: User;
-  private snackbar: any;
   title = "bla";
 
-  constructor() {
-      this.user = JSON.parse(localStorage.getItem('user'));
-      this.snackbar = document.querySelector('#xentha-snackbar');
+  @ViewChild('xentha-snackbar') snackbar;
+
+  constructor(private authService: AuthService) {
+      // this.user = JSON.parse(localStorage.getItem('user'));
+      // this.snackbar = document.querySelector('#xentha-snackbar');
   }
 
   logout() {
-    this.user = undefined;
-    localStorage.removeItem('user');
+    // this.user = undefined;
+    // localStorage.removeItem('user');
+    this.authService.logout();
     this.snackbar.MaterialSnackbar.showSnackbar('signed out..');
   }
 

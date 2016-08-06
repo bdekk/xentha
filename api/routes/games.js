@@ -34,4 +34,8 @@ router.post('/:gameId/achievement', function (req, res, next) {
   return games_controller.createAchievementByGame(req,res,next);
 })
 
+router.delete('/:gameId', function (req, res, next) {
+  return games_controller.delete(req,res,next);
+})
+
 module.exports = router

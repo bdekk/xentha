@@ -80,4 +80,24 @@ methods.createAchievementByGame = function(req, res, next) {
 	}
 }
 
+methods.delete = function(req, res, next) {
+	if(req.params.gameId) {
+		Game.destroy({
+		   where: {
+		      id: req.params.gameId
+		   }
+		}).then(function(rowDeleted) {
+		  if(rowDeleted === 1){
+		     res.send({success: true});
+		   } else {
+				 res.send(404, {error: "Could not find game."});
+			 }
+		}, function(err) {
+		    res.send(400, {"error": err});
+		});
+	} else {
+		return res.send(400, {error: "supply data"});
+	}
+}
+
 module.exports = methods

@@ -11,12 +11,12 @@
         <a class="mdl-navigation__link" [routerLink]="['/']">HOME</a>
         <a class="mdl-navigation__link" [routerLink]="['/games']">PLAY</a>
         <a class="mdl-navigation__link" [routerLink]="['/docs']">DOCS</a>
-        <a class="mdl-navigation__link" [hidden]="user" [routerLink]="['/login']">LOGIN/REGISTER</a>
-        <a class="mdl-navigation__link" [hidden]="!user" (click)="logout()">LOGOUT</a>
+        <a class="mdl-navigation__link" [hidden]="authService.getUser()" [routerLink]="['/login']">LOGIN/REGISTER</a>
+        <a class="mdl-navigation__link" [hidden]="!authService.getUser()" (click)="logout()">LOGOUT</a>
       </nav>
     </div>
   </header>
-  <drawer [user]="user" class="mdl-layout__drawer mdl-color--white mdl-color-text--blue-grey-50"></drawer>
+  <drawer [user]="authService.getUser()" class="mdl-layout__drawer mdl-color--white mdl-color-text--blue-grey-50"></drawer>
   <main class="mdl-layout__content">
     <!-- Router Outlet -->
     <router-outlet></router-outlet>
@@ -78,7 +78,7 @@
     </div>
 
   </footer>
-  <div id="xentha-snackbar" class="mdl-js-snackbar mdl-snackbar">
+  <div #xenthaSnackbar class="mdl-js-snackbar mdl-snackbar">
     <div class="mdl-snackbar__text"></div>
     <button class="mdl-snackbar__action" type="button"></button>
   </div>

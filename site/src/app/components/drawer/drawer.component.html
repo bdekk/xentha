@@ -1,6 +1,6 @@
 <!-- <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50" aria-hidden="true"> -->
 <header class="demo-drawer-header">
-  <div class="mdl-grid">
+  <div *ngIf="user" class="mdl-grid">
     <img src="images/default_profile.png" class="demo-avatar mdl-cell mdl-cell--4-col-desktop mdl-cell--12-col-phone">
     <span  class="mdl-color-text--blue-grey-400 mdl-cell mdl-cell--6-col-desktop mdl-cell--12-col-phone">{{user.firstname}} {{user.lastname}}</span>
   </div>

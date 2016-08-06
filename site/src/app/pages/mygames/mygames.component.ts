@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {Game} from '../../models/game';
 import {GameService} from '../../services/game.service';
 import { Configuration } from '../../app.constants';
@@ -21,6 +21,8 @@ export class MyGamesComponent implements OnInit {
   private filesToUpload: Array<File>;
   // me: any;
 
+    @ViewChild('dialog') deleteDialog;
+
   constructor(private gameService: GameService, private constants: Configuration) {
       this.user = JSON.parse(localStorage.getItem('user'));
       this.gameData = {};
@@ -38,14 +40,15 @@ export class MyGamesComponent implements OnInit {
   }
 
   public createGame(data, image) {
+    let me = this;
     data["authorId"] = this.user.id;
 
     this.gameService.create(data)
     .subscribe((game:Game) => {
-        if(game) {
-          this.addImage(game, image);
-          // console.log(data);
-          // me.myGames.push(data);
+        if(game && !image) {
+          me.myGames.push(game);
+        } else if(game && image) {
+          me.addImage(game, image);
         }
       },
       error => console.log(error),
@@ -53,8 +56,7 @@ export class MyGamesComponent implements OnInit {
   }
 
   private addImage(game:Game, image:File) {
-    var g = game;
-
+    let me = this;
     // this.makeFileRequest(this.url + game.id + '/image', [], this.filesToUpload).then((result) => {
     //   console.log(result);
     // }, (error) => {
@@ -62,11 +64,31 @@ export class MyGamesComponent implements OnInit {
     // });
     this.gameService.addImage(game.id, image).then((url:any) => {
       if(url) {
-        console.log(g, url);
-        g["image"] = url;
-        this.myGames.push(g);
+        console.log(game, url);
+        game["image"] = url;
+        me.myGames.push(game);
       }
     });
+  }
+
+  public showDeletePopup(game) {
+    // if (!this.deleteDialog.showModal) {
+    //   dialogPolyfill.registerDialog(this.deleteDialog);
+    // }
+    this.deleteDialog.nativeElement.showModal();
+    this.deleteDialog.gameId = game.id;
+  }
+
+  public deleteGame(gameId) {
+    let me = this;
+    if(gameId) {
+      this.gameService.delete(gameId)
+      .subscribe((data: boolean) => {
+          let index = me.myGames.findIndex( (el) => el.id === gameId );
+          if(index != -1) me.myGames.splice(index, 1)
+          me.deleteDialog.nativeElement.close();
+      });
+    }
   }
 
   // public makeFileRequest(url: string, params: Array<string>, files: Array<File>) {

@@ -1,3 +1,7 @@
 .section--center {
   margin: 0 auto;
 }
+
+td > img {
+  height: 100%;
+}
