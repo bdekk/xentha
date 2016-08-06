@@ -19,9 +19,10 @@ Shooter.Game.prototype = {
     //collision on blockedLayer
     this.map.setCollisionBetween(1, 5000, true, 'blocked');
 
+    // this.backgroundlayer.scale.set(0.5);
     //resizes the game world to match the layer dimensions
+    // this.backgroundlayer.wrap = true;
     this.backgroundlayer.resizeWorld();
-
     // //create coins
     // this.createCoins();
 
@@ -48,6 +49,7 @@ Shooter.Game.prototype = {
     var duckedDimensions = {width: playerDuckImg.width, height: playerDuckImg.height};
 
     this.players = [];
+    this.spawnPositions = [{x: 100, y: 300},{x: 300, y: 300}, {x: 200, y: 300}]
 
     this.initXentha();
 
@@ -80,17 +82,17 @@ Shooter.Game.prototype = {
   },
   update: function() {
     //collision
-
+    var me = this;
     for(var i = 0; i < this.players.length; i++) {
 
       var player = this.players[i];
       if (player.alive)
       {
-
         this.game.physics.arcade.collide(player, this.blockedLayer);
 
         this.getOtherPlayers(player).forEach(function(player, index) {
-          this.game.physics.arcade.overlap(this.bullets, player, this.hit, null, this);
+          console.log(player);
+          me.game.physics.arcade.overlap(me.bullets, player, me.hit, null, me);
         });
 
         var input = player.xentha.input[0];
@@ -125,12 +127,19 @@ Shooter.Game.prototype = {
             }
           }
 
+          if(input.id == 'joystick') {
+            if(input.pressed == true) {
+              console.log(input);
+            }
+          }
+
           if(input.id == 'a') {
             if(input.pressed == true) {
               this.playerFire(player);
             } else {
             }
-          } else if(input.id == 'b') {
+          }
+          if(input.id == 'b') {
             if(input.pressed == true) {
               this.playerJump(player);
             }
@@ -148,6 +157,9 @@ Shooter.Game.prototype = {
       }
     }
     return otherPlayers;
+  },
+  respawn: function(player) {
+
   },
   playerFire: function(player) {
     //  To avoid them being allowed to fire too fast we set a time limit
@@ -181,14 +193,26 @@ Shooter.Game.prototype = {
       bullet.kill();
   },
   hit: function(player,bullet) {
+      var hurtVelocity = bullet.body.velocity.x;
       bullet.kill();
+      me = this;
+
+      var resetVelocity = function(player) { player.body.velocity.x = 0; };
 
       if(player.lives < 1) {
         player.kill();
-        checkIfEndGame();
+        player.loadTexture('playerDead');
+        // this.game.time.events.add(Phaser.Timer.SECOND * 4, respawn(player), me);
+
+        // checkIfEndGame();
       } else {
+        player.loadTexture('playerHurt');
+        // setTimeout()
+        player.body.velocity.x = player.body.velocity.x + hurtVelocity;
+        // this.game.time.events.add(Phaser.Timer.SECOND * 2, resetVelocity(player), me);
         player.lives -= 1;
       }
+
   },
   collect: function(player, collectable) {
     //play audio
@@ -203,13 +227,16 @@ Shooter.Game.prototype = {
       return;
     }
 
+    XENTHA.settings.apiKey = "wHAY33IEW8he";
     XENTHA.connect();
 
     var me = this;
+
     XENTHA.playerJoined = function(data) {
       XENTHA.setLayout(XENTHA.layouts.CONTROLLER);
       // data.players.forEach(function(xPlayer, index) {
-      var player = me.game.add.sprite(100, 300, 'player');
+      var spawnPosition = me.spawnPositions[Math.floor((Math.random() * me.spawnPositions.length))];
+      var player = me.game.add.sprite(spawnPosition.x, spawnPosition.y, 'player');
       me.game.physics.arcade.enable(player);
       player.body.gravity.y = 1000;
 
@@ -221,6 +248,9 @@ Shooter.Game.prototype = {
 
     XENTHA.playerLeft = function(data) {
       console.log('player left.. ');
+      var index = me.players.map(function(player) {return player.xentha.id; }).indexOf(data.player.id);
+      me.players[index].destroy();
+      me.players.splice(index);
     }
 
     XENTHA.onInput = function(data) {

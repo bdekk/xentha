@@ -12,13 +12,15 @@ Shooter.Boot.prototype = {
     //loading screen will have a white background
     this.game.stage.backgroundColor = '#eee';
 
-    this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+    // this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     // this.game.scale.minWidth = 480;
     // this.game.scale.minHeight = 260;
-    this.game.scale.maxWidth = window.innerWidth;
-    this.game.scale.maxHeight = window.innerHeight;
-    this.game.scale.pageAlignHorizontally = true;
-    this.game.scale.updateLayout(true);
+    // this.game.scale.maxWidth = window.innerWidth;
+    // this.game.scale.maxHeight = window.innerHeight;
+    // this.game.scale.pageAlignHorizontally = true;
+    // this.game.scale.pageAlignVertically = true;
+
+    // this.game.scale.updateLayout(true);
 
     //physics system
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
