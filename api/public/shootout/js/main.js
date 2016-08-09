@@ -1,6 +1,6 @@
 var Shooter = Shooter || {};
 
-Shooter.game = new Phaser.Game(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, Phaser.AUTO, '');
+Shooter.game = new Phaser.Game('100%','100%', Phaser.AUTO, '');
 
 Shooter.game.state.add('Boot', Shooter.Boot);
 Shooter.game.state.add('Preload', Shooter.Preload);
