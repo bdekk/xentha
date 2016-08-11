@@ -22,6 +22,8 @@ Quiz.Preload.prototype = {
     this.load.audio('time', ['assets/audio/time.wav']);
     this.load.audio('timesup', ['assets/audio/timeup.wav']);
 
+    this.load.json('data', 'assets/data/data.json');
+
     WebFontConfig = {
 
       //  'active' means all requested fonts have finished loading
