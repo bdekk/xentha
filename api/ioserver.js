@@ -19,6 +19,18 @@ module.exports = function(io) {
         socket.emit('pong', new Date());
     });
 
+    initializeRoomVariables = function(socket, room) {
+      var players = roomdata.get(socket, "players");
+      // room is not yet initialized.
+      if(!players) {
+        roomdata.set(socket, "players", []);
+        roomdata.set(socket, "score", 0);
+        roomdata.set(socket, "state", 0);
+        roomdata.set(socket, "roomCode", room.roomCode);
+        roomdata.set(socket, "host", null);
+      }
+    }
+
     socket.on('joinRoom', function(data) {
       console.log('join', data);
       if(data.roomCode) {
@@ -27,15 +39,7 @@ module.exports = function(io) {
           if(room) {
               roomdata.joinRoom(socket, data.roomCode); // use same id as the api room id.
 
-              var players = roomdata.get(socket, "players");
-              // room is not yet initialized.
-              if(!players) {
-                roomdata.set(socket, "players", []);
-                roomdata.set(socket, "score", 0);
-                roomdata.set(socket, "state", 0);
-                roomdata.set(socket, "roomCode", room.roomCode);
-                roomdata.set(socket, "host", null);
-              }
+              initializeRoomVariables(socket, room);
 
               var players = roomdata.get(socket, "players");
               var state = roomdata.get(socket, "state");
@@ -44,14 +48,15 @@ module.exports = function(io) {
               var host = roomdata.get(socket, "host");
 
               if(data.type == 'game') {
-                roomdata.set(socket, "gameSocketId", socket.id);
+                Game.findOne({where: {apiKey: data.apiKey}}).then(function(game) {
+                  if(game) {
+                    roomdata.set(socket, "gameData", {socket: socket.id, name: game.name, id: game.id});
+                  }
+                });
               } else {
                 if(!host) {
                   roomdata.set(socket, "host", socket.id);
                   host = socket.id;
-                }
-                if(data.user) { // user is logged in :)
-
                 }
                 var name = (data.user) ? data.user.username : 'player ' + players.length + 1; //if the player did not fill in a name, make one up.
                 var player = {"id": socket.id, "name": name, "color": randomColor(), "host": host == socket.id};
@@ -97,8 +102,11 @@ module.exports = function(io) {
     });
 
     socket.on('game.achievement', function(data) {
-        io.sockets.connected[data.id].emit('game.achievement', data.achievement);
-
+        var gameData = roomdata.get(socket, "gameData");
+        if(gameData) {
+          // create an achievement for player with id :) .. First check id.
+          io.sockets.connected[data.id].emit('game.achievement', data.achievement);
+        }
     });
 
     // send by the game to players
@@ -125,7 +133,7 @@ module.exports = function(io) {
 
     // send custom event to game.
     socket.on('player.send', function(obj) {
-      var gameSocketId = roomdata.get(socket, "gameSocketId");
+      var gameSocketId = roomdata.get(socket, "gameData").socket;
       if(gameSocketId && io.sockets.connected[gameSocketId]!=null) {
         if(obj.event && obj.data) {
           io.sockets.connected[gameSocketId].emit(obj.event, obj.data);
@@ -146,7 +154,7 @@ module.exports = function(io) {
     socket.on('player.restart', function(data) {
       //send arrow up game.
       var roomCode = roomdata.get(socket, "roomCode");
-      var gameSocketId = roomdata.get(socket, "gameSocketId");
+      var gameSocketId = roomdata.get(socket, "gameData").socket;
       if(gameSocketId && io.sockets.connected[gameSocketId]!=null) {
         io.sockets.connected[gameSocketId].emit('player.restart', {player: socket.id, restart: true});
       } else {
@@ -157,7 +165,9 @@ module.exports = function(io) {
 
     socket.on('disconnect', function(data) {
       var roomCode = roomdata.get(socket, "roomCode");
-      var gameSocketId = roomdata.get(socket, "gameSocketId");
+
+      var gameData = roomdata.get(socket, "gameData");
+      var gameSocketId = (gameData) ? gameData.socket : null;
       var players = roomdata.get(socket, "players");
 
       if(gameSocketId && gameSocketId == socket.id) {
@@ -182,7 +192,7 @@ module.exports = function(io) {
     socket.on('player.input', function(data) {
           //send arrow up game.
         var roomCode = roomdata.get(socket, "roomCode");
-        var gameSocketId = roomdata.get(socket, "gameSocketId");
+        var gameSocketId = roomdata.get(socket, "gameData").socket;
         if(gameSocketId && io.sockets.connected[gameSocketId]!=null) {
           io.sockets.connected[gameSocketId].emit('player.input', {player: socket.id, input: data});
         } else {

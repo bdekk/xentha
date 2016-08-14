@@ -190,6 +190,8 @@ Quiz.Game.prototype = {
       var color = (key == this.currentQuestion.answer) ? "#009900" : "#E50000";
       this.answersElements[key].addColor(color, 0);
     }
+
+
   },
   xentha: function() {
     var me = this;
