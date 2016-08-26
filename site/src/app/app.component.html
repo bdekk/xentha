@@ -1,6 +1,5 @@
-<div class="xentha-layout mdl-layout mdl-js-layout mdl-layout--fixed-header has-drawer" [ngClass]="{'': user, '': !user}">
-  <header class="xentha-header mdl-layout__header mdl-color--blue-grey-50
-  ">
+<div class="xentha-layout mdl-layout mdl-js-layout mdl-layout--fixed-header" #screen [ngClass]="{'': user, '': !user}">
+  <header class="xentha-header mdl-layout__header mdl-color--blue-grey">
     <div class="mdl-layout__header-row">
       <!-- Title -->
       <span class="mdl-layout-title"></span>
@@ -8,15 +7,16 @@
       <div class="mdl-layout-spacer"></div>
       <!-- Navigation -->
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link" [routerLink]="['/']">HOME</a>
-        <a class="mdl-navigation__link" [routerLink]="['/games']">PLAY</a>
-        <a class="mdl-navigation__link" [routerLink]="['/docs']">DOCS</a>
-        <a class="mdl-navigation__link" [hidden]="authService.getUser()" [routerLink]="['/login']">LOGIN/REGISTER</a>
-        <a class="mdl-navigation__link" [hidden]="!authService.getUser()" (click)="logout()">LOGOUT</a>
+        <!-- <a class="mdl-navigation__link" [routerLink]="['/']">HOME</a> -->
+        <!-- <a class="mdl-navigation__link" [routerLink]="['/games']">PLAY</a> -->
+        <!-- <a class="mdl-navigation__link" [routerLink]="['/docs']">DOCS</a> -->
+        <!-- <a class="mdl-navigation__link" [hidden]="authService.getUser()" [routerLink]="['/login']">LOGIN/REGISTER</a> -->
+        <span class="mdl-navigation__link">{{room.name}}</span>
+        <a class="mdl-navigation__link" (click)="fullscreen()">FULLSCREEN</a>
       </nav>
     </div>
   </header>
-  <drawer [user]="authService.getUser()" class="mdl-layout__drawer mdl-color--white mdl-color-text--blue-grey-50"></drawer>
+  <!-- <drawer [user]="authService.getUser()" class="mdl-layout__drawer mdl-color--white mdl-color-text--blue-grey-50"></drawer> -->
   <main class="mdl-layout__content">
     <!-- Router Outlet -->
     <router-outlet></router-outlet>

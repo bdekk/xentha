@@ -2,55 +2,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 
 
   <script src="bower_components/jquery/dist/jquery.js"></script>
   <script>
-    function showForm(form) {
-      var forms = document.getElementsByTagName('form');
-      for(var i =0; i  < forms.length; i++) {
-            forms[i].style.display = 'none';
-      }
-      document.getElementById(form).style.display = 'inline';
-    }
+    // function showForm(form) {
+    //   var forms = document.getElementsByTagName('form');
+    //   for(var i =0; i  < forms.length; i++) {
+    //         forms[i].style.display = 'none';
+    //   }
+    //   document.getElementById(form).style.display = 'inline';
+    // }
+    //
+    // function init() {
+    //
+    //   showForm('joinForm');
+    //
+    //   var user = JSON.parse(localStorage.getItem('user'));
+      // if(user) {
+      //   var el = document.createElement('h3');
+      //   el.innerHTML = 'Hello, ' + user.firstname + ' ' + user.lastname;
+      //   document.getElementById('content').appendChild(el);
+      //
+      //   document.getElementById('loginNav').style.display = 'none';
+      //   document.getElementById('registerNav').style.display = 'none';
+      //   document.getElementById('logoutNav').style.display = 'inline';
+      // } else {
+      //   document.getElementById('loginNav').style.display = 'inline';
+      //   document.getElementById('registerNav').style.display = 'inline';
+      //   document.getElementById('logoutNav').style.display = 'none';
+      // }
+    // }
 
-    function init() {
+    // function responsiveNav() {
+    //     var x = document.getElementById("nav");
+    //     if (x.className === "topnav") {
+    //         x.className += " responsive";
+    //     } else {
+    //         x.className = "topnav";
+    //     }
+    // }
 
-      showForm('joinForm');
-
-      var user = JSON.parse(localStorage.getItem('user'));
-      if(user) {
-        var el = document.createElement('h3');
-        el.innerHTML = 'Hello, ' + user.firstname + ' ' + user.lastname;
-        document.getElementById('content').appendChild(el);
-
-        document.getElementById('loginNav').style.display = 'none';
-        document.getElementById('registerNav').style.display = 'none';
-        document.getElementById('logoutNav').style.display = 'inline';
-      } else {
-        document.getElementById('loginNav').style.display = 'inline';
-        document.getElementById('registerNav').style.display = 'inline';
-        document.getElementById('logoutNav').style.display = 'none';
-      }
-    }
-
-  window.onload = function() {
-    init();
-  }
-
+  // window.onload = function() {
+  //   init();
+  // }
   </script>
   <body>
+    <!-- <ul id="nav" class="topnav">
+      <li class="icon">
+        <a href="javascript:void(0);" onclick="responsiveNav()">&#9776;</a>
+      </li>
+      <li class="right" id="joinNav"><a href="#" onclick="showForm('joinForm'); responsiveNav();">Play</a></li>
+      <li class="right" id="logoutNav"><a href="#" onclick="logout(); responsiveNav();">Logout</a></li>
+      <li class="right" id="loginNav"><a href="#" onclick="showForm('loginForm'); responsiveNav();">Login</a></li>
+      <li class="right" id="registerNav"><a href="#" onclick="showForm('registerForm'); responsiveNav();">Register</a></li>
+    </ul>
     <div id="content">
-      <ul class="topnav">
-        <li class="right" id="registerNav"><a href="#" onclick="showForm('registerForm')">Register</a></li>
-        <li class="right" id="loginNav"><a href="#" onclick="showForm('loginForm')">Login</a></li>
-        <li class="right" id="logoutNav"><a href="#" onclick="logout()">Logout</a></li>
-        <li class="right" id="joinNav"><a href="#" onclick="showForm('joinForm')">Play</a></li>
-      </ul>
       <div class="formWrapper">
         <form id="joinForm" style="display: none;">
-          <h1 class="">Create / Join game</h1>
+          <h1 class="text-center">Join game</h1>
           <input type="text" class="xinput" name="roomCode" id="roomCode" placeholder="Enter roomcode.."><br>
           <button type="button" class="mbtn orange" onclick="joinRoom()"><span>JOIN ROOM</span></button>
         </form>
@@ -75,16 +87,77 @@
       <div class="alert">
         <span id="error"></span>
       </div>
+    </div> -->
+    <a href="#" class="menu-toggle" ontouchstart="controller.openMenu()">&#9776;</a>
+    <div id="home">
+      <div class="description">
+        <h4 class="center-div">Go to Xentha.com and create a session to get the code.</h4>
+      </div>
+      <div class="keypad">
+          <div id="display"><span></span></div>
+          <div class="key" ontouchstart="controller.keypadPressed(1)">1</div>
+          <div class="key" ontouchstart="controller.keypadPressed(2)">2</div>
+          <div class="key" ontouchstart="controller.keypadPressed(3)">3</div>
+          <div class="key" ontouchstart="controller.keypadPressed(4)">4</div>
+          <div class="key" ontouchstart="controller.keypadPressed(5)">5</div>
+          <div class="key" ontouchstart="controller.keypadPressed(6)">6</div>
+          <div class="key" ontouchstart="controller.keypadPressed(7)">7</div>
+          <div class="key" ontouchstart="controller.keypadPressed(8)">8</div>
+          <div class="key" ontouchstart="controller.keypadPressed(9)">9</div>
+          <div class="key" ontouchstart="controller.keypadPressed('del')">DEL</div>
+          <div class="key" ontouchstart="controller.keypadPressed(0)">0</div>
+          <div class="key" ontouchstart="controller.keypadPressed('ok')">OK</div>
+      </div>
     </div>
-    <div id="controller"></div>
+    <div id="controller">
+      <div class="profile">
+        <h4 class="center-div">Guest 1</h4>
+      </div>
+      <div class="controls-container">
+        <div class="controls">
+          <a href="#" class="center" ontouchstart="controller.select()"><span>select</span></a>
+          <a href="#" class="left" ontouchstart="controller.left()"></a>
+          <a href="#" class="right" ontouchstart="controller.right()"></a>
+          <a href="#" class="up" ontouchstart="controller.up()"></a>
+          <a href="#" class="down" ontouchstart="controller.down()"></a>
+        </div>
+      </div>
+    </div>
 
-    <script src="bower_components/socket.io-client/socket.io.js"></script>
-    <script src="http://192.168.2.5:3000/assets/xentha-client.js"></script>
+    <div id="menu" style="display:none;">
+      <input type="button" class="menu-button" ontouchstart="controller.leaveGame()" value="Edit Profile"/>
+      <input type="button"  class="menu-button" ontouchstart="controller.leaveGame()" value="Leave Game"/>
+      <input type="button"  class="menu-button" ontouchstart="controller.leaveSession()" value="Quit Session"/>
+      <input type="button" class="menu-button" ontouchstart="controller.closeMenu()" value="Close"/>
+    </div>
+    <iframe id="game" style="display: none;">
+      <!-- game url-->
+    </iframe>
+    <div id="errorBar"></div>
+    <!-- <script src="bower_components/socket.io-client/socket.io.js"></script> -->
+    <!-- <script src="http://192.168.2.5:3000/assets/xentha-client.js"></script> -->
 
     <script src="bower_components/pixi.js/bin/pixi.js"></script>
-    <script src="js/client.js"></script>
+    <!-- <script src="js/client.js"></script> -->
+    <script src="js/x-client.js"></script>
     <script src="js/user.js"></script>
+    <script src="js/controller.js"></script>
+
     <script>
+      var controller = new Controller();
     </script>
+    <!-- <script src="js/virtualjoystick.js"></script> -->
+    <!-- <script src="js/pixijoystick.js"></script> -->
   </body>
 </html>
+
+
+<!--
+
+  SITE > Create game
+  CLIENT > Join session
+  CLIENT > Choose game
+  SITE > START game
+  CLIENT > Open game client screen and logic (iframe)
+  SERVER > Open game screen and logic (iframe)
+-->

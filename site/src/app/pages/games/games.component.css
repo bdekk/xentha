@@ -1,6 +1,10 @@
 .game-card.mdl-card {
-  width: 320px;
-  height: 320px;
+  /*width: 320px;
+  height: 320px;*/
+}
+
+.selected {
+  border: 5px solid #eee;
 }
 
 .game-card > .mdl-card__title {

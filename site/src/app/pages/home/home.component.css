@@ -6,3 +6,24 @@
 .section--center {
   margin: 0 auto;
 }
+
+.center-text {
+  text-align: center;
+}
+
+.start-button {
+  margin: 0 auto;
+  width: 30%;
+  height: 30%;
+  text-align: center;
+
+/* need ot fix this lateR*/
+  position: absolute;
+  top: 30%;
+  left: 40%;
+}
+
+.start-button > button {
+  width: 10em;
+  height: 10em;
+}

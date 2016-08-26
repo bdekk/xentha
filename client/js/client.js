@@ -61,30 +61,31 @@ XENTHA.buildLayout = function(layout) {
   if(layout == 'controller') {
     buildControllerLayout();
   } else {
-    for(var i =0; i < layout.length; i++) {
-      if(layout[i].type == 'button') {
-        stage.addChild(createButton(layout[i].id, layout[i].x, layout[i].y,layout[i].width,layout[i].height, 'button-a.png', null,  {
-          mousedown: function() {
-            XENTHA.input({id: this.XENTHA_ID, pressed: true});
-          },
-          mouseup: function() {
-              XENTHA.input({id: this.XENTHA_ID, pressed: false});
-          }
-
-        }));
-      } else if(layout[i].type == 'input') {
-
-      } else if(layout[i].type == 'text') {
-        textOptions = {};
-        if(!layout[i].size) layout[i].size = 50;
-        textOptions.font = layout[i].size + "px Arial";
-        textOptions.fill = layout[i].color || "#fff";
-        var text = new PIXI.Text(layout[i].value, textOptions);
-        text.x = layout[i].x;
-        text.y = layout[i].y;
-        stage.addChild(text);
-      }
-    }
+    // for(var i =0; i < layout.length; i++) {
+    //   if(layout[i].type == 'button') {
+    //     stage.addChild(createButton(layout[i].id, layout[i].x, layout[i].y,layout[i].width,layout[i].height, 'button-a.png', null,  {
+    //       mousedown: function() {
+    //         XENTHA.input({id: this.XENTHA_ID, pressed: true});
+    //       },
+    //       mouseup: function() {
+    //           XENTHA.input({id: this.XENTHA_ID, pressed: false});
+    //       }
+    //
+    //     }));
+    //   } else if(layout[i].type == 'input') {
+    //
+    //   } else if(layout[i].type == 'text') {
+    //     textOptions = {};
+    //     if(!layout[i].size) layout[i].size = 50;
+    //     textOptions.font = layout[i].size + "px Arial";
+    //     textOptions.fill = layout[i].color || "#fff";
+    //     var text = new PIXI.Text(layout[i].value, textOptions);
+    //     text.x = layout[i].x;
+    //     text.y = layout[i].y;
+    //     stage.addChild(text);
+    //   }
+    // }
+    XENTHA.addLayout(layout);
   }
 }
 
@@ -113,6 +114,10 @@ XENTHA.addLayout = function(layout) {
       text.x = layout[i].x;
       text.y = layout[i].y;
       stage.addChild(text);
+    } else if(layout[i].type == 'joystick') {
+      createJoyStick(layout[i].id, layout[i].x, layout[i].y, {
+
+      });
     }
   }
 }
@@ -174,6 +179,41 @@ function buildControllerLayout() {
     }
   }));
 
+  // var i = null;
+  // createJoyStick('joystick', 100, window.innerHeight - 100, {
+  //   touchstart: function() {
+  //     i = setInterval(function(){
+  //       XENTHA.input(
+  //         {id: this.XENTHA_ID, pressed: true, data: {
+  //           deltaX: joystick.deltaX(),
+  //           deltaY: joystick.deltaY(),
+  //           left: joystick.left(),
+  //           right: joystick.right(),
+  //           up: joystick.up(),
+  //           down: joystick.down()
+  //         }
+  //       });
+  //     }, 1/30 * 1000);
+  //   },
+  //   touchend: function() {
+  //     // XENTHA.input({id: this.XENTHA_ID, pressed: true});
+  //     if(i) {
+  //       clearInterval(i);
+  //       i = null;
+  //       XENTHA.input(
+  //         {id: this.XENTHA_ID, pressed: false, data: {
+  //           deltaX: 0,
+  //           deltaY: 0,
+  //           left: false,
+  //           right: false,
+  //           up: false,
+  //           down: false
+  //         }
+  //       });
+  //     }
+  //   },
+  // });
+
 stage.addChild(createButton('up', 70,window.innerHeight - 150,50,50, 'button-up.png', null, {
     mousedown: function() {
       XENTHA.input({id: this.XENTHA_ID, pressed: true});
@@ -234,6 +274,34 @@ function animate() {
     renderer.render(stage);
 }
 
+
+
+function createJoyStick(id, x, y, events) {
+    var joystick = new VirtualJoystick({
+      mouseSupport: true,
+      stationaryBase: true,
+      limitStickTravel: true,
+      container: document.getElementsByTagName('body')[0],
+      stickRadius: 50,
+      baseX: x,
+      baseY: y,
+      mouseSupport	: true,
+      XENTHA_ID: id
+    });
+
+    joystick.addEventListener('touchStart', function(){
+  		events.touchStart;
+		})
+
+    joystick.addEventListener('touchEnd', function(){
+			events.touchEnd;
+		})
+
+        // setInterval(function(){
+    		//   joystick.deltaX()
+    	  //   joystick.deltaY()
+    		// }, 1/30 * 1000);
+}
 
 function createButton(id, x,y,width,height,image, text, events) {
   var events = events || {};

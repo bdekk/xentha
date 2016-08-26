@@ -1,8 +1,10 @@
 body {
   /*3a7bd5*/
-  background-color: #e67e22;
+  background-color: #3b3b3b;
   background-size: 100% auto;
   font-family: 'Open Sans', sans-serif;
+  padding:0;
+  margin:0;
 }
 
 .text-center {
@@ -199,4 +201,186 @@ ul.topnav li a.active {background-color: #eee;}
     display: block;
     text-align: center;
   }
+}
+
+
+
+// new styling!
+#home {
+}
+
+#home > .description {
+  position: relative;
+  width: 100%;
+  height: 40%;
+  text-align: center;
+  background: #000;
+}
+
+.center-div {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 50%;
+  margin-top: -1.5em;
+  color: #fff;
+}
+
+#home > .keypad {
+  position: relative;
+  height: 60%;
+  padding: 1em;
+}
+
+#home > .keypad > #display {
+  display: block;
+  height: 50px;
+  background: #1f1f1f;
+  border: 1px solid #3b3b3b;
+  color: #fff;
+  text-align: center;
+  font-size: 200%;
+}
+
+#home > .keypad > .key {
+  display: inline-block;
+  padding: .5em .5em .5em .5em;
+  width: 78px;
+  margin: 5px;
+  text-align: center;
+  background: #1f1f1f;
+  border: 1px solid #3b3b3b;
+  color: #fff;
+  cursor: pointer;
+}
+
+#controller > .profile {
+  position: relative;
+  width: 100%;
+  height: 40%;
+  text-align: center;
+}
+
+#controller > .controls-container {
+  position: relative;
+  height: 60%;
+  background: #1f1f1f;
+  padding: 2em;
+}
+
+#controller > .controls-container > .controls {
+  background: transparent url("../img/gamepad.png") no-repeat;
+  height: 100%;
+  background-size: 100%;
+  cursor: hand;
+  cursor: pointer;
+
+}
+
+#controller > .controls-container > .controls > .center {
+  position: absolute;
+  top: 22%;
+  left: 28%;
+  width: 44%;
+  height: 35%;
+  border-radius: 99px;
+  border:1px;
+}
+
+#controller > .controls-container > .controls > .center > span{
+  position: absolute;
+  top: 40%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#controller > .controls-container > .controls > .left {
+  position: absolute;
+    top: 22%;
+    left: 7%;
+    width: 21%;
+    height: 35%;
+}
+
+#controller > .controls-container > .controls > .right {
+  position: absolute;
+    top: 22%;
+    left: 72%;
+    width: 21%;
+    height: 35%;
+}
+
+#controller > .controls-container > .controls > .up {
+  position: absolute;
+  top: 7%;
+  left: 28%;
+  width: 44%;
+  height: 18%;
+}
+
+#controller > .controls-container > .controls > .down {
+  position: absolute;
+  top: 57%;
+  left: 28%;
+  width: 44%;
+  height: 18%;
+}
+
+
+#menu {
+  position: absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  right:0;
+  z-index: 100;
+  padding:5px;
+  background: #3b3b3b;
+}
+
+#menu > .menu-button {
+  display: block;
+  padding: 3em;
+  background: #1f1f1f;
+  border: 1px solid #3b3b3b;
+  text-align: center;
+  // margin: 5px;
+  color: #fff;
+  width:100%;
+}
+
+.menu-toggle {
+  position: absolute;
+  right:5px;
+  top:5px;
+  color: #fff;
+  z-index:50;
+  text-decoration: none;
+}
+
+#errorBar {
+  height: 40px;
+  left: 0;
+  right: 0;
+  display:none;
+  bottom: 0;
+  position: absolute;
+  text-align: center;
+}
+
+.info-notification {
+  color: #fff;
+  background: #55acee;
+}
+
+.error-notification {
+    background: #dd4b39;
+    color: #fff;
+}
+
+.success-notification {
+    background: #00933B;
+    color: #fff;
 }

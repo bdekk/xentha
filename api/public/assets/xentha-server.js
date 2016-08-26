@@ -335,6 +335,7 @@ XENTHA.connect = function(url) {
   // type: button, input, id: .. leftArrow, pressed: true/false)
   XENTHA.onInput = function(data) {}
   XENTHA.socket.on('player.input', function(data) {
+    console.log(data);
       XENTHA.onInput(data);
   });
 

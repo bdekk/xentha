@@ -15,8 +15,10 @@ import { Configuration } from '../../app.constants';
 export class GamesComponent implements OnInit {
 
   private games: Game [];
+  private selected: number;
 
   constructor(private gameService: GameService, private constants: Configuration, private router: Router) {
+    this.selected = 0;
   }
 
   ngOnInit() {
@@ -29,6 +31,16 @@ export class GamesComponent implements OnInit {
 
   onSelect(game: Game) {
     this.router.navigate(['/games', game.id]);
+  }
+
+  onLeft() {
+    if(this.selected > 0)
+      this.selected -= 1;
+  }
+
+  onRight() {
+    if(this.selected < this.games.length - 1)
+      this.selected += 1;
   }
 
   openGame(game: Game) {
