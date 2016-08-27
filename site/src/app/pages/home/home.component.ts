@@ -1,31 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Router}    from '@angular/router';
+import { Router }    from '@angular/router';
 import { MessageService } from '../../services/message.service';
-import { SocketService } from '../../services/socket.service';
-import { Configuration } from '../../app.constants';
 
 @Component({
   moduleId: module.id,
   selector: 'app-home',
   templateUrl: 'home.component.html',
   styleUrls: ['home.component.css'],
-  providers: [MessageService, SocketService, Configuration]
+  providers: []
 })
 export class HomeComponent implements OnInit {
-  constructor(private router: Router, private messageService: MessageService, private socketService: SocketService, private configuration: Configuration) {}
+  constructor(private router: Router, private messageService: MessageService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    console.log(this.messageService !== undefined);
   }
 
-  start() {
+  start(): void {
 
-    this.messageService.messages.next({
+    this.messageService.send({
       id: 'room.create',
       data: {'name': 'Blaat'}
     });
 
-    this.messageService.messages.subscribe(msg => {
+    this.messageService.messages$.subscribe(msg => {
       console.log(msg);
         if(msg.id == 'room.created') {
             // navigate naar games!

@@ -11,10 +11,12 @@ export interface Message {
 
 @Injectable()
 export class MessageService {
-    public messages: Rx.Subject<Message>;
+    private _messages: Rx.Subject<Message>;
+    messages$: Rx.Observable<Message>;
 
     constructor(wsService: SocketService, private configuration: Configuration) {
-      this.messages = <Rx.Subject<Message>>wsService
+      console.log('messag eservice');
+      this._messages = <Rx.Subject<Message>>wsService
         .connect()
         .map((response: MessageEvent): Message => {
             let data = JSON.parse(response.data);
@@ -23,5 +25,11 @@ export class MessageService {
                 data: data.data,
             }
         });
+
+      this.messages$ = this._messages.asObservable();
+    }
+
+    public send(message: Message): void {
+      this._messages.next(message);
     }
 }

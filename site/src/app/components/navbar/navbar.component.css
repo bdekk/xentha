@@ -1,0 +1,9 @@
+.xentha-header {
+  z-index: 100;
+}
+
+.xentha-header nav > span, .xentha-header nav > a  {
+  /*color: #92989b;*/
+  color: #fff;
+
+}
