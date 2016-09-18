@@ -27,7 +27,7 @@ export class SocketService {
             ws.onclose = obs.complete.bind(obs);
 
             return ws.close.bind(ws);
-        });
+        }).share();
 
         // on obs next (send something in the stream) send it using ws.
         let observer = {

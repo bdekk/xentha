@@ -25,9 +25,9 @@ export class HomeComponent implements OnInit {
     });
 
     this.messageService.messages$.subscribe(msg => {
-      console.log(msg);
         if(msg.id == 'room.created') {
             // navigate naar games!
+            this.router.navigate(['/games']);
         }
     });
   }

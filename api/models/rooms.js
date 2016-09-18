@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
   }, {
     hooks: {
       beforeCreate: function(room, options) {
-        room.roomCode = randomstring.generate(3);
+        room.roomCode = randomstring.generate({length: 3, charset: 'numeric'});
         return room;
       }
     },

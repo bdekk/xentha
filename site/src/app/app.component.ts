@@ -23,7 +23,7 @@ declare var componentHandler: any;
 export class AppComponent {
 
   private user: User;
-  title = "bla";
+  title = "Xentha";
 
   private room: any;
 
@@ -37,12 +37,13 @@ export class AppComponent {
   }
 
   ngOnInit(): void {
-    // this.messageService.messages$.subscribe(msg => {
-    //   console.log(msg);
-    //     if(msg.id == 'room.created') {
-    //         // navigate naar games!
-    //     }
-    // });
+    this.messageService.messages$.subscribe(msg => {
+      console.log(msg);
+        if(msg.id == 'room.created') {
+            // navigate naar games!
+            this.room = msg.data;
+        }
+    });
   }
 
   logout() {

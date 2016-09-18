@@ -90,7 +90,8 @@ var XENTHA = {
   api: "http://192.168.2.5:3000",
   connected: false,
   socket: undefined,
-  callbacks: {}
+  callbacks: {},
+  room: {}
 };
 
 XENTHA.connect = function() {
@@ -110,8 +111,13 @@ XENTHA.connect = function() {
       return;
     }
 
+    XENTHA.emit('_' + data.id, data.data);
     XENTHA.emit(XENTHA.callbacks[data.id], data.data);
     // updateStats(JSON.parse(event.data));
+  };
+
+  XENTHA.socket.onerror = function(data) {
+    XENTHA.emit('error', 'error while connecting..');
   };
 
   XENTHA.socket.onclosed = function(event) {
@@ -139,5 +145,9 @@ XENTHA.on('connect', function () {
 
 XENTHA.on('disconnect', function () {
 });
+
+XENTHA.on('_room.joined', function(data) {
+    XENTHA.room = data;
+}.bind(this));
 
 window.XENTHA = XENTHA;

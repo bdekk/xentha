@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MessageService } from '../../services/message.service';
 
 @Component({
@@ -8,17 +8,19 @@ import { MessageService } from '../../services/message.service';
   styleUrls: ['navbar.component.css']
 })
 export class Navbar implements OnInit {
+    @Input() room:any;
 
-  constructor(private messageService: MessageService) { }
+    constructor(private messageService: MessageService) { }
 
-  ngOnInit() {
+    ngOnInit() {
 
-    this.messageService.messages$.subscribe(msg => {
-      console.log(msg);
-        if(msg.id == 'room.created') {
-            // navigate naar games!
-        }
-    });
-  }
+        // this.messageService.messages$.subscribe(msg => {
+        //   console.log(msg);
+        //     if(msg.id == 'room.created') {
+        //         // navigate naar games!
+        //         this.room = msg.room;
+        //     }
+        // });
+    }
 
 }

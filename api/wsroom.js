@@ -29,6 +29,11 @@ exports.inRoom = function(socket, room) {
   }
 }
 
+exports.isHost = function(socket, room) {
+    var room = room || socket.room;
+    return this.rooms[room].host === socket.id;
+}
+
 /* Creates a room.
    Note: make sure that this room name is unique
 	 @param socket socket that creates this room.
@@ -37,16 +42,17 @@ exports.inRoom = function(socket, room) {
 */
 exports.create = function(socket, room, opts) {
   var opts = opts || {autoHost: true};
-	if(exports.Debug) console.log(socket.id+": Creating Room: "+room);
+  if(exports.Debug) console.log(socket.id+": Creating Room: "+room);
   if(this.exists(room)) { console.log('! overriding room with id ' + room); };
   var host = opts.autoHost ? socket.id : undefined;
-	this.rooms[room] = {host: host, sockets:[], variables: {}};
+  this.rooms[room] = {host: host, sockets:[], variables: {}};
+  socket.room = room;
 }
 
 /* Set variable on room */
 exports.set = function(socket, id, data) {
 	if(exports.Debug) console.log(socket.id+": Creating variable: "+id+" with data: "+data);
-	if(!this.inRoom(socket)){
+	if(!this.inRoom(socket) && !this.isHost(socket)) {
 		console.error("Socket" + socket + " is not in any room.");
 		return false;
 	}
@@ -55,28 +61,37 @@ exports.set = function(socket, id, data) {
 
 exports.get = function(socket, variable, content) {
 	if(exports.Debug) console.log(socket.id+": Getting variable: "+variable);
-  if(!this.inRoom(socket)) {
-		console.error("Could not get variable. Socket" + socket + " is not in any room.");
-    return undefined;
-  }
+
+    if(!this.inRoom(socket)) {
+	       console.error("Could not get variable. Socket" + socket + " is not in any room.");
+           return undefined;
+    }
 	if(variable == "room"){
 		if(!socket.room) return undefined;
 		return socket.room;
 	}
+
+    // standard room variables.
 	if(variable == "host") return this.rooms[socket.room].host;
 	if(variable == "sockets") return this.rooms[socket.room].sockets;
 	if(variable == "hostAndSockets") return this.rooms[socket.room].sockets.concat(this.rooms[socket.room].host);
+
+    return this.rooms[socket.room].variables[variable];
 }
 
 exports.join = function(socket, room, opts) {
   var opts = opts || {autoCreate: false};
 	if(exports.Debug) console.log(socket.id+": Joining room: "+room);
 	// if(socket.room) this.leaveRoom(socket, room);
-	if(opts.autoCreate && !this.exists(socket, room)) this.create(socket, room, {autoHost: true});
+	if(opts.autoCreate && !this.exists(socket, room)) {
+        this.create(socket, room, {autoHost: true});
+    }
+    if(!this.rooms[room].host && this.rooms[room].sockets.length == 0) {
+        // nobody joined the room yet and the host is not set (autohost was false on creation)
+        this.rooms[room].host = socket.id;
+    }
 	this.rooms[room].sockets.push(socket.id);
 	socket.room = room;
-
-
 };
 
 exports.clear = function(room) {

@@ -25,8 +25,11 @@ function Controller (options) {
 
 Controller.prototype._connect = function() {
   // this.socket = new WebSocket(this.ws);
-  XENTHA.callbacks["client.joined"] = 'roomJoined';
-  XENTHA.callbacks["client.joined.error"] = 'roomJoinedFailed';
+  XENTHA.callbacks["room.joined"] = 'roomJoined';
+  XENTHA.callbacks["room.joined.error"] = 'roomJoinedFailed';
+  XENTHA.callbacks["player.joined"] = 'playerJoined';
+  XENTHA.callbacks["room.selected"] = 'roomSelected';
+  XENTHA.callbacks["game.disconnect"] = 'gameDisconnected';
 
   XENTHA.connect();
 
@@ -36,14 +39,42 @@ Controller.prototype._connect = function() {
 
   XENTHA.on('connect', function(data) {
     console.log('connected.');
+    this.showSuccess('connected');
   }.bind(this));
 
   XENTHA.on('roomJoined', function(data) {
     console.log('room joined.');
+    this.$menu.hide();
+    this.$game.hide();
+    this.$home.hide();
+    this.$game.attr('src', null);
+    this.$controller.show();
+
   }.bind(this));
 
   XENTHA.on('roomJoinedFailed', function(data) {
     this.showError(data.message);
+  }.bind(this));
+
+  /* game has been selected */
+  XENTHA.on('roomSelected', function(data) {
+      console.log(data.gameUrl);
+      this.$menu = $('#menu').hide();
+      this.$game.attr('src', data.gameUrl);
+      this.$game.show();
+  }.bind(this));
+
+  /* game has been selected */
+  XENTHA.on('playerJoined', function(data) {
+      console.log('pj', data);
+  }.bind(this));
+
+  /* game has disconnected */
+  XENTHA.on('gameDisconnected', function(data) {
+      this.showError(data.message);
+      // this.$game.hide();
+      // this.$game.attr('src', null);
+      // this.$controller.show();
   }.bind(this));
   //
   // this.socket.on('error', function(data) {
@@ -120,7 +151,7 @@ Controller.prototype.joinRoom = function(roomCode) {
     this.showError('Please enter a room code.');
     return;
   }
-  XENTHA.send('room.join', {roomCode: roomCode});
+  XENTHA.send('room.join', {"roomCode": roomCode});
 }
 
 Controller.prototype.leaveRoom = function() {

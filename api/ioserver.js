@@ -44,8 +44,25 @@ module.exports = function(wss) {
     socket.id = userId;
 
     socket.sendData = function sendData(id, data) {
-      console.log('sendData');
+      console.log('send data to', socket.id, 'id: ', id, 'data: ', data);
       socket.send(JSON.stringify({id: id, data: data}));
+    }
+
+    socket.broadcastToRoom = function broadcastToRoom(id, data) {
+        if(!roomdata) {
+            console.error('could not find roomdata module.');
+            return;
+        }
+        var socketIdsInRoom = roomdata.get(this, 'sockets');
+        wss.clients.forEach(function each(client) {
+            var inRoom = socketIdsInRoom.some(function (socketId) {
+                return socketId === client.id;
+            });
+
+            if(inRoom) {
+                client.sendData(id, data);
+            }
+        });
     }
     // socket["sendData"] = function sendData(id, data) {
     //   console.log(id, data);
@@ -84,24 +101,26 @@ module.exports = function(wss) {
       if(data.roomCode) {
       //  io_room_controller.join(io.sockets, socket, data);
         Room.findOne({where: {roomCode: data.roomCode}}).then(function(room) {
-          if(room) {
-              roomdata.join(socket, data.roomCode); // use same id as the api room id.
+            if(room) {
+                  roomdata.join(socket, room.roomCode); // use same id as the api room id.
 
-              // initializeRoomVariables(socket, room);
+                  // initializeRoomVariables(socket, room);
 
-              var players = roomdata.get(socket, "players");
-              var state = roomdata.get(socket, "state");
-              var score = roomdata.get(socket, "score");
-              var roomCode = roomdata.get(socket, "roomCode");
-              var host = roomdata.get(socket, "host");
+                  var players = roomdata.get(socket, "players");
+                  var state = roomdata.get(socket, "state");
+                  var score = roomdata.get(socket, "score");
+                  var roomCode = roomdata.get(socket, "roomCode");
+                  var host = roomdata.get(socket, "host");
 
-              if(data.type == 'game') {
-                Game.findOne({where: {apiKey: data.apiKey}}).then(function(game) {
-                  if(game) {
-                    roomdata.set(socket, "gameData", {socket: socket.id, name: game.name, id: game.id});
-                  }
-                });
-              } else {
+                  console.log(players, state, score, roomCode, host);
+
+            //   if(data.type == 'game') {
+            //     Game.findOne({where: {apiKey: data.apiKey}}).then(function(game) {
+            //       if(game) {
+            //         roomdata.set(socket, "gameData", {socket: socket.id, name: game.name, id: game.id});
+            //       }
+            //     });
+            //   } else {
                 if(!host) {
                   roomdata.set(socket, "host", socket.id);
                   host = socket.id;
@@ -111,9 +130,9 @@ module.exports = function(wss) {
                 players.push(player);
                 roomdata.set(socket, "players", players);
                 console.log(room.roomCode, player);
-                socket.broadcast.to( room.roomCode ).sendData('player.joined', {roomCode: room.roomCode, player: player}); // send others that a player joien.
-              }
-              socket.sendData('room.joined', {roomCode: room.roomCode, players: players, player: player, state: state}); //send the joining player that he has joined.
+                socket.broadcastToRoom('player.joined', {roomCode: room.roomCode, player: player}); // send others that a player joien.
+                //   }
+                socket.sendData('room.joined', {roomCode: room.roomCode, players: players, player: player, state: state}); //send the joining player that he has joined.
               // console.log({room_code: rawRoom.roomCode, player: user});
           } else {
             socket.sendData('room.joined.error', {"message": "Could not find room with roomCode " + data.roomCode});
@@ -128,8 +147,11 @@ module.exports = function(wss) {
    /** room create, usually done by the website. Upon gaming there will be a client host that is the one that decides (boss) **/
     messages['room.create'] = function(data) {
       Room.create({name: data.name}).then(function(room) {
-          roomdata.create(socket, data.roomCode);
-          socket.sendData('room.created', {roomCode: room.roomCode}); //send the joining player that he has joined.
+          var jsonRoom = room.toJSON();
+          roomdata.create(socket, jsonRoom.roomCode);
+          roomdata.set(socket, 'players', []);
+          jsonRoom.players = [];
+          socket.sendData('room.created', jsonRoom); //send  the host that the room is created.
       })
     }.bind(this);
 

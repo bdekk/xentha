@@ -1,10 +1,24 @@
 .game-card.mdl-card {
   /*width: 320px;
   height: 320px;*/
+
+  width: 100%;
+  margin:0;
+  background-size: cover !important;
 }
 
 .selected {
-  border: 5px solid #eee;
+    border: 5px solid palegoldenrod;
+}
+
+.selected i {
+    font-size: 400%;
+    position: absolute;
+    z-index: 10;
+    top: 10px;
+    left: 10px;
+    color: palegoldenrod;
+    display: inline !important;
 }
 
 .game-card > .mdl-card__title {

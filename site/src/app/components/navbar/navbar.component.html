@@ -1,3 +1,4 @@
+<!Doctype>
 <header class="xentha-header mdl-layout__header mdl-color--blue-grey">
   <div class="mdl-layout__header-row">
     <!-- Title -->
@@ -10,7 +11,15 @@
       <!-- <a class="mdl-navigation__link" [routerLink]="['/games']">PLAY</a> -->
       <!-- <a class="mdl-navigation__link" [routerLink]="['/docs']">DOCS</a> -->
       <!-- <a class="mdl-navigation__link" [hidden]="authService.getUser()" [routerLink]="['/login']">LOGIN/REGISTER</a> -->
-      <span class="mdl-navigation__link"></span>
+
+      <span *ngIf="room.players" class="mdl-navigation__link">
+          <i class="material-icons">face</i>
+          <strong>{{room.players.length}}</strong>
+      </span>
+      <span *ngIf="room.roomCode" class="mdl-navigation__link">
+          <i class="material-icons">room</i>
+          <strong>{{room.roomCode}}</strong>
+      </span>
       <a class="mdl-navigation__link" (click)="fullscreen()">FULLSCREEN</a>
     </nav>
   </div>
