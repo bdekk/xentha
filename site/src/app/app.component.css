@@ -1,13 +1,3 @@
-.xentha-header {
-  z-index: 100;
-}
-
-.xentha-header nav > span, .xentha-header nav > a  {
-  /*color: #92989b;*/
-  color: #fff;
-
-}
-
 .mdl-layout__content {
   padding-bottom: 10em;
 }

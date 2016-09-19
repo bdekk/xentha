@@ -55,6 +55,7 @@ const barrels: string[] = [
   'app/pages/lobby',
   'app/pages/mygames',
   'app/components/navbar',
+  'app/pages/play',
   /** @cli-barrel */
 ];
 

@@ -1,0 +1,5 @@
+<!DocType>
+<div class="play-frame">
+    <iframe *ngIf="game" src="{{game.url}}"></iframe>
+    <h4 class="text-center" *ngIf="!game">Could not find game.</h4>
+</div>

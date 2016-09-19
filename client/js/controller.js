@@ -72,23 +72,10 @@ Controller.prototype._connect = function() {
   /* game has disconnected */
   XENTHA.on('gameDisconnected', function(data) {
       this.showError(data.message);
-      // this.$game.hide();
-      // this.$game.attr('src', null);
-      // this.$controller.show();
+      this.$game.hide();
+      this.$game.attr('src', null);
+      this.$controller.show();
   }.bind(this));
-  //
-  // this.socket.on('error', function(data) {
-  //   this.showError(data);
-  // }.bind(this));
-  //
-  // this.socket.on('roomJoined', function(data) {
-  //   this.roomCode = data.roomCode;
-  //   this.$keypadDisplay.text("");
-  //   this.$home.slideUp( "fast", function() {
-  //     // this.$home.hide();
-  //   });
-  //   this.$controller.show();
-  // }.bind(this));
 }
 
 Controller.prototype.left = function() {
@@ -113,22 +100,19 @@ Controller.prototype._showNotification = function() {
 }
 
 Controller.prototype.right = function() {
-  console.log('right');
   XENTHA.send('client.controls', {right: true});
 }
 
 Controller.prototype.up = function() {
-  console.log('up');
   XENTHA.send('client.controls', {up: true});
 }
 
 Controller.prototype.down = function() {
-  console.log('down');
   XENTHA.send('client.controls', {down: true});
 }
 
 Controller.prototype.select = function() {
-  console.log('select');
+  XENTHA.send('client.controls', {select: true});
 }
 
 Controller.prototype.keypadPressed = function(key) {

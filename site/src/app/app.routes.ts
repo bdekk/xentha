@@ -8,6 +8,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { HomeComponent } from './pages/home/home.component';
 import { MyGamesComponent } from './pages/mygames/mygames.component';
+import { PlayComponent } from './pages/play/play.component';
 
 // Route Configuration
 export const routes: RouterConfig = [
@@ -16,7 +17,8 @@ export const routes: RouterConfig = [
   { path: 'login', component: LoginComponent },
   { path: 'games/:id', component: GameComponent },
   { path: 'profile/:id', component: ProfileComponent },
-  { path: 'mygames', component: MyGamesComponent }
+  { path: 'mygames', component: MyGamesComponent },
+  { path: 'play/:id', component: PlayComponent }
 
   // { path: 'dogs', component: DogListComponent }
 ];

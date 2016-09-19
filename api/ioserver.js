@@ -64,10 +64,20 @@ module.exports = function(wss) {
             }
         });
     }
-    // socket["sendData"] = function sendData(id, data) {
-    //   console.log(id, data);
-    //   socket.send(JSON.stringify({id: id, data: data}));
-    // }
+
+    socket.sendTo = function(socketId, id, data) {
+        var hasSended = false;
+
+        var hostSocket = wss.clients.find(function(client) {
+            return client.id == socketId;
+        });
+
+        if(hostSocket) {
+            hostSocket.sendData(id, data);
+            return;
+        }
+        console.log('tried to send message to ', socketId, ' but could not be found.');
+    }
 
     socket.on('message', function incoming(event) {
       console.log('received: %s' , event);
@@ -85,17 +95,6 @@ module.exports = function(wss) {
         socket.sendData('pong', new Date());
     }.bind(this);
 
-    // initializeRoomVariables = function(socket, room) {
-    //   var players = roomdata.get(socket, "players");
-    //   // room is not yet initialized.
-    //   if(!players) {
-    //     roomdata.set(socket, "players", []);
-    //     roomdata.set(socket, "score", 0);
-    //     roomdata.set(socket, "state", 0);
-    //     roomdata.set(socket, "roomCode", room.roomCode);
-    //     roomdata.set(socket, "host", null);
-    //   }
-    // }
     messages['room.join'] = function(data) {
       console.log('join', data);
       if(data.roomCode) {
@@ -154,6 +153,12 @@ module.exports = function(wss) {
           socket.sendData('room.created', jsonRoom); //send  the host that the room is created.
       })
     }.bind(this);
+
+    /** client sends a control to the api. This controls needs to be send to the listening site which should handle the input. **/
+     messages['client.controls'] = function(data) {
+         var host = roomdata.get(socket, 'host');
+         socket.sendTo(host, 'client.controls', data); //send  the host that the room is created.
+     }.bind(this);
 
     socket.on('leave', function(data) {
       // leave(data);
