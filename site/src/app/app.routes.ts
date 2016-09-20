@@ -1,7 +1,10 @@
 // ====== ./app/app.routes.ts ======
 
 // Imports
-import { provideRouter, RouterConfig } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
+import { ModuleWithProviders } from '@angular/core';
+
+/** why do I have to declare these twice? */
 import { GamesComponent } from './pages/games/games.component';
 import { GameComponent } from './pages/game/game.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -11,7 +14,7 @@ import { MyGamesComponent } from './pages/mygames/mygames.component';
 import { PlayComponent } from './pages/play/play.component';
 
 // Route Configuration
-export const routes: RouterConfig = [
+const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'games', component: GamesComponent },
   { path: 'login', component: LoginComponent },
@@ -23,7 +26,9 @@ export const routes: RouterConfig = [
   // { path: 'dogs', component: DogListComponent }
 ];
 
-// Export routes
-export const APP_ROUTER_PROVIDERS = [
-  provideRouter(routes)
+// TODO: figure out why this is needed?
+export const appRoutingProviders: any[] = [
+
 ];
+
+export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

@@ -1,6 +1,8 @@
 function Controller (options) {
   this.options = options;
 
+  this.CLIENT_PATH = '/client.html';
+
   this.user = {};
   this.data = {};
 
@@ -30,6 +32,7 @@ Controller.prototype._connect = function() {
   XENTHA.callbacks["player.joined"] = 'playerJoined';
   XENTHA.callbacks["room.selected"] = 'roomSelected';
   XENTHA.callbacks["game.disconnect"] = 'gameDisconnected';
+  XENTHA.callbacks["game.joined"] = 'gameJoined';
 
   XENTHA.connect();
 
@@ -49,6 +52,15 @@ Controller.prototype._connect = function() {
     this.$home.hide();
     this.$game.attr('src', null);
     this.$controller.show();
+
+  }.bind(this));
+
+  XENTHA.on('gameJoined', function(data) {
+    this.$menu.hide();
+    this.$home.hide();
+    this.$controller.hide();
+    this.$game.show();
+    this.$game.attr('src', data.game.url + this.CLIENT_PATH);
 
   }.bind(this));
 

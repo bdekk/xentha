@@ -1,10 +1,10 @@
-import { SiteV2Page } from './app.po';
+import { SitePage } from './app.po';
 
-describe('site-v2 App', function() {
-  let page: SiteV2Page;
+describe('site App', function() {
+  let page: SitePage;
 
   beforeEach(() => {
-    page = new SiteV2Page();
+    page = new SitePage();
   });
 
   it('should display message saying app works', () => {

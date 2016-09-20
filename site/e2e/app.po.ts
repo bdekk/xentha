@@ -1,4 +1,6 @@
-export class SiteV2Page {
+import { browser, element, by } from 'protractor/globals';
+
+export class SitePage {
   navigateTo() {
     return browser.get('/');
   }

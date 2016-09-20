@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MessageService } from '../../services/message.service';
 
 @Component({
-  moduleId: module.id,
   selector: 'navbar',
   templateUrl: 'navbar.component.html',
   styleUrls: ['navbar.component.css']

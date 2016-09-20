@@ -5,7 +5,6 @@ import { Configuration } from '../../app.constants';
 import { User } from '../../models/user';
 
 @Component({
-  moduleId: module.id,
   selector: 'app-mygames',
   templateUrl: 'mygames.component.html',
   styleUrls: ['mygames.component.css'],

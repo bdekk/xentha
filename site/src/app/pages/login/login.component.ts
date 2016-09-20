@@ -4,15 +4,10 @@ import {AuthService} from '../../services/auth.service';
 import { Configuration } from '../../app.constants';
 import { Router}    from '@angular/router';
 
-import {Tabs} from '../../components/tabs';
-import {Tab} from '../../components/tab';
-
 @Component({
-  moduleId: module.id,
   selector: 'app-login',
   templateUrl: 'login.component.html',
   styleUrls: ['login.component.css'],
-  directives: [Tabs, Tab],
   providers: [AuthService, Configuration]
 })
 export class LoginComponent implements OnInit {

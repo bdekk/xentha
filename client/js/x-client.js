@@ -98,7 +98,6 @@ XENTHA.connect = function() {
   XENTHA.socket = new WebSocket(this.ws);
 
   XENTHA.socket.onopen = function(event) {
-    console.log(event, 'open');
     XENTHA.connected = true;
     XENTHA.emit('connect', {});
   };

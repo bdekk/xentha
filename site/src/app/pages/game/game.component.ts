@@ -5,7 +5,6 @@ import {Game} from '../../models/game';
 import { Configuration } from '../../app.constants';
 
 @Component({
-  moduleId: module.id,
   selector: 'app-game',
   templateUrl: 'game.component.html',
   styleUrls: ['game.component.css'],
