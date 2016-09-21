@@ -40,11 +40,14 @@ export class AppComponent {
   ngOnInit(): void {
     this.messageService.messages$.subscribe(msg => {
       console.log(msg);
-        if(msg.id == 'room.created') {
+        if(msg.id === 'room.created') {
             // navigate naar games!
             this.room = msg.data;
             this.sharedService.setRoom(msg.data);
 
+        } else if(msg.id === 'player.joined') {
+            this.room.players.push(msg.data);
+            this.sharedService.setRoom(this.room);
         }
     });
   }

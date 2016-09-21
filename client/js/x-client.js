@@ -86,8 +86,8 @@ Emitter.prototype.hasListeners = function(event){
 };
 
 var XENTHA = {
-  ws: "ws://192.168.2.5:3000",
-  api: "http://192.168.2.5:3000",
+  ws: "ws://10.114.1.160:3000",
+  api: "http://10.114.1.160:3000",
   connected: false,
   socket: undefined,
   callbacks: {},
@@ -131,6 +131,11 @@ XENTHA.send = function(id, data) {
   }
 
   XENTHA.socket.send(JSON.stringify({"id": id, "data": data}));
+}
+
+/** convenience method **/
+XENTHA.sendInput = function(data) {
+    XENTHA.send('player.input', data);
 }
 
 Emitter(XENTHA);
