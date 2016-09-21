@@ -22,8 +22,6 @@ var messages = {}
 
 module.exports = function (wss) {
 
-
-
     wss.broadcast = function broadcast(data) {
         wss.clients.forEach(function each(client) {
             client.send(data);
@@ -120,14 +118,44 @@ module.exports = function (wss) {
                 console.error('Could not get id or data.')
                 return;
             }
-            messages[data.id].call(this, data.data);
+
+            console.log('messages', messages);
+
+            if (data.id in messages) {
+            // specific message id.
+                messages[data.id].call(this, data.data);
+                return;
+            }
+
+            console.log('wildcard', data);
+
+            // send a wildcard (to players or game).
+            if(data.id.startsWith('player.')) {
+                // send data to the game.
+                var roomCode = roomdata.get(socket, "roomCode");
+                var gameData = roomdata.get(socket, "game");
+                if (!gameData) {
+                    socket.broadcastToRoom('player.error', {
+                        message: "Please open the game / lobby."
+                    });
+                    return;
+                }
+                socket.sendTo(gameData.socket, 'player.input', {
+                    player: socket.id,
+                    input: data
+                });
+
+                return;
+            }
+
+            if(data.id.startsWith('game.')) {
+                // send data to the player
+                socket.broadcastToRoom(data.id, data.data, {
+                    exclude: true
+                });
+                return;
+            }
         });
-
-        console.log('socket connected ', socket.id);
-
-        messages['ping'] = function (data) {
-            socket.sendData('pong', new Date());
-        }.bind(this);
 
         messages['room.join'] = function (data) {
             console.log('join', data);
@@ -149,8 +177,6 @@ module.exports = function (wss) {
                         var roomCode = roomdata.get(socket, "roomCode");
                         var host = roomdata.get(socket, "host");
 
-                        console.log(players, state, score, roomCode, host);
-
                         if (data.type === 'game') {
                             // a game socket has connected to the room. Now we need to set the game details and send a signal to the clients
                             // that they need to show the controller panel of the specific game.
@@ -160,7 +186,6 @@ module.exports = function (wss) {
                                 }
                             }).then(function (game) {
                                 if (game) {
-                                    console.log('game found.' + game);
                                     roomdata.set(socket, "game", {
                                         socket: socket.id,
                                         name: game.name,
@@ -168,7 +193,7 @@ module.exports = function (wss) {
                                     });
                                     socket.broadcastToRoom('game.joined', {
                                         roomCode: room.roomCode,
-                                        game: game
+                                        game: game.toJSON()
                                     });
                                 }
                             });
@@ -249,37 +274,37 @@ module.exports = function (wss) {
             });
         }.bind(this);
 
-        messages['player.input'] = function (data) {
-            var roomCode = roomdata.get(socket, "roomCode");
-            var gameData = roomdata.get(socket, "game");
-            if (!gameData) {
-                socket.broadcastToRoom('player.error', {
-                    message: "Please open the game / lobby."
-                });
-                return;
-            }
-
-            socket.sendTo(gameData.socket, 'player.input', {
-                player: socket.id,
-                input: data
-            });
-        }.bind(this);
-
-        /** Send input from game to clients
-            @param data object (add id of the player to the data object to send to specific player.)
-         **/
-        messages['game.input'] = function (data) {
-            var roomCode = roomdata.get(socket, "roomCode");
-
-            if (data.id) {
-                // send data to a specific player.
-                socket.sendTo(id, 'game.input', data);
-                return;
-            }
-            socket.broadcastToRoom('game.input', data, {
-                exclude: true
-            });
-        }.bind(this);
+        // messages['player.input'] = function (data) {
+        //     var roomCode = roomdata.get(socket, "roomCode");
+        //     var gameData = roomdata.get(socket, "game");
+        //     if (!gameData) {
+        //         socket.broadcastToRoom('player.error', {
+        //             message: "Please open the game / lobby."
+        //         });
+        //         return;
+        //     }
+        //
+        //     socket.sendTo(gameData.socket, 'player.input', {
+        //         player: socket.id,
+        //         input: data
+        //     });
+        // }.bind(this);
+        //
+        // /** Send input from game to clients
+        //     @param data object (add id of the player to the data object to send to specific player.)
+        //  **/
+        // messages['game.input'] = function (data) {
+        //     var roomCode = roomdata.get(socket, "roomCode");
+        //
+        //     if (data.id) {
+        //         // send data to a specific player.
+        //         socket.sendTo(id, 'game.input', data);
+        //         return;
+        //     }
+        //     socket.broadcastToRoom('game.input', data, {
+        //         exclude: true
+        //     });
+        // }.bind(this);
 
         // socket.on('leave', function (data) {
         //     // leave(data);
