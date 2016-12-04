@@ -35,7 +35,7 @@ export class GamesComponent implements OnInit {
   handleControls(msg: any): void {
       if(msg.id == 'client.controls' && msg.data) {
           if(msg.data.right) {
-                if(this.selected < this.games.length) {
+                if(this.selected < this.games.length - 1) {
                       this.selected ++;
                       return;
                 }
@@ -47,14 +47,14 @@ export class GamesComponent implements OnInit {
           }
           if(msg.data.up) {
               //taken into account that the games grid is 3 tiles per row.
-              if(!(this.selected - 3 < 0)) {
-                  this.selected -= 3;
+              if(!(this.selected - 4 < 0)) {
+                  this.selected -= 4;
               }
-              this.selected -= 3;
+              this.selected -= 4;
           }
           if(msg.data.down) {
-              if(!(this.selected - 3 < 0)) {
-                  this.selected -= 3;
+              if(!(this.selected - 4 < 0)) {
+                  this.selected -= 4;
               }
               return;
           }

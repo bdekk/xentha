@@ -86,25 +86,34 @@ Emitter.prototype.hasListeners = function(event){
 };
 
 var XENTHA = {
-  ws: "ws://10.0.2.15:3000",
-  api: "http://10.0.2.15:3000",
+  ws: "ws://192.168.2.5:3000",
+  api: "http://192.168.2.5:3000",
   connected: false,
-  socket: undefined,
   callbacks: {},
   room: {}
 };
 
 XENTHA.connect = function() {
-  XENTHA.socket = new WebSocket(this.ws);
 
-  XENTHA.socket.onopen = function(event) {
-    XENTHA.connected = true;
-    XENTHA.emit('connect', {});
-  };
+  if(!window.parent) {
+    console.error('Could not find parent.');
+  }
 
-  XENTHA.socket.onmessage = function (event) {
-    var data = JSON.parse(event.data);
-    if(data.id == 'message') return; // called upon send?
+  if(window.addEventListener){
+	  window.addEventListener("message", this._receive, false);
+	} else if (window.attachEvent){
+		window.attachEvent("message", this._receive, false);
+	}
+}
+
+// send data to parent (controller)
+XENTHA.send = function(id, data) {
+    window.parent.postMessage(JSON.stringify({"id": id, "data": data}),"*");
+}
+
+// receive data from parent iframe (controller)
+XENTHA._receive = function(event) {
+    var data = JSON.parse(event);
     if(!data.id || !data.data) {
       XENTHA.emit('error', 'message does not have an id or data.');
       return;
@@ -112,49 +121,9 @@ XENTHA.connect = function() {
 
     XENTHA.emit('_' + data.id, data.data);
     XENTHA.emit(XENTHA.callbacks[data.id], data.data);
-
-
-    // updateStats(JSON.parse(event.data));
-  };
-
-  XENTHA.socket.onerror = function(data) {
-    XENTHA.emit('error', 'error while connecting..');
-  };
-
-  XENTHA.socket.onclosed = function(event) {
-    console.log(event, 'closed');
-  };
 }
 
-XENTHA.listenToFrame = function(iframe) {
-  var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
-  var eventer = window[eventMethod];
-  var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
 
-  // Listen to message from child window
-  eventer(messageEvent,function(e) {
-      var key = e.message ? "message" : "data";
-      var data = e[key];
-      //run function//
-      console.log(XENTHA.send, key, data);
-      XENTHA.send(key, data);
-
-  },false);
-}
-
-XENTHA.send = function(id, data) {
-  if(!XENTHA.connected) {
-    console.error('Socket is not connected.');
-    return;
-  }
-
-  XENTHA.socket.send(JSON.stringify({"id": id, "data": data}));
-}
-
-/** convenience method **/
-XENTHA.sendInput = function(data) {
-    XENTHA.send('player.input', data);
-}
 
 Emitter(XENTHA);
 

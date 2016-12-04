@@ -1,5 +1,13 @@
+.xentha-layout {
+
+    background-color: #111111;
+    color: #fff;
+}
+
 .mdl-layout__content {
   padding-bottom: 10em;
+  margin-left: 5em;
+  margin-right: 5em;
 }
 
 .xentha-layout > header {

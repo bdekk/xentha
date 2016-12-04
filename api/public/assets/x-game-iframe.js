@@ -89,22 +89,34 @@ var XENTHA = {
   ws: "ws://192.168.2.5:3000",
   api: "http://192.168.2.5:3000",
   connected: false,
-  socket: undefined,
+  apiKey: "",
   callbacks: {},
   room: {}
 };
 
 XENTHA.connect = function() {
-  XENTHA.socket = new WebSocket(this.ws);
 
-  XENTHA.socket.onopen = function(event) {
-    XENTHA.connected = true;
-    XENTHA.emit('connect', {});
-  };
+  if(!window.parent) {
+    console.error('Could not find parent.');
+  }
 
-  XENTHA.socket.onmessage = function (event) {
-    var data = JSON.parse(event.data);
-    if(data.id == 'message') return; // called upon send?
+  if(window.addEventListener){
+	  window.addEventListener("message", this._receive, false);
+	} else if (window.attachEvent){
+		window.attachEvent("message", this._receive, false);
+	}
+
+  XENTHA.send('game.init', {"apiKey": this.apiKey});
+}
+
+// send data to parent (controller)
+XENTHA.send = function(id, data) {
+    window.parent.postMessage(JSON.stringify({"id": id, "data": data}),"*");
+}
+
+// receive data from parent iframe (controller)
+XENTHA._receive = function(event) {
+    var data = JSON.parse(event);
     if(!data.id || !data.data) {
       XENTHA.emit('error', 'message does not have an id or data.');
       return;
@@ -112,46 +124,10 @@ XENTHA.connect = function() {
 
     XENTHA.emit('_' + data.id, data.data);
     XENTHA.emit(XENTHA.callbacks[data.id], data.data);
-    // updateStats(JSON.parse(event.data));
-  };
-
-  XENTHA.socket.onerror = function(data) {
-    XENTHA.emit('error', 'error while connecting..');
-  };
-
-  XENTHA.socket.onclosed = function(event) {
-    console.log(event, 'closed');
-  };
 }
 
-XENTHA.send = function(id, data) {
-  if(!XENTHA.connected) {
-    console.error('Socket is not connected.');
-    return;
-  }
 
-  XENTHA.socket.send(JSON.stringify({"id": id, "data": data}));
-}
-
-/** convenience method **/
-XENTHA.sendInput = function(data) {
-    XENTHA.send('player.input', data);
-}
 
 Emitter(XENTHA);
-
-/** Callbacks **/
-XENTHA.on('error', function (data) {
-});
-
-XENTHA.on('connect', function () {
-});
-
-XENTHA.on('disconnect', function () {
-});
-
-XENTHA.on('_room.joined', function(data) {
-    XENTHA.room = data;
-}.bind(this));
 
 window.XENTHA = XENTHA;

@@ -1,6 +1,6 @@
-.instructions i {
+.start-button i {
   font-size: 500%;
-  color: #aaa;
+  color: #fff;
 }
 
 .section--center {
@@ -24,6 +24,7 @@
 }
 
 .start-button > button {
-  width: 10em;
+background-color: #F44336;
+  width: 20em;
   height: 10em;
 }

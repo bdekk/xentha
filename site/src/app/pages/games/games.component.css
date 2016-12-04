@@ -24,3 +24,8 @@
 .game-card > .mdl-card__title {
   color: #fff;
 }
+
+
+.text-center {
+  text-align: center;
+}

@@ -32,8 +32,6 @@ export class AppComponent {
       private socketService: SocketService,
       private configuration: Configuration,
       private sharedService: SharedService) {
-      // this.user = JSON.parse(localStorage.getItem('user'));
-      // this.snackbar = document.querySelector('#xentha-snackbar');
       this.room = {};
   }
 

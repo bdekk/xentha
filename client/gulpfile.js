@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var webserver = require('gulp-webserver');
 var sass = require('gulp-sass');
+var connect = require('gulp-connect');
 
 gulp.task('webserver', function() {
   gulp.src('')
@@ -12,9 +13,10 @@ gulp.task('webserver', function() {
 });
 
 gulp.task('sass', function() {
-  return gulp.src('scss/*.scss') // Gets all files ending with .scss in app/scss and children dirs
+  return gulp.src('./scss/*.scss')
     .pipe(sass())
-    .pipe(gulp.dest('css'))
+    .pipe(gulp.dest('./css'))
+    .pipe(connect.reload());
 })
 
 gulp.task('watch', ['webserver', 'sass'], function (){

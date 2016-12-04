@@ -32,9 +32,11 @@ Controller.prototype._connect = function() {
   XENTHA.callbacks["player.joined"] = 'playerJoined';
   XENTHA.callbacks["room.selected"] = 'roomSelected';
   XENTHA.callbacks["game.disconnect"] = 'gameDisconnected';
-  XENTHA.callbacks["game.joined"] = 'gameJoined';
+  XENTHA.callbacks["game.start"] = 'gameStart';
 
   XENTHA.connect();
+
+  XENTHA.listenToFrame(this.$game);
 
   XENTHA.on('error', function(data) {
       this.showError(data);
@@ -55,13 +57,13 @@ Controller.prototype._connect = function() {
 
   }.bind(this));
 
-  XENTHA.on('gameJoined', function(data) {
+  XENTHA.on('gameStart', function(data) {
+    console.log(data);
     this.$menu.hide();
     this.$home.hide();
     this.$controller.hide();
     this.$game.show();
     this.$game.attr('src', data.game.url + this.CLIENT_PATH);
-
   }.bind(this));
 
   XENTHA.on('roomJoinedFailed', function(data) {

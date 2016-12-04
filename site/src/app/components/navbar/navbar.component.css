@@ -1,7 +1,13 @@
 .xentha-header {
   z-index: 100;
+  background-color: transparent;
 }
 
 .xentha-header nav > span, .xentha-header nav > a  {
   color: #fff;
+}
+
+.navbar-image {
+  height: 48px;
+  width: 48px;
 }

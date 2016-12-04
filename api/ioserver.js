@@ -119,15 +119,11 @@ module.exports = function (wss) {
                 return;
             }
 
-            console.log('messages', messages);
-
             if (data.id in messages) {
             // specific message id.
                 messages[data.id].call(this, data.data);
                 return;
             }
-
-            console.log('wildcard', data);
 
             // send a wildcard (to players or game).
             if(data.id.startsWith('player.')) {
@@ -149,6 +145,7 @@ module.exports = function (wss) {
             }
 
             if(data.id.startsWith('game.')) {
+              console.log(data.id, data.data);
                 // send data to the player
                 socket.broadcastToRoom(data.id, data.data, {
                     exclude: true
@@ -177,26 +174,16 @@ module.exports = function (wss) {
                         var roomCode = roomdata.get(socket, "roomCode");
                         var host = roomdata.get(socket, "host");
 
-                        if (data.type === 'game') {
-                            // a game socket has connected to the room. Now we need to set the game details and send a signal to the clients
-                            // that they need to show the controller panel of the specific game.
-                            Game.findOne({
-                                where: {
-                                    apiKey: data.apiKey
-                                }
-                            }).then(function (game) {
-                                if (game) {
-                                    roomdata.set(socket, "game", {
-                                        socket: socket.id,
-                                        name: game.name,
-                                        id: game.id
-                                    });
-                                    socket.broadcastToRoom('game.joined', {
-                                        roomCode: room.roomCode,
-                                        game: game.toJSON()
-                                    });
-                                }
+                        if (data.type === 'screen') {
+                            // a game (screen) has joined. Now wait for a game start :)
+                            roomdata.set(socket, "game", {
+                                socket: socket.id
                             });
+                            socket.broadcastToRoom('game.joined', {
+                                roomCode: room.roomCode,
+                                game: game.toJSON()
+                            });
+
                         } else {
                             if (!host) {
                                 roomdata.set(socket, "host", socket.id);
@@ -237,6 +224,31 @@ module.exports = function (wss) {
                 });
             }
             // send join to game.
+        }.bind(this);
+
+        messages['game.init'] = function (data) {
+          console.log('on message game init ', data);
+          // call this method when the game is about to start (in a screen socket or itself.).
+          // this method will set the game variables, name and signals the players and the game socket that we processed the initialization.
+          // now the plyer and the screen can start showing the specific screens.
+          Game.findOne({
+              where: {
+                  apiKey: data.apiKey
+              }
+          }).then(function (game) {
+              if (game) {
+                roomdata.set(socket, "gameData", {
+                  "name": game.name,
+                  "id": game.id
+                });
+
+                socket.broadcastToRoom('game.start', {
+                  game: game.toJSON()
+                }, {
+                    exclude: true
+                });
+              }
+          });
         }.bind(this);
 
         /** room create, usually done by the website. Upon gaming there will be a client host that is the one that decides (boss) **/

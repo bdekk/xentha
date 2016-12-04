@@ -4,11 +4,10 @@ QuizClient.Menu = function () {};
 
 QuizClient.Menu.prototype = {
     preload: function () {
-        this.createText();
+        this.createWaitingText();
     },
     create: function () {
         this.game.stage.backgroundColor = "#eee";
-        this.buttonSound = this.game.add.audio('button');
         this.xentha();
     },
     onStart: function () {
@@ -42,27 +41,23 @@ QuizClient.Menu.prototype = {
         }
 
         // if(data.player.host) {
-        this.game.add.text(this.game.world.centerX, -100, "Start Game", style);
-        this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY, 'playPressed', this.startGame, this);
+            this.game.add.text(this.game.world.centerX, -100, "Start Game", style);
+            this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY, 'playPressed', this.startGame, this);
         // }
 
     },
     update: function () {
 
     },
-    createText: function () {
+    createWaitingText: function () {
 
         var style = {
             font: 'Luckiest Guy',
             fill: "#fff",
-            fontSize: 100
+            fontSize: 50
         }
 
-        text = this.game.add.text(this.game.world.centerX, -100, "Client", style);
-        text.anchor.setTo(0.5);
-        this.game.add.tween(text).to({
-            y: 100
-        }, 2400, Phaser.Easing.Bounce.Out, true);
+        this.game.add.text(this.game.world.centerX, -100, "Waiting...", style);
     },
     render: function () {
 
