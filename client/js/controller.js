@@ -33,6 +33,7 @@ Controller.prototype._connect = function() {
   XENTHA.callbacks["room.selected"] = 'roomSelected';
   XENTHA.callbacks["game.disconnect"] = 'gameDisconnected';
   XENTHA.callbacks["game.start"] = 'gameStart';
+  XENTHA.callbacks["game.error"] = 'error';
 
   XENTHA.connect();
 
@@ -48,29 +49,41 @@ Controller.prototype._connect = function() {
   }.bind(this));
 
   XENTHA.on('roomJoined', function(data) {
-    console.log('room joined.');
+    console.log('room joined.', data);
+    if(data.game) {
+      this._showGame(data.game.url);
+    } else {
+      //show controller.
+      this._showController();
+    }
+  }.bind(this));
+
+  XENTHA.on('gameStart', function(data) {
+    console.log(data);
+    if(!data.game) {
+        this._showController();
+        this.showError('Could not find game to start.');
+    }
+    this._showGame(data.game.url);
+    this.showSuccess('Starting game ...');
+  }.bind(this));
+
+  Controller.prototype._showController = function() {
     this.$menu.hide();
     this.$game.hide();
     this.$home.hide();
     this.$game.attr('src', null);
     this.$controller.show();
+  }
 
-  }.bind(this));
-
-  XENTHA.on('gameStart', function(data) {
-    console.log(data);
+  Controller.prototype._showGame = function(url) {
     this.$menu.hide();
     this.$home.hide();
     this.$controller.hide();
-    if(data.game) {
-        this.$game.show();
-        this.$game.attr('src', data.game.url + this.CLIENT_PATH);
-    } else {
-        this.$controller.show();
-        this.$game.hide();
-        this.$game.attr('src', null);
-    }
-  }.bind(this));
+    this.$game.show();
+    this.$game.attr('src', url + this.CLIENT_PATH);
+    XENTHA.send('player.joined', {"player": XENTHA.room.player});
+  }
 
   XENTHA.on('roomJoinedFailed', function(data) {
     this.showError(data.message);

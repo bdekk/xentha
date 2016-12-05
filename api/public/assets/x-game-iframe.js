@@ -91,7 +91,8 @@ var XENTHA = {
   connected: false,
   apiKey: "",
   callbacks: {},
-  room: {}
+  room: {},
+  players: []
 };
 
 XENTHA.connect = function() {
@@ -116,7 +117,7 @@ XENTHA.send = function(id, data) {
 
 // receive data from parent iframe (controller)
 XENTHA._receive = function(event) {
-    var data = JSON.parse(event);
+    var data = JSON.parse(event.data);
     if(!data.id || !data.data) {
       XENTHA.emit('error', 'message does not have an id or data.');
       return;
@@ -126,8 +127,16 @@ XENTHA._receive = function(event) {
     XENTHA.emit(XENTHA.callbacks[data.id], data.data);
 }
 
-
-
 Emitter(XENTHA);
+
+XENTHA.on('_player.joined', function(event) {
+  XENTHA.players.push(event.data.player);
+});
+
+XENTHA.on('_player.left', function(event) {
+  XENTHA.players = XENTHA.players.filter(function (player) {
+      return player.id !== event.data.player.id;
+  });
+});
 
 window.XENTHA = XENTHA;

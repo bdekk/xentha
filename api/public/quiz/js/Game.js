@@ -22,8 +22,8 @@ Quiz.Game.prototype = {
 
     // initialize player list
     this.players = [];
-    for(var i = 0; i < XENTHA.vars.connectedPlayers.length; i++) {
-      this.players.push({xentha: XENTHA.vars.connectedPlayers[i]});
+    for(var i = 0; i < XENTHA.players.length; i++) {
+      this.players.push({xentha: XENTHA.players[i]});
     }
 
     this.graphics = this.game.add.graphics(0, 0);
@@ -130,9 +130,9 @@ Quiz.Game.prototype = {
     };
 
     XENTHA.send({
-      event: 'game.layout',
+      event: 'game.state',
       data: {
-        layout: clientLayout
+        state: 'game'
       }
     });
 
@@ -195,30 +195,16 @@ Quiz.Game.prototype = {
   },
   xentha: function() {
     var me = this;
-    XENTHA.playerJoined = function(data) {
-      // XENTHA.setLayout(XENTHA.layouts.CONTROLLER);
-      // // data.players.forEach(function(xPlayer, index) {
-      // var player = me.game.add.sprite(100, 200, 'player');
-      // player.gun = me.game.add.sprite(0, 0, 'gun');
-      // player.addChild(player.gun);
-      // player.gun.anchor.setTo(-.5, -.3);
-      //
-      // me.game.physics.arcade.enable(player);
-      // player.body.collideWorldBounds=true;
-      // player.body.gravity.y = 1000;
-      //
-      // // set default lives.
-      // player.lives = this.lives;
-      // player.xentha = data.player;
-      // me.players.push(player);
-    }
 
-    XENTHA.playerLeft = function(data) {
-      // console.log('player left.. ');
-      // var index = me.players.map(function(player) {return player.xentha.id; }).indexOf(data.player.id);
-      // me.players[index].destroy();
-      // me.players.splice(index);
-    }
+    XENTHA.on('playerJoined', function (data) {
+        this.players.push(data.player);
+    }.bind(this));
+
+    XENTHA.on('playerLeft', function (data) {
+      this.players = this.players.filter(function (player) {
+          return player.id !== data.player.id;
+      });
+    }.bind(this));
 
     XENTHA.onInput = function(data) {
       if(data.input.pressed) {

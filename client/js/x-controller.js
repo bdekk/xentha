@@ -91,7 +91,8 @@ var XENTHA = {
   connected: false,
   socket: undefined,
   callbacks: {},
-  room: {}
+  room: {},
+  game: undefined
 };
 
 XENTHA.connect = function() {
@@ -112,9 +113,6 @@ XENTHA.connect = function() {
 
     XENTHA.emit('_' + data.id, data.data);
     XENTHA.emit(XENTHA.callbacks[data.id], data.data);
-
-
-    // updateStats(JSON.parse(event.data));
   };
 
   XENTHA.socket.onerror = function(data) {
@@ -170,6 +168,10 @@ XENTHA.on('disconnect', function () {
 
 XENTHA.on('_room.joined', function(data) {
     XENTHA.room = data;
+}.bind(this));
+
+XENTHA.on('_game.start', function(data) {
+    XENTHA.game = data.game;
 }.bind(this));
 
 window.XENTHA = XENTHA;

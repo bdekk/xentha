@@ -1,5 +1,7 @@
 <!Doctype>
 <section>
-    <iframe #gameframe [src]="safeGameUrl"></iframe>
+    <div *ngIf="game">
+      <iframe #gameframe [src]="safeGameUrl"></iframe>
+    </div>
     <h4 class="text-center" *ngIf="!game">Could not find game.</h4>
 </section>

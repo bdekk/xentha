@@ -81,6 +81,7 @@ module.exports = function (wss) {
             socketIdsInRoom.push(hostInRoom);
 
             wss.clients.forEach(function each(client) {
+
                 var inRoom = socketIdsInRoom.some(function (socketId) {
                     return socketId === client.id;
                 });
@@ -131,21 +132,19 @@ module.exports = function (wss) {
                 var roomCode = roomdata.get(socket, "roomCode");
                 var gameData = roomdata.get(socket, "game");
                 if (!gameData) {
-                    socket.broadcastToRoom('player.error', {
-                        message: "Please open the game / lobby."
-                    });
+                    // we need to send feedback to the player that he needs to open the game.
+                    socket.sendData('game.error', "Please open the game / lobby.");
                     return;
                 }
-                socket.sendTo(gameData.socket, 'player.input', {
+                socket.sendTo(gameData.socket, data.id, {
                     player: socket.id,
-                    input: data
+                    data: data.data
                 });
 
                 return;
             }
 
             if(data.id.startsWith('game.')) {
-              console.log(data.id, data.data);
                 // send data to the player
                 socket.broadcastToRoom(data.id, data.data, {
                     exclude: true
@@ -174,14 +173,15 @@ module.exports = function (wss) {
                         var roomCode = roomdata.get(socket, "roomCode");
                         var host = roomdata.get(socket, "host");
 
+                        var gameData = roomdata.get(socket, "gameData");
+
                         if (data.type === 'screen') {
                             // a game (screen) has joined. Now wait for a game start :)
                             roomdata.set(socket, "game", {
                                 socket: socket.id
                             });
-                            socket.broadcastToRoom('game.joined', {
-                                roomCode: room.roomCode,
-                                game: game.toJSON()
+                            socket.broadcastToRoom('screen.joined', {
+                                roomCode: room.roomCode
                             });
 
                         } else {
@@ -189,7 +189,7 @@ module.exports = function (wss) {
                                 roomdata.set(socket, "host", socket.id);
                                 host = socket.id;
                             }
-                            var name = (data.user) ? data.user.username : 'player ' + players.length + 1; //if the player did not fill in a name, make one up.
+                            var name = (data.user) ? data.user.username : 'player ' + (+players.length + +1); //if the player did not fill in a name, make one up.
                             var player = {
                                 "id": socket.id,
                                 "name": name,
@@ -198,19 +198,18 @@ module.exports = function (wss) {
                             };
                             players.push(player);
                             roomdata.set(socket, "players", players);
-                            console.log(room.roomCode, player);
-                            socket.broadcastToRoom('player.joined', {
+                            // not used yet.
+                            socket.broadcastToRoom('room.player.joined', {
                                 roomCode: room.roomCode,
                                 player: player
-                            }); // send others that a player joien.
-                            //   }
+                            });
                             socket.sendData('room.joined', {
                                 roomCode: room.roomCode,
-                                players: players,
-                                player: player,
-                                state: state
+                                "players": players,
+                                "player": player,
+                                "state": state,
+                                "game": gameData
                             }); //send the joining player that he has joined.
-                            // console.log({room_code: rawRoom.roomCode, player: user});
                         }
                     } else {
                         socket.sendData('room.joined.error', {
@@ -236,16 +235,19 @@ module.exports = function (wss) {
                   apiKey: data.apiKey
               }
           }).then(function (game) {
-              if (game) {
+              if(!game) {
+                socket.sendData('game.error', {
+                  message: "Could not find game."
+                });
+              } else {
                 roomdata.set(socket, "gameData", {
                   "name": game.name,
-                  "id": game.id
+                  "id": game.id,
+                  "url": game.url
                 });
 
                 socket.broadcastToRoom('game.start', {
                   game: game.toJSON()
-                }, {
-                    exclude: true
                 });
               }
           });

@@ -25,6 +25,11 @@ export class HomeComponent implements OnInit {
 
     this.messageService.messages$.subscribe(msg => {
         if(msg.id == 'room.created') {
+            this.messageService.send({
+              id: 'room.join',
+              data: {'roomCode': msg.data.roomCode, 'type': 'screen'}
+            });
+
             // navigate naar games!
             this.router.navigate(['/games']);
         }

@@ -55,9 +55,8 @@ export class PlayComponent implements OnInit {
         },false);
 
         this.messageService.messages$.subscribe(msg => {
-            if(msg.id.startsWith('game')) {
-                this.frame.nativeElement.contentWindow.postMessage(JSON.stringify(msg),"*");
-            }
+          console.log(msg);
+            this.frame.nativeElement.contentWindow.postMessage(JSON.stringify(msg),"*");
         });
 
     }

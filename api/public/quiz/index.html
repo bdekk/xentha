@@ -47,7 +47,11 @@
 
     <script src="js/main.js"></script>
     <script>
-      XENTHA.apiKey = "RYejWPlWd1xq";
+      XENTHA.apiKey = "EcVqD9gaoRY7";
+      XENTHA.callbacks['player.joined']= 'playerJoined';
+      XENTHA.callbacks['player.left']  = 'playerLeft';
+      XENTHA.callbacks['player.input'] = 'playerInput';
+      XENTHA.callbacks['player.start'] = 'playerStart';
       XENTHA.connect();
     </script>
 

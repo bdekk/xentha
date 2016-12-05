@@ -113,7 +113,7 @@ XENTHA.send = function(id, data) {
 
 // receive data from parent iframe (controller)
 XENTHA._receive = function(event) {
-    var data = JSON.parse(event);
+    var data = JSON.parse(event.data);
     if(!data.id || !data.data) {
       XENTHA.emit('error', 'message does not have an id or data.');
       return;
