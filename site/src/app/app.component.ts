@@ -23,7 +23,7 @@ export class AppComponent {
 
   private room: any;
 
-  @ViewChild('xentha-snackbar') snackbar;
+  @ViewChild('toast') toast;
   @ViewChild('screen') screen;
 
   constructor(
@@ -54,11 +54,11 @@ export class AppComponent {
     // this.user = undefined;
     // localStorage.removeItem('user');
     this.authService.logout();
-    this.snackbar.MaterialSnackbar.showSnackbar('signed out..');
+    this.toast.MaterialSnackbar.showSnackbar('signed out..');
   }
 
   fullscreen() {
-    this.screen.nativeElmeent.requestFullscreen();
+    this.screen.nativeElement.requestFullscreen();
   }
 
   ngAfterViewInit(){

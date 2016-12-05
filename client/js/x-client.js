@@ -86,8 +86,8 @@ Emitter.prototype.hasListeners = function(event){
 };
 
 var XENTHA = {
-  ws: "ws://10.0.2.15:3000",
-  api: "http://10.0.2.15:3000",
+  ws: "ws://localhost:3000",
+  api: "http://localhost:3000",
   connected: false,
   socket: undefined,
   callbacks: {},

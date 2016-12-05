@@ -62,8 +62,14 @@ Controller.prototype._connect = function() {
     this.$menu.hide();
     this.$home.hide();
     this.$controller.hide();
-    this.$game.show();
-    this.$game.attr('src', data.game.url + this.CLIENT_PATH);
+    if(data.game) {
+        this.$game.show();
+        this.$game.attr('src', data.game.url + this.CLIENT_PATH);
+    } else {
+        this.$controller.show();
+        this.$game.hide();
+        this.$game.attr('src', null);
+    }
   }.bind(this));
 
   XENTHA.on('roomJoinedFailed', function(data) {
