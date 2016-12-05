@@ -133,10 +133,8 @@ XENTHA.listenToFrame = function(iframe) {
   eventer(messageEvent,function(e) {
       var key = e.message ? "message" : "data";
       var data = e[key];
-      //run function//
-      console.log(XENTHA.send, key, data);
+      // send through socket
       XENTHA.send(key, data);
-
   },false);
 }
 
