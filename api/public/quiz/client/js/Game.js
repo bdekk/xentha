@@ -28,6 +28,44 @@ QuizClient.Game.prototype = {
 
     this.xentha();
   },
+  createAnswerElements: function(answers) {
+      this.questionGroup = this.game.add.group();
+      // this.questionGroup.alpha = 0;
+
+      this.answersElements = {};
+      var startY =  50;
+      var height = 100;
+      var width = 500;
+      var x = this.game.world.centerX - (width / 2);
+      var keys = Object.keys(answers);
+
+      var answerStyle = {
+        font: 'Luckiest Guy',
+        fill: "#aaa",
+        fontSize: 20,
+        wordWrap: true,
+        wordWrapWidth: width * 0.7
+      }
+
+      for(var j =0; j < keys.length; j++) {
+        var key = keys[j];
+        var extraY = (Math.floor(j * (height * 1.5)));
+        var y = startY + extraY;
+        // this.graphics.beginFill(0xffffff);
+        // this.graphics.lineStyle(1, 0xaaaaaa, 1);
+        // this.graphics.drawRect(x, y, width, height);
+
+        button = this.game.add.button(x, y, 'button', this.answer, this, 2, 1, 0, 0, this.questionGroup);
+        button.scale.setTo(button.width / width, button.height / height);
+
+        var answerText = this.game.add.text(Math.floor(x + width / 2),Math.floor(y + height / 2), answers[key], answerStyle, this.questionGroup);
+        answerText.anchor.setTo(0.5);
+        this.answersElements[key] = answerText;
+      }
+  },
+  answer: function(answer) {
+      console.log(answer);
+  },
   update: function() {
     //collision
     // var me = this;
@@ -71,6 +109,10 @@ QuizClient.Game.prototype = {
 
     XENTHA.on('player.left', function(data) {
         console.log(data);
+    });
+
+    XENTHA.on('nextQuestion', function(data) {
+        me.createAnswerElements(data.answers);
     });
     //
     // XENTHA.playerJoined = function(data) {

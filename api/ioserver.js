@@ -69,16 +69,17 @@ module.exports = function (wss) {
                 return;
             }
             var socketIdsInRoom = roomdata.get(this, 'sockets');
-
-            // remove calling socket.
+            console.log(opts.exclude, ' exclude.');
             if (opts.exclude) {
                 socketIdsInRoom = socketIdsInRoom.filter(function (obj) {
-                    return obj.id !== this.id;
+                    return obj !== socket.id;
                 });
             }
 
             var hostInRoom = roomdata.get(this, 'host');
-            socketIdsInRoom.push(hostInRoom);
+            if(!opts.exclude || hostInRoom != socket.id) {
+                socketIdsInRoom.push(hostInRoom);
+            }
 
             wss.clients.forEach(function each(client) {
 
@@ -129,11 +130,12 @@ module.exports = function (wss) {
             // send a wildcard (to players or game).
             if(data.id.startsWith('player.')) {
                 // send data to the game.
+                console.log('send data to game from player ', socket.id);
                 var roomCode = roomdata.get(socket, "roomCode");
                 var gameData = roomdata.get(socket, "game");
                 if (!gameData) {
                     // we need to send feedback to the player that he needs to open the game.
-                    socket.sendData('game.error', "Please open the game / lobby.");
+                    socket.sendData('game.error', {"message": "Please open the game / lobby."});
                     return;
                 }
                 socket.sendTo(gameData.socket, data.id, {
@@ -146,6 +148,7 @@ module.exports = function (wss) {
 
             if(data.id.startsWith('game.')) {
                 // send data to the player
+                console.log('send data to players from game ', socket.id);
                 socket.broadcastToRoom(data.id, data.data, {
                     exclude: true
                 });

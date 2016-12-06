@@ -34,6 +34,12 @@ QuizClient.Menu.prototype = {
         XENTHA.on('playerJoined', function(data) {
         }.bind(this));
 
+        XENTHA.on('stateChanged', function(data) {
+            if(data.state) {
+                this.state.start(data.state);
+            }
+        }.bind(this));
+
         var style = {
             font: 'Luckiest Guy',
             fill: "#fff",

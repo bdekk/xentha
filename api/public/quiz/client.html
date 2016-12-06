@@ -47,7 +47,9 @@
 
     <script src="client/js/main.js"></script>
     <script>
-      XENTHA.connect();
+        XENTHA.callbacks['game.state']= 'stateChanged';
+        XENTHA.callbacks['game.nextQuestion']= 'nextQuestion';
+        XENTHA.connect();
     </script>
 
   </body>

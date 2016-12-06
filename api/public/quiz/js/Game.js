@@ -74,12 +74,16 @@ Quiz.Game.prototype = {
   nextQuestion: function() {
 
     var nQuestion = this.questions[this.game.rnd.between(0, this.questions.length - 1)];
+
     // answers is the object without question and answer.
     var answers = {};
     answers["A"] = nQuestion["A"];
     answers["B"] = nQuestion["B"];
     answers["C"] = nQuestion["C"];
     answers["D"] = nQuestion["D"];
+
+
+    XENTHA.send("game.nextQuestion", {"question": nQuestion, "answers": answers});
 
     var questionStyle = {
       font: 'Luckiest Guy',
@@ -113,28 +117,21 @@ Quiz.Game.prototype = {
       wordWrapWidth: width * 0.7
     }
 
-    var clientLayout = [];
-    for(var i =0; i < keys.length; i++) {
-      var key = keys[i];
-      var height = 100;
-      var y = 100 + (i * (height * 1.5));
-      clientLayout.push({
-          type: 'button',
-          width: 100,
-          height: height,
-          x: 100,
-          y: y,
-          text:  answers[key],
-          id: key
-      });
-    };
-
-    XENTHA.send({
-      event: 'game.state',
-      data: {
-        state: 'game'
-      }
-    });
+    // var clientLayout = [];
+    // for(var i =0; i < keys.length; i++) {
+    //   var key = keys[i];
+    //   var height = 100;
+    //   var y = 100 + (i * (height * 1.5));
+    //   clientLayout.push({
+    //       type: 'button',
+    //       width: 100,
+    //       height: height,
+    //       x: 100,
+    //       y: y,
+    //       text:  answers[key],
+    //       id: key
+    //   });
+    // };
 
     for(var j =0; j < keys.length; j++) {
       var key = keys[j];
@@ -206,16 +203,23 @@ Quiz.Game.prototype = {
       });
     }.bind(this));
 
-    XENTHA.onInput = function(data) {
-      if(data.input.pressed) {
-        for(var i = 0; i < me.players.length; i++){
-          if(me.players[i].xentha.id == data.player) {
-            me.players[i].choice = data.input.id;
-            break;
-          }
-        }
-      }
-    }
+    XENTHA.on('playerAnswer', function (msg) {
+      var player = this.players.find(function(player) {
+          player.id = msg.player.id;
+      });
+      player.choice = msg.data.answer;
+    }.bind(this));
+
+    // XENTHA.onInput = function(data) {
+    //   if(data.input.pressed) {
+    //     for(var i = 0; i < me.players.length; i++){
+    //       if(me.players[i].xentha.id == data.player) {
+    //         me.players[i].choice = data.input.id;
+    //         break;
+    //       }
+    //     }
+    //   }
+    // }
   },
   checkIfEndGame: function() {
   },

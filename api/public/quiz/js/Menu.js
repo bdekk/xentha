@@ -42,6 +42,7 @@ Quiz.Menu.prototype = {
         transition.onComplete.add(function startGame() {
                 this.state.start('Game');
             }, this)
+        XENTHA.send("game.state", {"state": "Game"});
             // this.state.start('Game');
     },
     xentha: function () {

@@ -27,6 +27,8 @@ function Controller (options) {
 
 Controller.prototype._connect = function() {
   // this.socket = new WebSocket(this.ws);
+  XENTHA.iframe = this.$game[0];
+
   XENTHA.callbacks["room.joined"] = 'roomJoined';
   XENTHA.callbacks["room.joined.error"] = 'roomJoinedFailed';
   XENTHA.callbacks["player.joined"] = 'playerJoined';
@@ -37,10 +39,9 @@ Controller.prototype._connect = function() {
 
   XENTHA.connect();
 
-  XENTHA.listenToFrame(this.$game);
 
   XENTHA.on('error', function(data) {
-      this.showError(data);
+      this.showError(data.message);
   }.bind(this));
 
   XENTHA.on('connect', function(data) {
@@ -117,11 +118,13 @@ Controller.prototype.left = function() {
 }
 
 Controller.prototype.showError = function(text) {
+  this.$notification.removeClass('success-notification');
   this.$notification.addClass('error-notification').text(text)
   this._showNotification();
 }
 
 Controller.prototype.showSuccess = function(text) {
+  this.$notification.removeClass('error-notification');
   this.$notification.addClass('success-notification').text(text)
   this._showNotification();
 }

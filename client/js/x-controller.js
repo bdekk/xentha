@@ -92,11 +92,16 @@ var XENTHA = {
   socket: undefined,
   callbacks: {},
   room: {},
-  game: undefined
+  game: undefined,
+  iframe: undefined
 };
 
 XENTHA.connect = function() {
   XENTHA.socket = new WebSocket(this.ws);
+
+  if(XENTHA.iframe) {
+      XENTHA.listenToFrame();
+  }
 
   XENTHA.socket.onopen = function(event) {
     XENTHA.connected = true;
@@ -104,15 +109,19 @@ XENTHA.connect = function() {
   };
 
   XENTHA.socket.onmessage = function (event) {
-    var data = JSON.parse(event.data);
-    if(data.id == 'message') return; // called upon send?
-    if(!data.id || !data.data) {
+    var msg = JSON.parse(event.data);
+    if(msg.id == 'message') return; // called upon send?
+    if(!msg.id || !msg.data) {
       XENTHA.emit('error', 'message does not have an id or data.');
       return;
     }
 
-    XENTHA.emit('_' + data.id, data.data);
-    XENTHA.emit(XENTHA.callbacks[data.id], data.data);
+    XENTHA.emit('_' + msg.id, msg.data);
+    XENTHA.emit(XENTHA.callbacks[msg.id], msg.data);
+    // also send the requests to an iframe if needed :)
+    if(XENTHA.iframe) {
+        XENTHA.sendToFrame(msg);
+    }
   };
 
   XENTHA.socket.onerror = function(data) {
@@ -124,7 +133,7 @@ XENTHA.connect = function() {
   };
 }
 
-XENTHA.listenToFrame = function(iframe) {
+XENTHA.listenToFrame = function() {
   var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
   var eventer = window[eventMethod];
   var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
@@ -132,10 +141,19 @@ XENTHA.listenToFrame = function(iframe) {
   // Listen to message from child window
   eventer(messageEvent,function(e) {
       var key = e.message ? "message" : "data";
-      var data = e[key];
+      var msg = JSON.parse(e[key]);
+
       // send through socket
-      XENTHA.send(key, data);
+      XENTHA.send(msg.id, msg.data);
   },false);
+}
+
+XENTHA.sendToFrame = function(msg) {
+    if(!this.iframe) {
+        console.error('Iframe not set');
+        return;
+    }
+    this.iframe.contentWindow.postMessage(JSON.stringify(msg),"*");
 }
 
 XENTHA.send = function(id, data) {
@@ -145,11 +163,6 @@ XENTHA.send = function(id, data) {
   }
 
   XENTHA.socket.send(JSON.stringify({"id": id, "data": data}));
-}
-
-/** convenience method **/
-XENTHA.sendInput = function(data) {
-    XENTHA.send('player.input', data);
 }
 
 Emitter(XENTHA);

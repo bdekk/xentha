@@ -108,6 +108,7 @@ XENTHA.connect = function() {
 
 // send data to parent (controller)
 XENTHA.send = function(id, data) {
+    console.log(window.parent);
     window.parent.postMessage(JSON.stringify({"id": id, "data": data}),"*");
 }
 
