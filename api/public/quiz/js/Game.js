@@ -205,7 +205,7 @@ Quiz.Game.prototype = {
 
     XENTHA.on('playerAnswer', function (msg) {
       var player = this.players.find(function(player) {
-          player.id = msg.player.id;
+          return player.xentha.id === msg.player;
       });
       player.choice = msg.data.answer;
     }.bind(this));

@@ -55,16 +55,17 @@ QuizClient.Game.prototype = {
         // this.graphics.lineStyle(1, 0xaaaaaa, 1);
         // this.graphics.drawRect(x, y, width, height);
 
-        button = this.game.add.button(x, y, 'button', this.answer, this, 2, 1, 0, 0, this.questionGroup);
-        button.scale.setTo(button.width / width, button.height / height);
+        button = this.game.add.button(x, y, 'quizButton', this.answer, this);
+        button.answerKey = key;
+        // button.scale.setTo(button.width / width, button.height / height);
 
         var answerText = this.game.add.text(Math.floor(x + width / 2),Math.floor(y + height / 2), answers[key], answerStyle, this.questionGroup);
         answerText.anchor.setTo(0.5);
         this.answersElements[key] = answerText;
       }
   },
-  answer: function(answer) {
-      console.log(answer);
+  answer: function(button) {
+      XENTHA.send('player.answer', {"answer": button.answerKey});
   },
   update: function() {
     //collision
