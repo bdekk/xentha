@@ -72,7 +72,7 @@ Quiz.Game.prototype = {
     return otherPlayers;
   },
   nextQuestion: function() {
-
+    this.game.world.remove(this.questionGroup);
     var nQuestion = this.questions[this.game.rnd.between(0, this.questions.length - 1)];
 
     // answers is the object without question and answer.
@@ -94,14 +94,13 @@ Quiz.Game.prototype = {
     }
 
     this.timeLeft = this.TIME_PER_QUESTION;
-
-    if(this.questionGroup) {
-      var removeTween = this.game.add.tween(this.questionGroup).to( { alpha: 0 }, 1000, "Linear", true);
-      transition.onComplete.add(function startGame() { this.questionGroup.destroy() }, this);
-    }
+    //
+    // if(this.questionGroup) {
+    //   var removeTween = this.game.add.tween(this.questionGroup).to( { alpha: 0 }, 1000, "Linear", true);
+    //   transition.onComplete.add(function startGame() { this.questionGroup.destroy() }, this);
+    // }
 
     this.questionGroup = this.game.add.group();
-    // this.questionGroup.alpha = 0;
 
     this.answersElements = {};
     var startY =  this.game.world.centerY - 100;
@@ -116,22 +115,6 @@ Quiz.Game.prototype = {
       wordWrap: true,
       wordWrapWidth: width * 0.7
     }
-
-    // var clientLayout = [];
-    // for(var i =0; i < keys.length; i++) {
-    //   var key = keys[i];
-    //   var height = 100;
-    //   var y = 100 + (i * (height * 1.5));
-    //   clientLayout.push({
-    //       type: 'button',
-    //       width: 100,
-    //       height: height,
-    //       x: 100,
-    //       y: y,
-    //       text:  answers[key],
-    //       id: key
-    //   });
-    // };
 
     for(var j =0; j < keys.length; j++) {
       var key = keys[j];
@@ -160,6 +143,7 @@ Quiz.Game.prototype = {
       this.timeSound.stop();
       this.timesUpSound.play();
       this.checkAnswers();
+      XENTHA.send("game.timeUp", {"answer": this.currentQuestion.answer});
       this.timeLeft = this.TIME_PER_QUESTION;
     } else {
       this.timeLeft -= 1;
@@ -188,7 +172,10 @@ Quiz.Game.prototype = {
       this.answersElements[key].addColor(color, 0);
     }
 
-
+    // new question in 4 seconds.
+    var timer = this.game.time.create(false);
+    timer.add(Phaser.Timer.SECOND * 4, this.nextQuestion, this);
+    timer.start();
   },
   xentha: function() {
     var me = this;
@@ -209,17 +196,6 @@ Quiz.Game.prototype = {
       });
       player.choice = msg.data.answer;
     }.bind(this));
-
-    // XENTHA.onInput = function(data) {
-    //   if(data.input.pressed) {
-    //     for(var i = 0; i < me.players.length; i++){
-    //       if(me.players[i].xentha.id == data.player) {
-    //         me.players[i].choice = data.input.id;
-    //         break;
-    //       }
-    //     }
-    //   }
-    // }
   },
   checkIfEndGame: function() {
   },

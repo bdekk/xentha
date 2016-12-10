@@ -29,6 +29,7 @@ QuizClient.Game.prototype = {
     this.xentha();
   },
   createAnswerElements: function(answers) {
+      this.game.world.removeAll();
       this.questionGroup = this.game.add.group();
       // this.questionGroup.alpha = 0;
 
@@ -65,7 +66,26 @@ QuizClient.Game.prototype = {
       }
   },
   answer: function(button) {
+      this.chosenAnswer = button.answerKey;
       XENTHA.send('player.answer', {"answer": button.answerKey});
+  },
+  timeUp: function(answer) {
+      this.game.world.removeAll();
+
+      var style = {
+        font: 'Luckiest Guy',
+        fill: "#E50000",
+        fontSize: 25,
+        wordWrap: true,
+        wordWrapWidth: this.game.width * 0.7
+      }
+
+      var answerText = "Unfortunate..";
+      if(this.chosenAnswer == answer) {
+            style.fill = "#009900";
+            answerText = "Good job ";
+      }
+      this.game.add.text(this.game.world.centerX, this.game.world.centerY, answerText, style);
   },
   update: function() {
     //collision
@@ -114,6 +134,10 @@ QuizClient.Game.prototype = {
 
     XENTHA.on('nextQuestion', function(data) {
         me.createAnswerElements(data.answers);
+    });
+
+    XENTHA.on('timeUp', function(data) {
+        me.timeUp(data.answer);
     });
     //
     // XENTHA.playerJoined = function(data) {
