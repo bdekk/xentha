@@ -8,7 +8,15 @@ QuizClient.Menu.prototype = {
     },
     create: function () {
         this.game.stage.backgroundColor = "#eee";
+        var style = {
+            font: 'Luckiest Guy',
+            fill: "#0xff5300",
+            fontSize: 100
+        }
+
+        this.game.add.text(this.game.world.centerX, -100, "Start Game", style, this.world);
         this.xentha();
+        this.game.add.button(this.game.world.centerX - 128, this.game.world.centerY - 128, 'playPressed', this.startGame, this);
     },
     onStart: function () {
         var transition = this.game.add.tween(this.game.world).to({
@@ -39,18 +47,6 @@ QuizClient.Menu.prototype = {
                 this.state.start(data.state);
             }
         }.bind(this));
-
-        var style = {
-            font: 'Luckiest Guy',
-            fill: "#fff",
-            fontSize: 100
-        }
-
-        // if(data.player.host) {
-            this.game.add.text(this.game.world.centerX, -100, "Start Game", style);
-            this.game.add.button(this.game.world.centerX - 100, this.game.world.centerY, 'playPressed', this.startGame, this);
-        // }
-
     },
     update: function () {
 

@@ -15,7 +15,7 @@ QuizClient.Preload.prototype = {
     this.load.image('goldCoin', 'assets/images/goldCoin.png');
     this.load.image('playUnpressed', 'assets/images/buttons/unpressed/yellow/play.png');
     this.load.image('playPressed', 'assets/images/buttons/pressed/yellow/play.png');
-    this.load.image('quizButton', 'assets/images/quizbutton.png');
+    this.load.image('quizButton', 'assets/images/answer_button.png');
 
     this.load.audio('background', ['assets/audio/background.mp3']);
     this.load.audio('coin', ['assets/audio/coin.mp3']);

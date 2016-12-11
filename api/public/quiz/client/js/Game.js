@@ -42,7 +42,7 @@ QuizClient.Game.prototype = {
 
       var answerStyle = {
         font: 'Luckiest Guy',
-        fill: "#aaa",
+        fill: "#fff",
         fontSize: 20,
         wordWrap: true,
         wordWrapWidth: width * 0.7
@@ -56,7 +56,9 @@ QuizClient.Game.prototype = {
         // this.graphics.lineStyle(1, 0xaaaaaa, 1);
         // this.graphics.drawRect(x, y, width, height);
 
-        button = this.game.add.button(x, y, 'quizButton', this.answer, this);
+        button = this.game.add.button(x, y, 'quizButton', this.answer, this, this.questionGroup);
+        button.scale.setTo(width/864, height/475);
+        // button.anchor.setTo(0.5, 0.5);
         button.answerKey = key;
         // button.scale.setTo(button.width / width, button.height / height);
 
@@ -75,7 +77,7 @@ QuizClient.Game.prototype = {
       var style = {
         font: 'Luckiest Guy',
         fill: "#E50000",
-        fontSize: 25,
+        fontSize: 50,
         wordWrap: true,
         wordWrapWidth: this.game.width * 0.7
       }
@@ -85,7 +87,7 @@ QuizClient.Game.prototype = {
             style.fill = "#009900";
             answerText = "Good job ";
       }
-      this.game.add.text(this.game.world.centerX, this.game.world.centerY, answerText, style);
+      this.game.add.text(this.game.world.centerX - 100, this.game.world.centerY - 100, answerText, style);
   },
   update: function() {
     //collision

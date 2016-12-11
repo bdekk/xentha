@@ -43,9 +43,15 @@ export class AppComponent {
             this.room = msg.data;
             this.sharedService.setRoom(msg.data);
 
-        } else if(msg.id === 'player.joined') {
+        } else if(msg.id === 'room.player.joined') {
             this.room.players.push(msg.data);
             this.sharedService.setRoom(this.room);
+        } else if(msg.id === 'room.player.left') {
+            // let index = this.room.players.indexOf(msg.data);
+            // if(index < 0) {
+            //     let roomWithoutPlayer = this.room.players.splice(index, 1);
+            //     this.sharedService.setRoom(roomWithoutPlayer);
+            // }
         }
     });
   }

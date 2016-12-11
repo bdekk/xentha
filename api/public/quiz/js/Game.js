@@ -74,6 +74,7 @@ Quiz.Game.prototype = {
   nextQuestion: function() {
     this.game.world.remove(this.questionGroup);
     var nQuestion = this.questions[this.game.rnd.between(0, this.questions.length - 1)];
+    this.answerTime.setText(this.TIME_PER_QUESTION);
 
     // answers is the object without question and answer.
     var answers = {};
