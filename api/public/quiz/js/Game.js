@@ -19,14 +19,17 @@ Quiz.Game.prototype = {
     this.buttonSound = this.game.add.audio('button');
     this.timesUpSound = this.game.add.audio('timesup');
     this.timeSound = this.game.add.audio('time');
+    this.scoreGroup = this.game.add.group();
 
     // initialize player list
     this.players = [];
+    this.answersElements = {};
     for(var i = 0; i < XENTHA.players.length; i++) {
-      this.players.push({xentha: XENTHA.players[i]});
+      this.players.push({xentha: XENTHA.players[i], score: 0});
     }
 
     this.graphics = this.game.add.graphics(0, 0);
+    this.answerGraphics = this.game.add.graphics(0,0);
 
     var tintColor = this.bgColors[this.game.rnd.between(0, this.bgColors.length - 1)];
     this.game.stage.backgroundColor = tintColor;
@@ -40,27 +43,40 @@ Quiz.Game.prototype = {
 
     this.xentha();
     this.nextQuestion();
-    //
-    // this.players = [];
-    // this.initXentha();
   },
   update: function() {
-    //collision
-    // var me = this;
-    // for(var i = 0; i < this.players.length; i++) {
-    //   var player = this.players[i];
-    //   if(player) {
-    //     var input = player.xentha.input[0];
-    //     if(input) {
-    //       if(input.id == 'up') {
-    //         if(input.pressed == true) {
-    //         } else {
-    //         }
-    //       }
-    //       player.xentha.input.shift();
-    //     }
-    //   }
-    // }
+
+      // set players :)
+      if(this.answersElements && this.currentQuestion) {
+
+        var playersThatAnswered = this.players.filter(function(player) {
+            return player.choice;
+        });
+
+        this.answerGraphics.clear();
+
+        for(var i = 0; i < playersThatAnswered.length; i++) {
+          var x = this.answersElements[playersThatAnswered[i].choice].x + (30 * i);
+          var y = this.answersElements[playersThatAnswered[i].choice].y + 30;
+          this.answerGraphics.lineStyle(0);
+          var hexColor = playersThatAnswered[i].xentha.color.replace('#', '0x');
+          this.answerGraphics.beginFill(hexColor, 1);
+          this.answerGraphics.drawCircle(x,y, 20);
+        }
+
+
+        var scoreStyle = {
+          font: 'Luckiest Guy',
+          fill: "#fff",
+          fontSize: 15,
+          wordWrap: true
+        }
+
+        this.scoreGroup.removeAll();
+        for(var j = 0; j < this.players.length; j++) {
+          this.game.add.text(this.game.world.width - 100, 20 + Math.floor(j * 30), this.players[j].xentha.name + ": " + this.players[j].score, scoreStyle, this.scoreGroup);
+        }
+      }
   },
   getOtherPlayers: function(player) {
     var otherPlayers = [];
@@ -75,6 +91,12 @@ Quiz.Game.prototype = {
     this.game.world.remove(this.questionGroup);
     var nQuestion = this.questions[this.game.rnd.between(0, this.questions.length - 1)];
     this.answerTime.setText(this.TIME_PER_QUESTION);
+
+    // remove previous choices.
+    this.players = this.players.map(function(player) {
+        player.choice = undefined;
+        return player;
+    });
 
     // answers is the object without question and answer.
     var answers = {};
@@ -102,8 +124,6 @@ Quiz.Game.prototype = {
     // }
 
     this.questionGroup = this.game.add.group();
-
-    this.answersElements = {};
     var startY =  this.game.world.centerY - 100;
     var height = 150;
     var width = 250;
@@ -136,7 +156,10 @@ Quiz.Game.prototype = {
     question.anchor.setTo(0.5);
 
     this.currentQuestion = nQuestion;
+    this.game.time.events.stop();
     this.game.time.events.loop(Phaser.Timer.SECOND, this.count, this);
+    this.game.time.events.start();
+    // game.time.events.start();
   },
   count: function() {
     if(this.timeLeft <= 0) {
@@ -157,13 +180,15 @@ Quiz.Game.prototype = {
   },
   checkAnswers: function() {
 
-    // set players :)
-    for(var i = 0; i < this.players.length; i++) {
-      var x = this.answersElements[this.players[i].choice].x + (30 * i);
-      var y = this.answersElements[this.currentQuestion.answer].y + 30;
-      this.graphics.lineStyle(0);
-      this.graphics.beginFill(this.players[i].xentha.color, 1);
-      this.graphics.drawCircle(x,y, 20);
+
+    var playersThatAnswered = this.players.filter(function(player) {
+        return player.choice;
+    });
+
+    for(var i = 0; i < playersThatAnswered.length; i++) {
+      if(playersThatAnswered[i].choice == this.currentQuestion.answer) {
+        playersThatAnswered[i].score += 1;
+      }
     }
 
     // set colors of textelements :)
@@ -182,7 +207,8 @@ Quiz.Game.prototype = {
     var me = this;
 
     XENTHA.on('playerJoined', function (data) {
-        this.players.push(data.player);
+        var player = data.player;
+        this.players.push({"xentha": player, "score": 0});
     }.bind(this));
 
     XENTHA.on('playerLeft', function (data) {

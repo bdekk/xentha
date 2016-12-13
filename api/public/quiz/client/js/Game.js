@@ -56,7 +56,7 @@ QuizClient.Game.prototype = {
         // this.graphics.lineStyle(1, 0xaaaaaa, 1);
         // this.graphics.drawRect(x, y, width, height);
 
-        button = this.game.add.button(x, y, 'quizButton', this.answer, this, this.questionGroup);
+        button = this.game.add.button(x, y, 'quizButton', this.answer, this, 0, 0, 1);
         button.scale.setTo(width/864, height/475);
         // button.anchor.setTo(0.5, 0.5);
         button.answerKey = key;
@@ -66,10 +66,12 @@ QuizClient.Game.prototype = {
         answerText.anchor.setTo(0.5);
         this.answersElements[key] = answerText;
       }
+      this.game.world.bringToTop(this.questionGroup);
   },
   answer: function(button) {
       this.chosenAnswer = button.answerKey;
       XENTHA.send('player.answer', {"answer": button.answerKey});
+      button.frame = 1;
   },
   timeUp: function(answer) {
       this.game.world.removeAll();

@@ -1,7 +1,7 @@
 <!Doctype>
 <section>
     <div *ngIf="game">
-      <iframe #gameframe [src]="safeGameUrl"></iframe>
+      <iframe #gameframe [src]="safeGameUrl" frameBorder="0"></iframe>
     </div>
     <h4 class="text-center" *ngIf="!game">Could not find game.</h4>
 </section>

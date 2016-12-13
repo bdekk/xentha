@@ -65,42 +65,6 @@ Quiz.Menu.prototype = {
             }).indexOf(data.player.id);
             me.connected.splice(index);
         }.bind(this));
-        // XENTHA.playerJoined = function(data) {
-        // XENTHA.setLayout(XENTHA.layouts.CONTROLLER);
-        // data.players.forEach(function(xPlayer, index) {
-        // this.players.
-        //   me.connected.push(data.player);
-        //   if(data.player.host) {
-        //     XENTHA.send({
-        //       player: data.player.id,
-        //       event: 'game.layout.add',
-        //       data: {
-        //         layout: [{
-        //             type: 'button',
-        //             width: 100,
-        //             height: 100,
-        //             x: 100,
-        //             y: 100,
-        //             text: 'Start Quiz!',
-        //             id: 'start'
-        //         }]
-        //       }
-        //     });
-        //   }
-
-        //   XENTHA.send({
-        //     event: 'game.layout.add',
-        //     data: {
-        //       layout: [{
-        //           type: 'text',
-        //           x: 200,
-        //           y: 200,
-        //           size: 20,
-        //           value: 'Connected.'
-        //       }]
-        //     }
-        //   })
-        //
     },
     update: function () {
 
