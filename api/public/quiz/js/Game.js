@@ -152,7 +152,7 @@ Quiz.Game.prototype = {
       this.answersElements[key] = answerText;
     }
 
-    var question = this.game.add.text(this.game.world.centerX, 50, nQuestion.question, questionStyle, this.questionGroup);
+    var question = this.game.add.text(this.game.world.centerX, 80, nQuestion.question, questionStyle, this.questionGroup);
     question.anchor.setTo(0.5);
 
     this.currentQuestion = nQuestion;
@@ -207,7 +207,7 @@ Quiz.Game.prototype = {
     var me = this;
 
     XENTHA.on('playerJoined', function (data) {
-        var player = data.player;
+        var player = data.data.player;
         this.players.push({"xentha": player, "score": 0});
     }.bind(this));
 

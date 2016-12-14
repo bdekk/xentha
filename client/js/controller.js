@@ -171,7 +171,7 @@ Controller.prototype.joinRoom = function(roomCode) {
     this.showError('Please enter a room code.');
     return;
   }
-  XENTHA.send('room.join', {"roomCode": roomCode});
+  XENTHA.send('room.join', {"roomCode": roomCode, "name": this.user.name});
 }
 
 Controller.prototype.leaveRoom = function() {

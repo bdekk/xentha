@@ -12,7 +12,7 @@ Quiz.Menu.prototype = {
         this.game.stage.backgroundColor = "0xff5300";
         this.buttonSound = this.game.add.audio('button');
 
-        this.connected = XENTHA.players;
+        this.connected = [];
 
         playersText = this.game.add.text(100, this.game.world.centerY, "Players", {
             fill: '#fff'
@@ -50,7 +50,7 @@ Quiz.Menu.prototype = {
         var me = this;
 
         XENTHA.on('playerJoined', function (data) {
-            this.connected.push(data.player);
+            this.connected.push(data.data.player);
         }.bind(this));
 
 

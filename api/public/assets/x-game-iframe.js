@@ -130,7 +130,10 @@ XENTHA._receive = function(event) {
 Emitter(XENTHA);
 
 XENTHA.on('_player.joined', function(event) {
-  XENTHA.players.push(event.data.player);
+  console.log('player joined', event.data.player);
+  if(event.data.player) {
+    XENTHA.players.push(event.data.player);
+  }
 });
 
 XENTHA.on('_player.left', function(event) {
