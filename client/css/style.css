@@ -288,7 +288,7 @@ ul.topnav li a.active {
   padding: 5px;
   background: #3b3b3b; }
 
-#menu > .menu-button {
+#menu .menu-button {
   display: block;
   padding: 3em;
   background: #1f1f1f;
@@ -297,7 +297,7 @@ ul.topnav li a.active {
   color: #fff;
   width: 100%; }
 
-#menu > .menu-button.disabled {
+#menu .menu-button.disabled {
   color: #eee;
   background-color: #aaa; }
 

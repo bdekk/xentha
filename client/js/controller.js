@@ -11,6 +11,10 @@ function Controller (options) {
   this.$controller = $('#controller');
   this.$game = $('#game');
   this.$menu = $('#menu');
+  this.$menu_main = $('#main');
+  this.$menu_edit = $('#edit');
+  this.$name = $('#name');
+  this.$profile_name = $('#profile_name');
 
   this.$notification = $('#errorBar');
 
@@ -84,6 +88,16 @@ Controller.prototype._connect = function() {
     this.$game.show();
     this.$game.attr('src', url + this.CLIENT_PATH);
     XENTHA.send('player.joined', {"player": XENTHA.room.player});
+  }
+
+  Controller.prototype.showEdit = function() {
+    this.$menu_main.hide();
+    this.$menu_edit.show();
+  }
+
+  Controller.prototype.editBack = function() {
+    this.$menu_main.show();
+    this.$menu_edit.hide();
   }
 
   XENTHA.on('roomJoinedFailed', function(data) {
@@ -200,9 +214,19 @@ Controller.prototype.leaveGame = function() {
   }
 }
 
-Controller.prototype.editUser = function(user) {
-
+Controller.prototype.edit = function() {
+  var name = this.$name.val();
+  if(name) {
+    this.user.name = name;
+    this.$profile_name.text(name);
+    this.showSuccess("Name changed..");
+    this.editBack();
+  } else {
+    this.showError("Please enter a name..")
+  }
 }
+
+
 
 Controller.prototype.openMenu = function() {
   this.$menu.slideDown("fast");

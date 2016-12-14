@@ -33,7 +33,7 @@
     </div>
     <div id="controller">
       <div class="profile">
-        <h4 class="center-div">Guest 1</h4>
+        <h4 class="center-div" id="profile_name"></h4>
       </div>
       <div class="controls-container">
         <div class="controls">
@@ -47,10 +47,17 @@
     </div>
 
     <div id="menu" style="display:none;">
-      <input type="button" class="disabled menu-button" ontouchstart="" value="Edit Profile (todo)"/>
-      <input type="button"  class="menu-button" ontouchstart="controller.leaveGame()" value="Leave Game"/>
-      <input type="button"  class="menu-button" ontouchstart="controller.leaveRoom()" value="Quit Session"/>
-      <input type="button" class="menu-button" ontouchstart="controller.closeMenu()" value="Close"/>
+      <div id="main">
+        <input type="button" class="menu-button" ontouchstart="controller.showEdit()" value="Edit Profile (todo)"/>
+        <input type="button"  class="menu-button" ontouchstart="controller.leaveGame()" value="Leave Game"/>
+        <input type="button"  class="menu-button" ontouchstart="controller.leaveRoom()" value="Quit Session"/>
+        <input type="button" class="menu-button" ontouchstart="controller.closeMenu()" value="Close"/>
+      </div>
+      <div id="edit" style="display:none;">
+        <input type="input" class="menu-button" id="name" value="" placeholder="Name ..."/>
+        <input type="button"  class="menu-button" ontouchstart="controller.edit()" value="Edit"/>
+        <input type="button" class="menu-button" ontouchstart="controller.editBack()" value="Back"/>
+      </div>
     </div>
     <iframe id="game" style="display: none;">
       <!-- game url-->
