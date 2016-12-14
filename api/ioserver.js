@@ -230,6 +230,23 @@ module.exports = function (wss) {
             // send join to game.
         }.bind(this);
 
+        /**
+          Removes the socket from the room and removes the player data related to the socket.
+          Sends a room.left response to the calling socsket and a room.player.left response to the rest of the room.
+        **/
+        messages['room.leave'] = function (data) {
+            let players = roomdata.get(socket, "players");
+            let playersWithoutLeaver = players.filter(player => player.id !== socket.id);
+            if(playersWithoutLeaver.length !== players.length) { //we found the player (and removed other likies if bugged.)
+              roomdata.set(socket, "players", playersWithoutLeaver);
+              socket.broadcastToRoom('room.player.left', {"player": {"id": socket.id}}, {exclude: true});
+              roomdata.leave(socket);
+              socket.sendData('room.left', {}); //explicit leave response to the client.
+            } else {
+              socket.sendData("error", "Could not find player in room.");
+            }
+        }.bind(this);
+
         messages['game.init'] = function (data) {
           console.log('on message game init ', data);
           // call this method when the game is about to start (in a screen socket or itself.).

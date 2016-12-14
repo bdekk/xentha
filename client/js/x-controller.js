@@ -91,7 +91,7 @@ var XENTHA = {
   connected: false,
   socket: undefined,
   callbacks: {},
-  room: {},
+  room: undefined,
   game: undefined,
   iframe: undefined
 };

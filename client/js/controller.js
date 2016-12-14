@@ -175,14 +175,29 @@ Controller.prototype.joinRoom = function(roomCode) {
 }
 
 Controller.prototype.leaveRoom = function() {
-  this.$home.show();
-  this.$controller.hide();
+  if(XENTHA.room) {
+    XENTHA.send('room.leave', XENTHA.room.player);
+    XENTHA.room = undefined; //TODO: do this in a response fro mthe server.
+    this.$home.show();
+    this.$controller.hide();
+    this.closeMenu();
+  } else {
+    this.showError("You are not in a room.");
+  }
 }
 
+/* only for these general calls, the controller can call player commands */
 Controller.prototype.leaveGame = function() {
-  this.$home.show();
-  this.$controller.hide();
-  this.$game.hide();
+  if(XENTHA.room && XENTHA.room.player) {
+    XENTHA.send('player.leave', XENTHA.room.player);
+    XENTHA.room.player = undefined; //TODO: do this in a response from the server.
+    this.closeMenu();
+    this.$home.hide();
+    this.$controller.show();
+    this.$game.hide();
+  } else {
+    this.showError("You are not in-game.");
+  }
 }
 
 Controller.prototype.editUser = function(user) {

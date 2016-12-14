@@ -297,6 +297,10 @@ ul.topnav li a.active {
   color: #fff;
   width: 100%; }
 
+#menu > .menu-button.disabled {
+  color: #eee;
+  background-color: #aaa; }
+
 .menu-toggle {
   position: absolute;
   right: 5px;
@@ -312,7 +316,8 @@ ul.topnav li a.active {
   display: none;
   bottom: 0;
   position: absolute;
-  text-align: center; }
+  text-align: center;
+  z-index: 999; }
 
 .info-notification {
   color: #fff;

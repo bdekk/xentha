@@ -102,10 +102,11 @@ exports.leave = function(socket) {
 	var room = socket.room;
 	if(socket.room==undefined) throw new Error("socket id:" + socket.id + " is not in a room!");
 	if(exports.Debug) console.log(socket.id+": Leaving room: "+socket.room);
-	var i = this.rooms[socket.room].users.indexOf(socket.id);
-	if(i != -1) this.rooms[socket.room].users.splice(i, 1);
+	var i = this.rooms[socket.room].sockets.indexOf(socket.id);
+	console.log(i);
+	if(i != -1) this.rooms[socket.room].sockets.splice(i, 1);
 	// socket.leave(socket.roomdata_room);
-	if(this.rooms[room].users.length == 0) {
+	if(this.rooms[room].sockets.length == 0) {
 		this.clearRoom(room);
 	}
 }
