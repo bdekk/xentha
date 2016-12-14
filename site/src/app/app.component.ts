@@ -44,14 +44,12 @@ export class AppComponent {
             this.sharedService.setRoom(msg.data);
 
         } else if(msg.id === 'room.player.joined') {
-            this.room.players.push(msg.data);
+            this.room.players.push(msg.data.player);
             this.sharedService.setRoom(this.room);
         } else if(msg.id === 'room.player.left') {
-            // let index = this.room.players.indexOf(msg.data);
-            // if(index < 0) {
-            //     let roomWithoutPlayer = this.room.players.splice(index, 1);
-            //     this.sharedService.setRoom(roomWithoutPlayer);
-            // }
+            let playersWithoutLeaver = this.room.players.filter(player => player.id !== msg.data.player.id);
+            this.room.players = playersWithoutLeaver;
+            this.sharedService.setRoom(this.room);
         }
     });
   }
