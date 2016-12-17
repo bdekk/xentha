@@ -80,6 +80,14 @@ export class PlayComponent implements OnInit {
             let id = +params['id'];
             this.gameService.getOne(id).subscribe((data:Game) => {
                 var room = me.sharedService.getRoom();
+                if(!room) {
+                  this.router.navigate(['/']);
+                }
+
+                if(!data) {
+                  this.router.navigate(['/games']);  
+                }
+
                 if(data && room) {
 
                     var urlWithRoomCode = data.url + '?room=' + room.roomCode;
