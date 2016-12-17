@@ -211,10 +211,14 @@ Quiz.Game.prototype = {
         this.players.push({"xentha": player, "score": 0});
     }.bind(this));
 
-    XENTHA.on('playerLeft', function (data) {
-      this.players = this.players.filter(function (player) {
-          return player.id !== data.player.id;
+    XENTHA.on('playerLeft', function (event) {
+      this.players = this.players.filter(function(player) {
+          return player.xentha.id !== event.player;
       });
+
+      if(this.players.length === 0) {
+        XENTHA.send('game.disconnect', {});
+      }
     }.bind(this));
 
     XENTHA.on('playerAnswer', function (msg) {

@@ -46,6 +46,11 @@ export class PlayComponent implements OnInit {
           if(e.data) {
             let message = JSON.parse(e.data);
             if(message.data && message.id) {
+
+              if(message.id === 'game.disconnect') {
+                me.router.navigate(['/games']);
+              }
+
               me.messageService.send({
                 "id": message.id,
                 "data": message.data
@@ -56,7 +61,10 @@ export class PlayComponent implements OnInit {
 
         this.messageService.messages$.subscribe(msg => {
           console.log(msg);
-            this.frame.nativeElement.contentWindow.postMessage(JSON.stringify(msg),"*");
+          let contentWindow = this.frame.nativeElement.contentWindow;
+          if(contentWindow) {
+            contentWindow.postMessage(JSON.stringify(msg),"*");
+          }
         });
 
     }

@@ -58,12 +58,14 @@ Quiz.Menu.prototype = {
             this.onStart();
         }.bind(this));
 
-        XENTHA.on('playerLeft', function (data) {
-            //   console.log('player left.. ');
-            var index = me.connected.map(function (player) {
-                return player.id;
-            }).indexOf(data.player.id);
-            me.connected.splice(index);
+        XENTHA.on('playerLeft', function (event) {
+          this.connected = this.connected.filter(function(player) {
+              return player.xentha.id !== event.player;
+          });
+
+          if(this.connected.length === 0) {
+            XENTHA.send('game.disconnect', {});
+          }
         }.bind(this));
     },
     update: function () {
