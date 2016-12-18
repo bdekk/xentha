@@ -34,6 +34,7 @@ QuizClient.Menu.prototype = {
         var me = this;
 
         XENTHA.callbacks["game.start"] = 'startGame';
+        XENTHA.callbacks["game.state"] = 'stateChanged';
 
         XENTHA.on('startGame', function(data) {
             this.onStart();

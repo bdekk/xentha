@@ -10,6 +10,7 @@ Quiz.Game.prototype = {
     this.game.world.alpha = 1;
 
     this.TIME_PER_QUESTION = 20;
+    this.AMOUNT_QUESTIONS = 1;
   },
   create: function() {
     this.questions = this.game.cache.getJSON('data');
@@ -20,6 +21,9 @@ Quiz.Game.prototype = {
     this.timesUpSound = this.game.add.audio('timesup');
     this.timeSound = this.game.add.audio('time');
     this.scoreGroup = this.game.add.group();
+
+
+    this.roundsLeft = this.AMOUNT_QUESTIONS;
 
     // initialize player list
     this.players = [];
@@ -198,10 +202,27 @@ Quiz.Game.prototype = {
       this.answersElements[key].addColor(color, 0);
     }
 
-    // new question in 4 seconds.
-    var timer = this.game.time.create(false);
-    timer.add(Phaser.Timer.SECOND * 4, this.nextQuestion, this);
-    timer.start();
+
+    if(this.roundsLeft <= 1) {
+      var playerScores = this.players.map(function(player) {
+        return {score: player.score, xentha: player.xentha };
+      })
+
+      this.game.state.states['Game']._scores = playerScores;
+
+      var transition = this.game.add.tween(this.game.world).to({
+          alpha: 0
+      }, 1000, "Linear", true);
+      transition.onComplete.add(function startHighscore() {
+              this.state.start('Highscore');
+          }, this)
+      XENTHA.send("game.state", {"state": "Highscore"});
+    } else {
+      this.roundsLeft -= 1;
+      var timer = this.game.time.create(false);
+      timer.add(Phaser.Timer.SECOND * 4, this.nextQuestion, this);
+      timer.start();
+    }
   },
   xentha: function() {
     var me = this;
@@ -227,10 +248,5 @@ Quiz.Game.prototype = {
       });
       player.choice = msg.data.answer;
     }.bind(this));
-  },
-  checkIfEndGame: function() {
-  },
-  endGame: function() {
-    this.game.state.start('Game');
   }
 };

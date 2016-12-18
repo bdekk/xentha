@@ -124,9 +124,18 @@ QuizClient.Game.prototype = {
     //     // }
     // });
 
+    XENTHA.callbacks["game.state"] = 'stateChanged';
+
     XENTHA.on('game.start', function(data) {
             console.log('wildcard .. ');
     });
+
+
+    XENTHA.on('stateChanged', function(data) {
+        if(data.state) {
+            this.state.start(data.state);
+        }
+    }.bind(this));
 
     XENTHA.on('player.joined', function(data) {
         console.log(data);
