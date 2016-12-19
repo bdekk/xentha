@@ -276,6 +276,11 @@ module.exports = function (wss) {
           });
         }.bind(this);
 
+        messages['game.disconnect'] = function (data) {
+            roomdata.set(socket, "gameData", undefined);
+            socket.broadcastToRoom('game.disconnect', {});
+        }.bind(this);
+
         /** room create, usually done by the website. Upon gaming there will be a client host that is the one that decides (boss) **/
         messages['room.create'] = function (data) {
             Room.create({
@@ -295,13 +300,6 @@ module.exports = function (wss) {
             socket.sendTo(host, 'client.controls', data); //send  the host that the room is created.
         }.bind(this);
 
-        /** game events **/
-
-        messages['game.disconnect'] = function (data) {
-            socket.broadcastToRoom('game.disconnect', {}, {
-                exclude: true
-            });
-        }.bind(this);
 
         /** player events **/
 

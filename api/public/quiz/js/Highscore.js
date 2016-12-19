@@ -33,7 +33,6 @@ Quiz.Highscore.prototype = {
     update: function () {
     },
     createHighscoreText(playerScores) {
-      this.scoreGroup.removeAll();
 
       var scoreStyle = {
         font: 'Luckiest Guy',
@@ -43,7 +42,7 @@ Quiz.Highscore.prototype = {
       }
 
       for(var j = 0; j < playerScores.length; j++) {
-        this.game.add.text(this.game.world.width / 2, this.game.world.height + Math.floor(j * 30), playerScores[j].xentha.name + ": " + playerScores[j].score, scoreStyle, this.scoreGroup);
+        this.game.add.text(this.game.world.width / 2, this.game.world.height + Math.floor(j * 30), playerScores[j].xentha.name + ": " + playerScores[j].score, scoreStyle);
       }
     },
     createText: function () {

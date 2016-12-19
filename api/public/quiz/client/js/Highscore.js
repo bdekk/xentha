@@ -24,10 +24,6 @@ QuizClient.Highscore.prototype = {
     xentha: function () {
 
         var me = this;
-
-        XENTHA.on('game.disconnect', function(event) {
-          XENTHA.send('player.leave', {});
-        });
     },
     update: function () {
     },

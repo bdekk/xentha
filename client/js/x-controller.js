@@ -116,6 +116,8 @@ XENTHA.connect = function() {
       return;
     }
 
+    console.log(msg.id, msg.data);
+
     XENTHA.emit('_' + msg.id, msg.data);
     XENTHA.emit(XENTHA.callbacks[msg.id], msg.data);
     // also send the requests to an iframe if needed :)
