@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ElementRef} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import {GameService} from '../../services/game.service';
 import {SharedService} from '../../services/shared.service';
@@ -82,13 +82,9 @@ export class PlayComponent implements OnInit {
                 var room = me.sharedService.getRoom();
                 if(!room) {
                   this.router.navigate(['/']);
-                }
-
-                if(!data) {
-                  this.router.navigate(['/games']);  
-                }
-
-                if(data && room) {
+                } else if(!data) {
+                  this.router.navigate(['/games']);
+                } else {
 
                     var urlWithRoomCode = data.url + '?room=' + room.roomCode;
 
@@ -101,6 +97,17 @@ export class PlayComponent implements OnInit {
 
         this.listenToIFrame();
     }
+
+    ngOnDestroy() {
+       if (this.sub != null) {
+           this.sub.unsubscribe();
+       }
+
+       if(this.messageService.messages$) {
+         this.messageService.unsubscribe();
+       }
+
+   }
 
     // get data form iframe and send it to the api.
 

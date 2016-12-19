@@ -32,4 +32,8 @@ export class MessageService {
     public send(message: Message): void {
       this._messages.next(message);
     }
+
+    public unsubscribe(): void {
+      this._messages.unsubscribe();
+    }
 }
