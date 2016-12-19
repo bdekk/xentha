@@ -98,16 +98,15 @@ export class PlayComponent implements OnInit {
         this.listenToIFrame();
     }
 
-    ngOnDestroy() {
-       if (this.sub != null) {
-           this.sub.unsubscribe();
-       }
-
-       if(this.messageService.messages$) {
-         this.messageService.unsubscribe();
-       }
-
-   }
+  //   ngOnDestroy() {
+  //      if (this.sub != null) {
+  //          this.sub.unsubscribe();
+  //      }
+   //
+  //      if(this.messageService.messages$) {
+  //        this.messageService.unsubscribe();
+  //      }
+  //  }
 
     // get data form iframe and send it to the api.
 

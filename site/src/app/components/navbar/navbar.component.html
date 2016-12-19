@@ -6,7 +6,7 @@
     <!-- Add spacer, to align navigation to the right -->
     <div class="mdl-layout-spacer"></div>
     <!-- Navigation -->
-    <nav class="mdl-navigation">
+    <nav *ngIf="room" class="mdl-navigation">
       <!-- <a class="mdl-navigation__link" [routerLink]="['/']">HOME</a> -->
       <!-- <a class="mdl-navigation__link" [routerLink]="['/games']">PLAY</a> -->
       <!-- <a class="mdl-navigation__link" [routerLink]="['/docs']">DOCS</a> -->

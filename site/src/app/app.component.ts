@@ -1,5 +1,5 @@
 import { NgModule, Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, Router, RouterModule } from '@angular/router';
 import {User} from './models/user';
 
 import {AuthService} from './services/auth.service';
@@ -31,8 +31,15 @@ export class AppComponent {
       private messageService: MessageService,
       private socketService: SocketService,
       private configuration: Configuration,
-      private sharedService: SharedService) {
-      this.room = {};
+      private sharedService: SharedService,
+      private router: Router) {
+      this.room = null;
+
+      router.events.subscribe((path) => {
+          if(!this.room && !(path.url === '' || path.url === '/')) {
+            this.router.navigate(['/']);
+          }
+      });
   }
 
   ngOnInit(): void {
