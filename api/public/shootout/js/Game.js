@@ -215,13 +215,17 @@ Shooter.Game.prototype = {
       return;
     }
 
-    XENTHA.settings.apiKey = "wHAY33IEW8he";
+    XENTHA.apiKey = "9WBUtNuccvfa";
+
+    XENTHA.callbacks['player.left']= 'playerLeft';
+    XENTHA.callbacks['player.joined']= 'playerJoined';
+    XENTHA.callbacks['player.input']= 'onInput';
+
     XENTHA.connect();
 
     var me = this;
 
     XENTHA.playerJoined = function(data) {
-      XENTHA.setLayout(XENTHA.layouts.CONTROLLER);
       var player = me.game.add.sprite(100, 200, 'player');
 
       player.gun = me.game.add.sprite(0, 0, 'gun');

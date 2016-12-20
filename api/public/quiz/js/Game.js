@@ -10,7 +10,7 @@ Quiz.Game.prototype = {
     this.game.world.alpha = 1;
 
     this.TIME_PER_QUESTION = 20;
-    this.AMOUNT_QUESTIONS = 1;
+    this.AMOUNT_QUESTIONS = 10;
   },
   create: function() {
     this.questions = this.game.cache.getJSON('data');
