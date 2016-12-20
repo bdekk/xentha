@@ -4,6 +4,7 @@ Quiz.Highscore = function () {};
 
 Quiz.Highscore.prototype = {
     preload: function () {
+        this.game.world.alpha = 1;
         this.createText();
     },
     create: function () {
@@ -42,7 +43,7 @@ Quiz.Highscore.prototype = {
       }
 
       for(var j = 0; j < playerScores.length; j++) {
-        this.game.add.text(this.game.world.width / 2, this.game.world.height + Math.floor(j * 30), playerScores[j].xentha.name + ": " + playerScores[j].score, scoreStyle);
+        this.game.add.text(this.game.world.width / 2 - 50, (this.game.world.height / 2) + Math.floor(j * 30), playerScores[j].xentha.name + ": " + playerScores[j].score, scoreStyle);
       }
     },
     createText: function () {
@@ -58,8 +59,5 @@ Quiz.Highscore.prototype = {
         this.game.add.tween(text).to({
             y: 100
         }, 2400, Phaser.Easing.Bounce.Out, true);
-    },
-    render: function () {
-
     }
 };

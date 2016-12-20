@@ -28,20 +28,28 @@ module.exports = function (wss) {
         });
     };
 
-    wss.on('close', function (socket) {
-        console.log('Client #%d disconnected.');
-        socket.broadcastToRoom('room.player.left', {'player': socket.id});
-        socket.broadcastToRoom('player.left', {'player': socket.id});
-    });
-
-    wss.on('error', function (e) {
-        console.log('Client #%d error: %s', e.message);
-    });
-
     wss.on('connection', function (socket) {
+      
+        wss.on('close', function (socket) {
+            console.log('Client #%d disconnected.');
+            var game = roomdata.get(socket, 'game');
+            if(!game || game.socket !== socket.id) {
+              socket.broadcastToRoom('game.disconnect', {});
+            } else {
+              // socket.broadcastToRoom('player.disconnect', {'player': socket.id});
+              socket.broadcastToRoom('room.player.left', {'player': socket.id});
+              socket.broadcastToRoom('player.left', {'player': socket.id});
+            }
+        });
+
+        wss.on('error', function (e) {
+            console.log('Client error.', e.message);
+        });
+
         var userId = randomstring.generate(5);
         connections[userId] = socket;
         socket.id = userId;
+        console.log('Socket connected. ', socket.id);
 
         /**
             Convenience method to send data with an identifier and data payload.
