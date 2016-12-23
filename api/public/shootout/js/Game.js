@@ -215,17 +215,9 @@ Shooter.Game.prototype = {
       return;
     }
 
-    XENTHA.apiKey = "9WBUtNuccvfa";
-
-    XENTHA.callbacks['player.left']= 'playerLeft';
-    XENTHA.callbacks['player.joined']= 'playerJoined';
-    XENTHA.callbacks['player.input']= 'onInput';
-
-    XENTHA.connect();
-
     var me = this;
 
-    XENTHA.playerJoined = function(data) {
+    XENTHA.on("playerJoined", function(data) {
       var player = me.game.add.sprite(100, 200, 'player');
 
       player.gun = me.game.add.sprite(0, 0, 'gun');
@@ -241,22 +233,25 @@ Shooter.Game.prototype = {
       player.hits = me.HITS;
       player.xentha = data.player;
       me.players.push(player);
-    }
+    });
 
-    XENTHA.playerLeft = function(data) {
+    XENTHA.on("playerLeft", function(data) {
       console.log('player left.. ');
-      var index = me.players.map(function(player) {return player.xentha.id; }).indexOf(data.player.id);
+      var index = me.players.map(function(player) {
+        return player.xentha.id;
+      }).indexOf(data.player.id);
+
       me.players[index].destroy();
       me.players.splice(index);
-    }
+    });
 
-    XENTHA.onInput = function(data) {
+    XENTHA.on("onInput", function(event) {
       for(var i = 0; i < me.players.length; i++){
-        if(me.players[i].xentha.id == data.player) {
-          me.players[i].xentha.input.push({id: data.input.id, pressed: data.input.pressed});
+        if(me.players[i].xentha.id == event.player) {
+          me.players[i].xentha.input.push({id: event.data.id, pressed: event.data.pressed});
         }
       }
-    }
+    });
   },
   //create coins
   createCoins: function() {

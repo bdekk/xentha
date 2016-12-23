@@ -81,6 +81,10 @@ Controller.prototype._connect = function() {
     this.$controller.show();
   }
 
+  Controller.prototype.fullscreen = function() {
+    XENTHA.send('client.fullscreen', {fullscreen: true});
+  }
+
   Controller.prototype._showGame = function(url) {
     this.$menu.hide();
     this.$home.hide();

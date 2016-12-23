@@ -12,8 +12,8 @@ Shooter.Boot.prototype = {
     //loading screen will have a white background
     this.game.stage.backgroundColor = '#eee';
     // this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    // this.game.scale.pageAlignHorizontally = true;
-    // this.game.scale.pageAlignVertically = true;
+    this.game.scale.pageAlignHorizontally = true;
+    this.game.scale.pageAlignVertically = true;
     // this.game.scale.setScreenSize(true);
     // this.game.scale.updateLayout(true);
 
