@@ -7,6 +7,12 @@
   background-size: cover !important;
 }
 
+.mdl-grid {
+    padding:0;
+}
+
+
+
 .selected {
     border: 5px solid palegoldenrod;
 }
@@ -23,6 +29,7 @@
 
 .game-card > .mdl-card__title {
   color: #fff;
+  margin-left:0;
 }
 
 

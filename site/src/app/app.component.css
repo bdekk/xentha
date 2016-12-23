@@ -1,6 +1,6 @@
 .xentha-layout {
 
-    background: linear-gradient(left, #2989d8 0%, #0f294f 0%, #18457c 52%, #0f294f 100%, #000000 100%); /* FF3.6-15 */
+    background: linear-gradient(to right, #2989d8 0%, #0f294f 0%, #18457c 52%, #0f294f 100%);
     color: #fff;
 }
 
@@ -15,4 +15,10 @@
 }
 .xentha-layout > drawer {
   padding-top:64px;
+}
+
+.xentha-layout > footer {
+    padding-left: 5em;
+    padding-right: 5em;
+    background-color: transparent;
 }

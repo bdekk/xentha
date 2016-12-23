@@ -1,13 +1,28 @@
 .xentha-header {
   z-index: 100;
   background-color: transparent;
+  box-shadow: none;
+  position: relative;
 }
 
 .xentha-header nav > span, .xentha-header nav > a  {
   color: #fff;
 }
 
+.xentha-header .mdl-layout__header-row {
+    padding-left:5em;
+    padding-right: 5em;
+}
+
 .navbar-image {
   height: 48px;
   width: 48px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.clock {
+    margin-right: 0.5em;
 }

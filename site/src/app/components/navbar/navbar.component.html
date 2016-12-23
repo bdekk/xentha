@@ -2,8 +2,13 @@
 <header class="xentha-header mdl-layout__header">
   <div class="mdl-layout__header-row">
     <!-- Title -->
-    <img src="assets/images/xentha_logo.png" class="navbar-image"/>
     <!-- Add spacer, to align navigation to the right -->
+    <i class="material-icons clock">access_time</i>
+    <strong>{{data | date: format}}</strong>
+
+    <div class="mdl-layout-spacer"></div>
+    <img src="assets/images/xentha_logo.png" class="navbar-image"/>
+
     <div class="mdl-layout-spacer"></div>
     <!-- Navigation -->
     <nav *ngIf="room" class="mdl-navigation">
@@ -20,7 +25,10 @@
           <i class="material-icons">room</i>
           <strong>{{room.roomCode}}</strong>
       </span>
-      <a class="mdl-navigation__link" (click)="fullscreen()">FULLSCREEN</a>
+      <a class="mdl-navigation__link" (click)="toggleFullscreen()">
+          <i class="material-icons">fullscreen</i>
+          <span>FULLSCREEN</span>
+      </a>
     </nav>
   </div>
 </header>

@@ -12,15 +12,11 @@
 }
 
 .start-button {
-  margin: 0 auto;
-  width: 30%;
-  height: 30%;
-  text-align: center;
-
-/* need ot fix this lateR*/
+  left: 50%;
+  top: 50%;
   position: absolute;
-  top: 30%;
-  left: 40%;
+  transform: translate(-50%, -50%);
+  text-align: center;
 }
 
 .start-button > button {

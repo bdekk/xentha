@@ -59,6 +59,11 @@ export class AppComponent {
             this.sharedService.setRoom(this.room);
         }
     });
+
+    // browser compatibility for fullscreen.
+    this.screen.nativeElement.requestFullscreen = this.screen.nativeElement.requestFullscreen = this.screen.nativeElement.requestFullscreen ||
+           this.screen.nativeElement.mozRequestFullScreen || this.screen.nativeElement.webkitRequestFullscreen ||
+           this.screen.nativeElement.msRequestFullscreen;
   }
 
   logout() {
@@ -68,7 +73,7 @@ export class AppComponent {
     this.toast.MaterialSnackbar.showSnackbar('signed out..');
   }
 
-  fullscreen() {
+  toggleFullscreen() {
     this.screen.nativeElement.requestFullscreen();
   }
 
