@@ -1,6 +1,6 @@
 .xentha-layout {
 
-    background-color: #111111;
+    background: linear-gradient(left, #2989d8 0%, #0f294f 0%, #18457c 52%, #0f294f 100%, #000000 100%); /* FF3.6-15 */
     color: #fff;
 }
 
