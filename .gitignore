@@ -1,11 +1,8 @@
 node_modules/
 documentation/build/
 api/node_modules/
-api/config/config.json
 site/node_modules/
 client/bower_components/
 client/node_modules/
 site/bower_components/
-old_site/
 site/node_modules/
-site/dist/
