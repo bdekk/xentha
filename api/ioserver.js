@@ -29,7 +29,7 @@ module.exports = function (wss) {
     };
 
     wss.on('connection', function (socket) {
-      
+
         wss.on('close', function (socket) {
             console.log('Client #%d disconnected.');
             var game = roomdata.get(socket, 'game');

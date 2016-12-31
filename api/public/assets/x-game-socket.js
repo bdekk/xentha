@@ -1,3 +1,5 @@
+//TODO CHECK AND REMOVE UNNECESSARY CODE.
+
 // server xentha library. Use this to create your xentha game :)
 var pathArray = window.location.pathname.split( 'room' );
 

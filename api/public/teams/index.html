@@ -50,7 +50,13 @@
         XENTHA.apiKey = "q9J9SI677nNT";
         XENTHA.callbacks['player.left']= 'playerLeft';
         XENTHA.callbacks['player.joined']= 'playerJoined';
-        XENTHA.callbacks['player.input']= 'onInput';
+
+        XENTHA.callbacks['player.move.left']= 'playerMoveLeft';
+        XENTHA.callbacks['player.move.right']= 'playerMoveRight';
+        XENTHA.callbacks['player.move.down']= 'playerMoveDown';
+        XENTHA.callbacks['player.move.up']= 'playerMoveUp';
+        XENTHA.callbacks['player.a']= 'playerA';
+        XENTHA.callbacks['player.b']= 'playerB';
         XENTHA.connect();
     </script>
   </body>

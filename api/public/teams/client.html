@@ -15,11 +15,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet" type="text/css">
-    <script src="http://localhost:3000/assets/x-client-iframe.js"></script>
+    <script src="http://localhost:3000/assets/x-client-socket.js"></script>
 
     <!-- <script type="text/javascript" src="js/gamecontroller.js"></script> -->
 
     <script type="text/javascript" src="assets/phaser.js"></script>
+
+    <script type="text/javascript" src="client/Preload.js"></script>
 
     <script type="text/javascript" src="client/Boot.js"></script>
 
@@ -43,14 +45,11 @@
 
     <!-- include the main game file -->
 
-    <script src="js/main.js"></script>
-    <script>
-        XENTHA.apiKey = "9WBUtNuccvfa";
-        XENTHA.callbacks['player.left']= 'playerLeft';
-        XENTHA.callbacks['player.joined']= 'playerJoined';
-        XENTHA.callbacks['player.input']= 'onInput';
-        XENTHA.connect();
-    </script>
+
+      <script src="client/main.js"></script>
+      <script>
+          XENTHA.connect();
+      </script>
   </body>
 
 </html>

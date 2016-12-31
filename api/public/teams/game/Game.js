@@ -5,6 +5,8 @@ Teams.Game = function(){};
 Teams.Game.prototype = {
   preload: function() {
       this.game.time.advancedTiming = true;
+
+      this.players = [];
     },
   create: function() {
     this.map = this.game.add.tilemap('level1');
@@ -32,6 +34,47 @@ Teams.Game.prototype = {
     this.leftKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
     this.rightKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
 
+    XENTHA.on('playerJoined', function(event) {
+          console.log('player joined', event);
+    });
+
+    XENTHA.on('playerLeft', function(event) {
+        console.log('player left', event);
+    });
+
+    XENTHA.on('playerMoveLeft', function(event) {
+        console.log('player playerMoveLeft', event);
+
+    });
+
+
+    XENTHA.on('playerMoveRight', function(event) {
+        console.log('player playerMoveRight', event);
+
+    });
+
+
+    XENTHA.on('playerMoveUp', function(event) {
+        console.log('player playerMoveUp', event);
+
+    });
+
+
+    XENTHA.on('playerMoveDown', function(event) {
+        console.log('player playerMoveDown', event);
+
+    });
+
+
+    XENTHA.on('playerA', function(event) {
+        console.log('player playerA', event);
+
+    });
+
+    XENTHA.on('playerB', function(event) {
+        console.log('player playerB', event);
+
+    });
   },
   update: function() {
 

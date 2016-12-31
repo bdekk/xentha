@@ -1,3 +1,6 @@
+// server xentha library. Use this to create your xentha game :)
+var pathArray = window.location.pathname.split( 'room' );
+
 function Emitter(obj) {
   if (obj) return mixin(obj);
 };
@@ -86,33 +89,49 @@ Emitter.prototype.hasListeners = function(event){
 };
 
 var XENTHA = {
-  ws: "ws://192.168.2.5:3000",
-  api: "http://192.168.2.5:3000",
+  ws: "ws://localhost:3000",
+  // api: "http://localhost:3000",
   connected: false,
-  apiKey: "",
   callbacks: {},
   room: {},
-  players: []
+  vars: {
+    autoJoin: true,
+    roomCode: getParameterByName('room')
+  }
 };
 
 XENTHA.connect = function() {
+  XENTHA.socket = new WebSocket(this.ws);
 
-  if(!window.parent) {
-    console.error('Could not find parent.');
-  }
+  XENTHA.socket.onopen = function(event) {
+        XENTHA.connected = true;
+        if(XENTHA.vars.autoJoin && XENTHA.vars.roomCode) {
+            XENTHA.send('room.join', {roomCode: XENTHA.vars.roomCode});
+        }
+  };
 
-  if(window.addEventListener){
-	  window.addEventListener("message", this._receive, false);
-	} else if (window.attachEvent){
-		window.attachEvent("message", this._receive, false);
-	}
+  /** if a message is received on this socket, call the related method **/
+  XENTHA.socket.onmessage = function (event) {
+    XENTHA._receive(event);
+  };
 
-  XENTHA.send('game.init', {"apiKey": this.apiKey});
+  XENTHA.socket.onerror = function(data) {
+    XENTHA.emit('error', 'error while connecting..');
+  };
+
+  XENTHA.socket.onclosed = function(event) {
+    XENTHA.emit('error', 'client closed.');
+  };
+
 }
 
-// send data to parent (controller)
 XENTHA.send = function(id, data) {
-    window.parent.postMessage(JSON.stringify({"id": id, "data": data}),"*");
+  if(!XENTHA.connected || !XENTHA.socket) {
+    console.error('Socket is not connected.');
+    return;
+  }
+
+  XENTHA.socket.send(JSON.stringify({"id": id, "data": data}));
 }
 
 // receive data from parent iframe (controller)
@@ -127,20 +146,32 @@ XENTHA._receive = function(event) {
     XENTHA.emit(XENTHA.callbacks[data.id], data.data);
 }
 
+
+
 Emitter(XENTHA);
 
-XENTHA.on('_player.joined', function(event) {
-  console.log('player joined', event.data.player);
-  if(event.data.player) {
-    XENTHA.players.push(event.data.player);
-  }
+/** Callbacks **/
+XENTHA.on('error', function (data) {
 });
 
-XENTHA.on('_player.left', function(event) {
-  console.log('player ĺeft', event.data.player);
-  XENTHA.players = XENTHA.players.filter(function (player) {
-      return player.id !== event.data.player.id;
-  });
+XENTHA.on('connect', function () {
 });
+
+XENTHA.on('disconnect', function () {
+});
+
+XENTHA.on('_room.joined', function(data) {
+    XENTHA.room = data;
+}.bind(this));
+
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
 
 window.XENTHA = XENTHA;
