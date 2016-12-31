@@ -36,34 +36,38 @@ Teams.Game.prototype = {
 
     XENTHA.on('playerJoined', function(event) {
           console.log('player joined', event);
-    });
+    }.bind(this));
 
     XENTHA.on('playerLeft', function(event) {
         console.log('player left', event);
-    });
+    }.bind(this));
 
     XENTHA.on('playerMoveLeft', function(event) {
-        console.log('player playerMoveLeft', event);
-
-    });
+      if(event.data.pressed) {
+        this.player.x-=2;
+      }
+    }.bind(this));
 
 
     XENTHA.on('playerMoveRight', function(event) {
-        console.log('player playerMoveRight', event);
-
-    });
+      if(event.data.pressed) {
+        this.player.x+=2;
+      }
+    }.bind(this));
 
 
     XENTHA.on('playerMoveUp', function(event) {
-        console.log('player playerMoveUp', event);
-
-    });
+        if(event.data.pressed) {
+          this.player.y+=2;
+        }
+    }.bind(this));
 
 
     XENTHA.on('playerMoveDown', function(event) {
-        console.log('player playerMoveDown', event);
-
-    });
+        if(event.data.pressed) {
+          this.player.y-=2;
+        }
+    }.bind(this));
 
 
     XENTHA.on('playerA', function(event) {

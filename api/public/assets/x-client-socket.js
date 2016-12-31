@@ -100,8 +100,9 @@ var XENTHA = {
   }
 };
 
-XENTHA.connect = function() {
-  XENTHA.socket = new WebSocket(this.ws);
+XENTHA.connect = function(url) {
+  url = url || this.ws;
+  XENTHA.socket = new WebSocket(url);
 
   XENTHA.socket.onopen = function(event) {
         XENTHA.connected = true;

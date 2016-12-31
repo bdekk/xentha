@@ -98,66 +98,73 @@ var XENTHA = {
   callbacks: {
       "room.joined": 'roomJoined',
       "room.joined.error": 'roomJoinedFailed',
+      "room.created": 'roomCreated',
       "player.joined": 'playerJoined',
       "player.left": 'playerLeft'
   },
+  ws: "ws://localhost:3000",
+  api: "http://localhost:3000",
+  apiKey: "",
+  connected: false,
+  room: {},
   vars: {
-    connectedPlayers:[],
+    autoJoin: true,
+    autoCreate: true,
     roomCode: getParameterByName('room'),
-    connected:0,
-    sounds: {},
-    soundFiles: [{
-      name: "achievement",
-      url: "http://localhost:3000/assets/sounds/achievement.mp3",
-      loop: false,
-      autoPlay: false,
-      play: function() {},
-      stop: function() {}
-    },{
-      name: "success",
-      url: "http://localhost:3000/assets/sounds/success.wav",
-      loop: false,
-      autoPlay: false,
-      play: function() {},
-      stop: function() {}
-    }]
+    showNotifications:true,
+    showPlayerList: true
   },
-  settings:{
-    apiKey:"", //key to identify game socket.
-    version:"0",
-    host: "http://localhost:3000",
-    ws: "ws://localhost:3000",
-    api: "http://localhost:3000/api",
-    standalone: true,
-    ui:{
-      showNotifications:true,
-      showPlayerList: true
-    },
-    sound:true
-  },
-  layouts: {
-    CONTROLLER: 'controller'
-  }
+  // vars: {
+  //   connectedPlayers:[],
+  //   roomCode: getParameterByName('room'),
+  //   connected:false
+    // sounds: {},
+    // soundFiles: [{
+    //   name: "achievement",
+    //   url: "http://localhost:3000/assets/sounds/achievement.mp3",
+    //   loop: false,
+    //   autoPlay: false,
+    //   play: function() {},
+    //   stop: function() {}
+    // },{
+    //   name: "success",
+    //   url: "http://localhost:3000/assets/sounds/success.wav",
+    //   loop: false,
+    //   autoPlay: false,
+    //   play: function() {},
+    //   stop: function() {}
+    // }]
+  // },
+  // settings:{
+    // apiKey:"", //key to identify game socket.
+    // version:"0",
+    // host: "http://localhost:3000",
+    // ws: "ws://localhost:3000",
+    // api: "http://localhost:3000/api",
+    // standalone: true,
+
+    // sound:true
+  // }
 };
 
 
 var init = function() {
   // var canvas = document.getElementsByTagName('canvas')[0];
-  if(XENTHA.settings.ui.showNotifications) {
+  if(XENTHA.vars.showNotifications) {
     XENTHA.createNotification();
   }
 
   XENTHA.createInfo();
 
   // if the sound is off, the user should still be able to access his/her sounds.
-  XENTHA.loadSoundResources(XENTHA.vars.sounds);
+  // XENTHA.loadSoundResources(XENTHA.vars.sounds);
 
   // add player list
-  if(XENTHA.settings.ui.showPlayerList) {
+  if(XENTHA.vars.showPlayerList) {
     XENTHA.createPlayerList([]);
   }
 
-  addCss(XENTHA.settings.host + "/assets/xentha-server.css");
+  addCss(XENTHA.api + "/assets/xentha-server.css");
 }
 
 function addCss(fileName) {
@@ -186,44 +193,43 @@ XENTHA.showNotification = function(message, duration) {
   }
 }
 
-
-
-XENTHA.loadSoundResources = function(sounds) {
-  window.AudioContext = window.AudioContext || window.webkitAudioContext;
-  if(!window.AudioContext) return;
-  var context = new AudioContext();
-
-  // source: http://www.html5rocks.com/en/tutorials/webaudio/intro/
-  // https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode
-  XENTHA.vars.soundFiles.forEach(function(soundFile, index) {
-    var request = new XMLHttpRequest();
-    request.open('GET', soundFile.url, true);
-    request.responseType = 'arraybuffer';
-
-    var sound = {};
-    sound.play = function() {};
-
-    // Decode asynchronously
-    request.onload = function() {
-      context.decodeAudioData(request.response, function(buffer) {
-        sound.play = function () {
-          if(XENTHA.settings.sound) {
-            var source = context.createBufferSource();
-            source.buffer = buffer;
-            source.connect(context.destination);
-            if (!source.start)
-                source.start = source.noteOn;
-            source.start(0);
-            source.loop = soundFile.loop;
-            source.autoPlay = soundFile.autoPlay;
-          }
-        };
-        XENTHA.vars.sounds[soundFile.name] = sound;
-      });
-    }
-    request.send();
-  });
-}
+// SOUNDS FOR ACHIEVEMENTS.
+// XENTHA.loadSoundResources = function(sounds) {
+//   window.AudioContext = window.AudioContext || window.webkitAudioContext;
+//   if(!window.AudioContext) return;
+//   var context = new AudioContext();
+//
+//   // source: http://www.html5rocks.com/en/tutorials/webaudio/intro/
+//   // https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode
+//   XENTHA.vars.soundFiles.forEach(function(soundFile, index) {
+//     var request = new XMLHttpRequest();
+//     request.open('GET', soundFile.url, true);
+//     request.responseType = 'arraybuffer';
+//
+//     var sound = {};
+//     sound.play = function() {};
+//
+//     // Decode asynchronously
+//     request.onload = function() {
+//       context.decodeAudioData(request.response, function(buffer) {
+//         sound.play = function () {
+//           if(XENTHA.settings.sound) {
+//             var source = context.createBufferSource();
+//             source.buffer = buffer;
+//             source.connect(context.destination);
+//             if (!source.start)
+//                 source.start = source.noteOn;
+//             source.start(0);
+//             source.loop = soundFile.loop;
+//             source.autoPlay = soundFile.autoPlay;
+//           }
+//         };
+//         XENTHA.vars.sounds[soundFile.name] = sound;
+//       });
+//     }
+//     request.send();
+//   });
+// }
 
 XENTHA.createPlayerList = function(players) {
   var ul = document.createElement('ul');
@@ -286,7 +292,7 @@ XENTHA.showRoomCode = function(visible) {
 }
 
 XENTHA.send = function(id, data) {
-  if(!XENTHA.vars.connected) {
+  if(!XENTHA.connected) {
     console.error('Socket is not connected.');
     return;
   }
@@ -297,22 +303,35 @@ XENTHA.send = function(id, data) {
 Emitter(XENTHA);
 
 XENTHA.connect = function(url, opts) {
-  var url = url || this.settings.ws;
+  var url = url || this.ws;
   var opts = opts || {autoJoin: true};
-  pathArray
 
-  if(!(XENTHA.settings.apiKey && XENTHA.settings.apiKey.length > 1)) {
-    console.err('please enter an API key (xentha.settings.apikey)');
+  if(!(XENTHA.apiKey && XENTHA.apiKey.length > 1)) {
+    console.err('please enter an API key (xentha.apikey)');
     return;
   }
 
   XENTHA.socket = new WebSocket(url);
 
   XENTHA.socket.onopen = function(event) {
-        XENTHA.vars.connected = true;
-        XENTHA.emit('connect', {});
-        if(opts.autoJoin && XENTHA.vars.roomCode) {
-            XENTHA.send('room.join', {type: 'game', apiKey: XENTHA.settings.apiKey, roomCode: XENTHA.vars.roomCode});
+        XENTHA.connected = true;
+        if(XENTHA.vars.roomCode) {
+          XENTHA.send("room.join", {'roomCode': XENTHA.vars.roomCode, 'type': 'screen'});
+        } else if(XENTHA.vars.autoCreate) {
+          XENTHA.send("room.create", {"name": "Standalone room."});
+
+          // act on room created callback.
+          XENTHA.on('_room.created', function(data) {
+            XENTHA.send("room.join", {'roomCode': data.roomCode, 'type': 'screen'});
+            XENTHA.on("_screen.joined", function(data) {
+                XENTHA.roomCode = data.roomCode;
+                XENTHA.send('game.init', {"apiKey": XENTHA.apiKey});
+                XENTHA.setInfoText('Go to xentha.com and enter code <strong>' + data.roomCode + '</strong>');
+            });
+            XENTHA.on("_screen.joined.error", function(data) {
+                XENTHA.setInfoText('Room joined failed. </strong>', 5000);
+            });
+          });
         }
   };
 
@@ -337,68 +356,25 @@ XENTHA.connect = function(url, opts) {
     XENTHA.emit('error', 'client closed.');
   };
 
-  //   if(!(XENTHA.settings.apiKey && XENTHA.settings.apiKey.length > 1)) {
-  //     console.err('PLEASE ENTER AN APIKEY TO XENTHA.SETTINGS.APIKEY');
-  //     return;
-  //   } else {
-  //     if(XENTHA.settings.standalone) {
-  //       XENTHA.socket.emit('createRoom', {});
-  //     } else if(XENTHA.vars.roomCode) {
-  //       XENTHA.socket.emit('joinRoom', {type: 'game', roomCode: XENTHA.vars.roomCode, apiKey: XENTHA.settings.apiKey});
-  //     }
-  //   }
-  // })
-
-  XENTHA.on('_roomJoined', function(data) {
-      console.log(data);
-      XENTHA.vars.connectedPlayers = data.players;
-      XENTHA.vars.roomCode = data.roomCode;
-      XENTHA.vars.state = data.state;
-      // XENTHA.showNotification('Go to xentha.com and enter code ' + data.roomCode, 50000);
-      XENTHA.setInfoText('Go to xentha.com and enter code <strong>' + data.roomCode + '</strong>');
-  }.bind(this));
-
-  XENTHA.on('_roomJoinedFailed', function(data) {
-      console.log('join room failed.');
-  }.bind(this));
-
-  // XENTHA.roomCreated = function(a) {};
-  // XENTHA.socket.on('roomCreated', function(data) {
-  //   XENTHA.vars.connectedPlayers = data.players;
-  //   XENTHA.vars.roomCode = data.roomCode;
-  //   XENTHA.vars.state = data.state;
-  //   if(XENTHA.settings.standalone) {
-  //     XENTHA.socket.emit('joinRoom', {type: 'game', roomCode: XENTHA.vars.roomCode,  apiKey: XENTHA.settings.apiKey});
-  //   }
-  //   XENTHA.roomCreated(data);
-  // });
-
-  // XENTHA.createRoomFailed = function(a) {};
-  // XENTHA.socket.on('createRoomFailed', function(data) {
-  //   console.log('create room failed.');
-  //   // XENTHA.socket.emit('createRoom');
-  //   XENTHA.createRoomFailed(data);
-  // })
-
   XENTHA.on('_game.stateChanged', function(data) {
     XENTHA.vars.state = data.state;
   }.bind(this));
 
   XENTHA.on('_player.joined', function(data) {
     data.player.input = []; //create an empty input array.
-    XENTHA.vars.connectedPlayers.push(data.player);
+    XENTHA.room.players.push(data.player);
     if(XENTHA.settings.ui.showPlayerList) {
-      XENTHA.setPlayerList(XENTHA.vars.connectedPlayers);
+      XENTHA.setPlayerList(XENTHA.room.players);
     }
     XENTHA.showNotification(data.player.name + ' joined the game.', 3000);
   }.bind(this));
 
   XENTHA.playerLeft = function(a) {};
   XENTHA.on('_player.left', function(data) {
-    var index = XENTHA.vars.connectedPlayers.map(function(player) {return player.id; }).indexOf(data.player.id);
-    XENTHA.vars.connectedPlayers.splice(index);
-    if(XENTHA.settings.ui.showPlayerList) {
-      XENTHA.setPlayerList(XENTHA.vars.connectedPlayers);
+    var index = XENTHA.room.players.map(function(player) {return player.id; }).indexOf(data.player.id);
+    XENTHA.room.players.splice(index);
+    if(XENTHA.vars.showPlayerList) {
+      XENTHA.setPlayerList(XENTHA.room.players);
     }
     XENTHA.showNotification(data.player.name + ' left the game.', 3000);
     XENTHA.playerLeft(data);
@@ -406,73 +382,6 @@ XENTHA.connect = function(url, opts) {
 
   XENTHA.on("_player.orientation",function(a){
   }.bind(this));
-
-//   // CONVENIENCE METHOD.
-//
-//   // {data: , player (optional): , event: .. }
-//   XENTHA.send = function(obj) {
-//     if(!obj.event || !obj.data) return;
-//     XENTHA.socket.emit('game.send', obj);
-//   }
-//
-//     // NOT USED YET.
-//   XENTHA.die = function(data) {
-//       // XENTHA.socket.emit('game.die', {id: data.id});
-//       XENTHA.send({event: 'game.die', player: data.id, data: {die: true}});
-//   }
-//
-// // {id: data.id, score: data.score}
-//   XENTHA.score = function(data) {
-//       // XENTHA.socket.emit('game.score', data);
-//       XENTHA.send({event: 'game.score', player: data.id, data: {score: data.score}});
-//   }
-//
-//   // NOT USED YET.
-// // {players: data.players, time: data.time}
-//   XENTHA.end = function(data) {
-//       // XENTHA.socket.emit('game.end', data);
-//       XENTHA.send({event: 'game.end', data: {players: data.players, time: data.time}});
-//   }
-//
-//     // NOT USED YET.
-//   XENTHA.start = function(data) {
-//     XENTHA.socket.emit('game.start', {players: data.players});
-//   }
-//
-//     // NOT USED YET.
-//   XENTHA.onPlayerRestart = function(data) {};
-//   XENTHA.socket.on('player.restart', function(data) {
-//     XENTHA.onPlayerRestart(data);
-//   });
-//
-//   // set player layout (type: button, input, id: .. position: x, y, width, height)
-//   XENTHA.setLayout = function(data) {
-//     XENTHA.socket.emit('game.layout', data);
-//   }
-//
-//   XENTHA.addLayout = function(data) {
-//     XENTHA.send(data);
-//   }
-//
-// // event, id, achievement {key: .., time: ..}
-//   XENTHA.addAchievement = function (data) {
-//       XENTHA.send({event: 'game.achievement', player: data.id, data: {achievement: data.achievement}});
-//   }
-//
-//   // type: button, input, id: .. leftArrow, pressed: true/false)
-//   XENTHA.onInput = function(data) {}
-//   XENTHA.socket.on('player.input', function(data) {
-//     console.log(data);
-//       XENTHA.onInput(data);
-//   });
-//
-//   XENTHA.joinRoom = function() {
-//     XENTHA.socket.emit('joinRoom', {type: 'game', roomCode: XENTHA.vars.roomCode});
-//   }
-//
-//   XENTHA.createRoom = function(name) {
-//     XENTHA.socket.emit('createRoom', {type: 'game', roomName: name});
-//   }
 }
 
 function getParameterByName(name, url) {
