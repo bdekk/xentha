@@ -176,8 +176,14 @@ module.exports = function (wss) {
                     }
                 }).then(function (room) {
                     if (room) {
+                        console.log(room.roomCode, roomdata.rooms);
+                        if(!roomdata.exists(socket, room.roomCode)) {
+                          socket.sendData('room.joined.error', {
+                              "message": "Room " + data.roomCode + " did exist but is not active anymore. "
+                          });
+                          return;
+                        }
                         roomdata.join(socket, room.roomCode); // use same id as the api room id.
-
                         // initializeRoomVariables(socket, room);
 
                         var players = roomdata.get(socket, "players");

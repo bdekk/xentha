@@ -90,7 +90,7 @@ Emitter.prototype.hasListeners = function(event){
 
 var XENTHA = {
   ws: "ws://localhost:3000",
-  // api: "http://localhost:3000",
+  api: "http://localhost:3000",
   connected: false,
   callbacks: {},
   room: {},
@@ -107,9 +107,17 @@ XENTHA.connect = function(url) {
   XENTHA.socket.onopen = function(event) {
         XENTHA.connected = true;
         if(XENTHA.vars.autoJoin && XENTHA.vars.roomCode) {
-            XENTHA.send('room.join', {roomCode: XENTHA.vars.roomCode});
+            XENTHA.connectToRoom(XENTHA.vars.roomCode);
         }
   };
+
+  XENTHA.connectToRoom = function(roomCode) {
+    XENTHA.send('room.join', {"roomCode": roomCode});
+    XENTHA.on('_room.joined', function(event) {
+      console.log(event);
+      setModalVisibility(false);
+    });
+  }
 
   /** if a message is received on this socket, call the related method **/
   XENTHA.socket.onmessage = function (event) {
@@ -124,6 +132,66 @@ XENTHA.connect = function(url) {
     XENTHA.emit('error', 'client closed.');
   };
 
+}
+
+function addCss(fileName) {
+  var head = document.head
+    , link = document.createElement('link')
+
+  link.type = 'text/css'
+  link.rel = 'stylesheet'
+  link.href = fileName
+  head.appendChild(link)
+}
+
+addCss(XENTHA.api + "/assets/xentha-client.css");
+createRoomCodeModal();
+setModalVisibility(true);
+
+function createRoomCodeModal() {
+  var modal = document.createElement('div');
+  modal.setAttribute('id', 'modal');
+  modal.setAttribute('class', 'modal');
+
+  var modalContent = document.createElement('div');
+  modalContent.setAttribute('class', 'modal-content');
+
+  modal.appendChild(modalContent);
+
+  var text = document.createElement('p');
+  text.innerHTML = "Please enter the roomcode.";
+
+  var input = document.createElement('input');
+  input.type = "text";
+  input.className = "text-input";
+
+
+  var button = document.createElement('input');
+  button.type = "button";
+  button.value = "Join";
+  button.className = "button-input";
+
+  button.addEventListener('click', function() {
+    if(input.value && input.value !== "")
+    XENTHA.connectToRoom(input.value);
+  }, false);
+
+  modalContent.appendChild(text);
+  modalContent.appendChild(input);
+  modalContent.appendChild(button);
+
+  document.body.insertBefore(modal, document.body.firstChild);
+}
+
+function setModalVisibility(visible) {
+    var klass = 'visible';
+    var element = document.getElementById('modal');
+
+    var classes = element.className.match(/\S+/g) || [],
+        index = classes.indexOf(klass);
+
+    index < 0 & visible ? classes.push(klass) : classes.splice(index, 1);
+    element.className = classes.join(' ');
 }
 
 XENTHA.send = function(id, data) {

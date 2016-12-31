@@ -95,13 +95,7 @@ Emitter.prototype.hasListeners = function(event){
 
 var XENTHA = {
   socket: null,
-  callbacks: {
-      "room.joined": 'roomJoined',
-      "room.joined.error": 'roomJoinedFailed',
-      "room.created": 'roomCreated',
-      "player.joined": 'playerJoined',
-      "player.left": 'playerLeft'
-  },
+  callbacks: {},
   ws: "ws://localhost:3000",
   api: "http://localhost:3000",
   apiKey: "",
@@ -369,7 +363,6 @@ XENTHA.connect = function(url, opts) {
     XENTHA.showNotification(data.player.name + ' joined the game.', 3000);
   }.bind(this));
 
-  XENTHA.playerLeft = function(a) {};
   XENTHA.on('_player.left', function(data) {
     var index = XENTHA.room.players.map(function(player) {return player.id; }).indexOf(data.player.id);
     XENTHA.room.players.splice(index);

@@ -8,6 +8,7 @@ exports.rooms = {};
   Returns if the room exists.
 */
 exports.exists = function(room) {
+	console.log(this.rooms[room]);
 	if(!this.rooms[room]) return false;
 	return true;
 };
@@ -84,14 +85,15 @@ exports.join = function(socket, room, opts) {
 	if(exports.Debug) console.log(socket.id+": Joining room: "+room);
 	// if(socket.room) this.leaveRoom(socket, room);
 	if(opts.autoCreate && !this.exists(socket, room)) {
-        this.create(socket, room, {autoHost: true});
-    }
-    if(!this.rooms[room].host && this.rooms[room].sockets.length == 0) {
-        // nobody joined the room yet and the host is not set (autohost was false on creation)
-        this.rooms[room].host = socket.id;
-    }
+      this.create(socket, room, {autoHost: true});
+  }
+  if(!this.rooms[room].host && this.rooms[room].sockets.length == 0) {
+      // nobody joined the room yet and the host is not set (autohost was false on creation)
+      this.rooms[room].host = socket.id;
+  }
 	this.rooms[room].sockets.push(socket.id);
 	socket.room = room;
+
 };
 
 exports.clear = function(room) {
