@@ -8,7 +8,6 @@ exports.rooms = {};
   Returns if the room exists.
 */
 exports.exists = function(room) {
-	console.log(this.rooms[room]);
 	if(!this.rooms[room]) return false;
 	return true;
 };
