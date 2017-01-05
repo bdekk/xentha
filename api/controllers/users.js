@@ -28,6 +28,7 @@ methods.create = function(req, res, next) {
 
 methods.login = function(req, res, next) {
   if(req.body.user) {
+      console.log(req.body.user);
   	User.findOne({where: {username: req.body.user.username}})
 		.then(function (user) {
 			if (!user) {

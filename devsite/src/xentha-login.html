@@ -1,0 +1,100 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+
+<dom-module id="xentha-login">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px 20px;
+      }
+
+    </style>
+    <iron-ajax
+        method="POST"
+        id="loginAjax"
+        content-type="application/json"
+        handle-as="json"
+        on-response="_onLogin"
+        on-error="_onLoginError">
+    </iron-ajax>
+    <iron-ajax
+        method="POST"
+        id="registerAjax"
+        content-type="application/json"
+        handle-as="json"
+        on-response="_onRegister"
+        on-error="_onRegisterError">
+    </iron-ajax>
+
+    <div class="card">
+        <div hidden="[[!loggedIn()]]">
+            <paper-input  value="{{username}}" placeholder="Username">
+            </paper-input>
+            <paper-input type="password"  value="{{password}}" placeholder="Password">
+            </paper-input>
+            <paper-button class="blue" on-tap="doLogin" raised>Login</paper-button>
+            <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
+        </div>
+        <div hidden="[[loggedIn()]]">
+            <p>You are already logged in [[user.username]]</p>
+            <paper-button class="blue" on-tap="doLogout" raised>Logout</paper-button>
+            <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
+        </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'xentha-login',
+      properties: {
+          user: {
+              type: Object,
+              notify: true,
+              value: null
+          },
+          baseUrl: String,
+          username: String,
+          password: String
+      },
+      loggedIn: function() {
+          return this.user !== null;
+      },
+      doLogin: function() {
+          this.$.loginAjax.url = this.baseUrl + "/users/login";
+          this.$.loginAjax.body = JSON.stringify({"user": {"username": this.username, "password": this.password}});
+          this.$.loginAjax.generateRequest();
+      },
+
+
+      doRegister: function() {
+          this.$.registerAjax.url = this.baseUrl + "/users";
+          this.$.registerAjax.body = {"username": this.username, "password": this.password};
+          this.$.registerAjax.generateRequest();
+      },
+
+      _onLogin: function(event) {
+          this.set('user', event.detail.response.user);
+      },
+      doLogout: function(event) {
+          this.set('user', undefined);
+      },
+      _onLoginError: function(event) {
+          this.fire('error', {"message": event.detail.error});
+          console.log(event);
+      },
+      _onRegister: function(event) {
+              console.log(event);
+      },
+      _onRegisterError: function(event) {
+          console.log(event);
+      },
+    });
+  </script>
+</dom-module>
