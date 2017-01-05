@@ -22,13 +22,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <div class="card">
         <h2 class="text-center">Welcome to the Xentha developer portal</h2>
-        <p>You have come to the right place to start developing local multiplayer games!</p>
+        <p>You have come to the right place to start developing local multiplayer games! Get to it [[user.firstname]]!</p>
     </div>
   </template>
 
   <script>
     Polymer({
       is: 'xentha-home',
+      properties: {
+        user: {
+          type: Object
+        }
+      }
     });
   </script>
 </dom-module>

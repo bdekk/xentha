@@ -34,19 +34,20 @@
     </iron-ajax>
 
     <div class="card">
-        <div hidden="[[!loggedIn()]]">
+        <template is="dom-if" if="[[!loggedIn()]]">
             <paper-input  value="{{username}}" placeholder="Username">
             </paper-input>
             <paper-input type="password"  value="{{password}}" placeholder="Password">
             </paper-input>
             <paper-button class="blue" on-tap="doLogin" raised>Login</paper-button>
             <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
-        </div>
-        <div hidden="[[loggedIn()]]">
+        </template>
+
+        <template is="dom-if" if="[[loggedIn()]]">
             <p>You are already logged in [[user.username]]</p>
             <paper-button class="blue" on-tap="doLogout" raised>Logout</paper-button>
             <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
-        </div>
+        </template>
     </div>
   </template>
 
@@ -56,15 +57,14 @@
       properties: {
           user: {
               type: Object,
-              notify: true,
-              value: null
+              notify: true
           },
           baseUrl: String,
           username: String,
           password: String
       },
       loggedIn: function() {
-          return this.user !== null;
+          return !!this.user;
       },
       doLogin: function() {
           this.$.loginAjax.url = this.baseUrl + "/users/login";
@@ -83,7 +83,7 @@
           this.set('user', event.detail.response.user);
       },
       doLogout: function(event) {
-          this.set('user', undefined);
+          this.set('user', null);
       },
       _onLoginError: function(event) {
           this.fire('error', {"message": event.detail.error});

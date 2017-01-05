@@ -101,15 +101,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </app-header>
 
         <iron-pages
-            selected="[[page]]"
+            selected="[[routeData.page]]"
             attr-for-selected="name"
             fallback-selection="404"
             role="main">
-          <xentha-home name="home"></xentha-home>
+          <xentha-home user="[[user]]" name="home"></xentha-home>
           <xentha-login base-url="[[baseUrl]]" user="{{user}}" name="login"></xentha-login>
           <xentha-docs name="docs"></xentha-docs>
-          <xentha-games base-url="[[baseUrl]]" hidden="[[!loggedIn()]]" name="games"></xentha-games>
-          <xentha-profile base-url="[[baseUrl]]" hidden="[[!loggedIn()]]" name="profile"></xentha-profile>
+          <xentha-games user="[[user]]" base-url="[[baseUrl]]" hidden$="[[!loggedIn()]]" name="games"></xentha-games>
+          <xentha-profile user="[[user]]" base-url="[[baseUrl]]" hidden$="[[!loggedIn()]]" name="profile"></xentha-profile>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -130,17 +130,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             type: String,
             value: "http://localhost:3000/api"
         },
-        user: Object
+        user: { type: Object }
       },
 
       observers: [
         '_routePageChanged(routeData.page)',
+        '_userChanged(user)',
       ],
       listeners: {
           'error': 'onError'
       },
       loggedIn: function() {
-          return this.user !== null;
+          return !!this.user;
       },
       _routePageChanged: function(page) {
         this.page = page || 'home';
@@ -149,7 +150,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.drawer.close();
         }
       },
-
+      _userChanged: function(user) {
+            this.set('user', user);
+            if(this.user && this.routeData.page === 'login') {
+                this.set('route.path', '/home');
+            }
+      },
       _pageChanged: function(page) {
         // Load page import on demand. Show 404 page if fails
         var resolvedPageUrl = this.resolveUrl('xentha-' + page + '.html');

@@ -1,14 +1,5 @@
-<!--
-@license
-Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="xentha-games">
@@ -21,17 +12,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <iron-ajax
+        method="GET"
+        id="gamesAjax"
+        content-type="application/json"
+        handle-as="json"
+        on-response="_onGetGames"
+        on-error="_onGetGamesError">
+    </iron-ajax>
+
     <div class="card">
-      <div class="circle">2</div>
-      <h1>View Two</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+        <template is="dom-repeat" items="[[games]]" as="game">
+          <span>[[game.name]]</span>
+        </template>
     </div>
   </template>
 
   <script>
     Polymer({
       is: 'xentha-games',
+      properties: {
+        user: {
+          type: Object
+        },
+        games: Array
+      },
+      observers: ['userChanged(user)'],
+      userChanged: function(user) {
+        if(user) {
+          this.getGames();
+        }
+      },
+      _onGetGames: function(event) {
+        this.games = event.detail.response.games;
+      },
+      _onGetGamesError: function(event) {
+        this.fire('error', event.detail.error);
+      },
+      getGames: function() {
+          this.$.gamesAjax.url = this.baseUrl + "/games";
+          // this.$.gamesAjax.body = JSON.stringify({"user": {"username": this.username, "password": this.password}});
+          this.$.gamesAjax.generateRequest();
+      },
     });
   </script>
 </dom-module>
