@@ -10,7 +10,6 @@ Teams.Game.prototype = {
     },
   create: function() {
     this.map = this.game.add.tilemap('level1');
-    this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     this.map.addTilesetImage('towerDefense_tilesheet', 'towerDefense_tilesheet', 64, 64);
     this.map.addTilesetImage('medieval_tilesheet', 'medieval_tilesheet', 64, 64);
@@ -21,9 +20,17 @@ Teams.Game.prototype = {
     this.propsLayer = this.map.createLayer('backgroundLayer2'); //paths , water , sand
     this.blockedLayer = this.map.createLayer('blockedLayer'); // blocking obstacles.
     this.obstacleLayer = this.map.createLayer('obstacleBackground'); // action triggers.
+
+    this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+
+    var windowWidth = (window.innerWidth * window.devicePixelRatio);
+    var windowHeight = (window.innerHeight * window.devicePixelRatio);
+    this.backgroundlayer.scale = {"x": (windowWidth / 1280), "y": (windowHeight / 1280)};
+    this.propsLayer.scale = {"x": (windowWidth / 1280), "y": (windowHeight / 1280)};
+    this.blockedLayer.scale = {"x": (windowWidth / 1280), "y": (windowHeight / 1280)};
+    this.obstacleLayer.scale = {"x": (windowWidth / 1280), "y": (windowHeight / 1280)};
     this.backgroundlayer.resizeWorld();
     this.map.setCollisionBetween(1, 5000, true, 'blockedLayer');
-
 
     this.player = this.game.add.sprite(100, 300, 'player');
     this.player.scale.setTo(64/this.player.width * 0.5, 64/this.player.height * 0.5);

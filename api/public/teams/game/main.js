@@ -1,6 +1,6 @@
 var Teams = Teams || {};
 
-Teams.game = new Phaser.Game(800,600, Phaser.AUTO, '');
+Teams.game = new Phaser.Game(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, Phaser.AUTO, 'gameArea');
 
 Teams.game.state.add('Boot', Teams.Boot);
 Teams.game.state.add('Game', Teams.Game);

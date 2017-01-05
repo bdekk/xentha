@@ -11,9 +11,9 @@ Teams.Boot.prototype = {
   create: function() {
     //loading screen will have a white background
     this.game.stage.backgroundColor = '#eee';
-    this.game.scale.pageAlignHorizontally = true;
- 		this.game.scale.pageAlignVertically = true;
-    this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    // this.game.scale.pageAlignHorizontally = true;
+ 	// 	this.game.scale.pageAlignVertically = true;
+    // this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
 
 
