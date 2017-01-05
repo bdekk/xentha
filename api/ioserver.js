@@ -294,6 +294,44 @@ module.exports = function (wss) {
             socket.broadcastToRoom('game.disconnect', {});
         }.bind(this);
 
+        /**
+            Saves score to the database of the specific game.
+            Example:
+                socket.send('game.score', {
+                    scores: [{
+                        userId: 1,  // note: not the player's name, but the unique userId.
+                        score: 10
+                    }, ...];
+                });
+        **/
+        messages['game.score'] = function (data) {
+            var roomCode = roomdata.get(socket, "roomCode");
+            var gameData = roomdata.get(socket, "gameData");
+
+            if(!roomCode || !gameData) {
+                socket.sendData('game.score.error', "score could not be saved. roomCode and gameData are missing.");
+                return;
+            }
+
+            if(!data.scores) {
+                socket.sendData('game.score.error', "score could not be saved. data.scores missing");
+                return;
+            }
+
+            data.scores.forEach(function(playerScore) {
+                Score.create({
+                    roomCode: roomCode,
+                    gameId: gameData.id,
+                    gameName: gameData.name, // easier for lookup :)
+                    score: playerScore.score,
+                    userId: playerScore.userId
+                }).then(function (room) {
+                    var jsonScore = score.toJSON();
+                    socket.sendData('game.score.created', jsonScore);
+                });
+            });
+        }.bind(this);
+
         /** room create, usually done by the website. Upon gaming there will be a client host that is the one that decides (boss) **/
         messages['room.create'] = function (data) {
             Room.create({
