@@ -1,5 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="xentha-games">
@@ -9,6 +11,50 @@
         display: block;
 
         padding: 10px;
+      }
+
+      .flex {
+        display: flex;
+      }
+
+      .horizontal {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+      }
+
+      .vertical {
+        flex-direction: column;
+      }
+
+      .flex-1 {
+        flex: 1;
+      }
+
+      .flex-2 {
+        flex: 2;
+      }
+
+      img {
+        height: 100%;
+        max-width: 100px;
+        max-height: 100px;
+      }
+
+      a {
+        text-decoration: none;
+        color: #000;
+        cursor: pointer;
+        padding: 6px 26px 6px 26px;
+      }
+
+      a:hover {
+        background-color: #eee;
+      }
+
+      .game {
+        border-bottom: 1px solid #eee;
+        padding-top: 1em;
       }
     </style>
 
@@ -23,8 +69,22 @@
 
     <div class="card">
         <template is="dom-repeat" items="[[games]]" as="game">
-          <span>[[game.name]]</span>
+          <div class="flex horizontal game">
+            <div class="flex-1">
+              <img src="[[getGameImage(game.image)]]"></img>
+              <!-- <paper-input hidden$={{!inEditMode(editMode)}} label="image" value="[[game.image]]"></paper-input> -->
+            </div>
+            <div class="vertical flex-2">
+                <h3 hidden$={{inEditMode(editMode)}}>[[game.name]]</h3>
+                <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.name]]"></paper-input>
+                <p><strong>apiKey:</strong> [[game.apiKey]]</p>
+                <p hidden$={{inEditMode(editMode)}} ><strong>URL:</strong> <a  target="_blank" href="[[game.url]]/index.html">site</a> <a  target="_blank" href="[[game.url]]/client.html">client</a></p>
+                <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.url]]"></paper-input>
+            </div>
         </template>
+
+        <paper-button hidden$="{{inEditMode(editMode)}}" on-tap="toggleEdit" class="blue">Edit</paper-button>
+        <paper-button hidden$="{{!inEditMode(editMode)}}" on-tap="save" class="green">Save</paper-button>
     </div>
   </template>
 
@@ -35,13 +95,17 @@
         user: {
           type: Object
         },
-        games: Array
+        games: Array,
+        editMode: {type: Boolean, value: false }
       },
       observers: ['userChanged(user)'],
       userChanged: function(user) {
         if(user) {
           this.getGames();
         }
+      },
+      getGameImage: function(imageSrc) {
+        return imageSrc || 'images/game.png';
       },
       _onGetGames: function(event) {
         this.games = event.detail.response.games;
@@ -54,6 +118,15 @@
           // this.$.gamesAjax.body = JSON.stringify({"user": {"username": this.username, "password": this.password}});
           this.$.gamesAjax.generateRequest();
       },
+      toggleEdit: function() {
+        this.set('editMode', !this.editMode);
+      },
+      save: function() {
+        this.toggleEdit();
+      },
+      inEditMode: function(editMode) {
+        return editMode;
+      }
     });
   </script>
 </dom-module>
