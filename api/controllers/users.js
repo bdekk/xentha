@@ -1,6 +1,7 @@
 var methods = {};
 var User = require('../models').User;
 var Room = require('../models').Room;
+var Game = require('../models').Game;
 
 methods.get = function(req, res, next) {
 	User.findAll().then(function(users) {
@@ -24,6 +25,14 @@ methods.create = function(req, res, next) {
 	} else {
 		return res.send(400, {error: "supply data"});
 	}
+}
+
+methods.getGames = function(req, res, next) {
+		if(req.params.userId) {
+			Game.findAll({"where": {"authorId": req.params.userId}}).then(function(games) {
+				return res.send({games: games});
+			});
+		}
 }
 
 methods.login = function(req, res, next) {

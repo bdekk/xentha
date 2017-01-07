@@ -163,6 +163,7 @@
       add: function() {
         if(this.newGame.name && this.newGame.url) {
           this.$.addGameAjax.url = this.baseUrl + '/games';
+          this.newGame.authorId = this.userId; // add user to game.
           this.$.addGameAjax.body = JSON.stringify({"game": this.newGame});
           this.$.addGameAjax.generateRequest();
 
@@ -174,7 +175,7 @@
         this.getGames();
       },
       getGames: function() {
-          this.$.gamesAjax.url = this.baseUrl + "/games";
+          this.$.gamesAjax.url = this.baseUrl + "/users/" + this.userId + "/games";
           // this.$.gamesAjax.body = JSON.stringify({"user": {"username": this.username, "password": this.password}});
           this.$.gamesAjax.generateRequest();
       },

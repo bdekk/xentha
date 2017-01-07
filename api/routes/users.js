@@ -10,6 +10,10 @@ router.get('/:id', function(req, res, next) {
 	return user_controller.getOne(req, res, next);
 })
 
+router.get('/:userId/games', function(req, res, next) {
+	return user_controller.getGames(req, res, next);
+})
+
 router.post('/', function(req, res, next) {
 	return user_controller.create(req, res, next);
 })
