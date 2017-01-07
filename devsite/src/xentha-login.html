@@ -1,6 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="shared-styles.html">
@@ -37,22 +39,44 @@
         on-error="_onRegisterError">
     </iron-ajax>
 
+    <paper-tabs selected="{{selected}}" no-slide>
+      <paper-tab>Login</paper-tab>
+      <paper-tab>Register</paper-tab>
+    </paper-tabs>
+    <iron-pages selected="[[selected]]">
+      <div>
+        <h2>Login</h2>
+        <template is="dom-if" if="[[!loggedIn()]]">
+            <paper-input  value="{{username}}" placeholder="Username">
+            </paper-input>
+            <paper-input type="password"  value="{{password}}" placeholder="Password">
+            </paper-input>
+            <paper-button on-tap="doLogin" raised>Login</paper-button>
+            <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
+        </template>
 
-    <h2>Login</h2>
-    <template is="dom-if" if="[[!loggedIn()]]">
-        <paper-input  value="{{username}}" placeholder="Username">
-        </paper-input>
-        <paper-input type="password"  value="{{password}}" placeholder="Password">
-        </paper-input>
-        <paper-button on-tap="doLogin" raised>Login</paper-button>
-        <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
-    </template>
-
-    <template is="dom-if" if="[[loggedIn()]]">
-        <p>You are already logged in</p>
-        <paper-button class="blue" on-tap="doLogout" raised>Logout</paper-button>
-        <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
-    </template>
+        <template is="dom-if" if="[[loggedIn()]]">
+            <p>You are already logged in</p>
+            <paper-button class="blue" on-tap="doLogout" raised>Logout</paper-button>
+            <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
+        </template>
+      </div>
+      <div>
+        <h2>Register</h2>
+        <template is="dom-if" if="[[!loggedIn()]]">
+          <paper-input  value="{{newUser.firstname}}" placeholder="Firstname">
+          </paper-input>
+          <paper-input  value="{{newUser.lastname}}" placeholder="Lastname">
+          </paper-input>
+          <paper-input  value="{{newUser.username}}" placeholder="Username">
+          </paper-input>
+          <paper-input type="password"  value="{{newUser.password}}" placeholder="Password">
+          </paper-input>
+          <paper-button on-tap="doRegister" raised>Register</paper-button>
+            <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
+        </template>
+      </div>
+    </iron-pages>
   </template>
 
   <script>
@@ -65,7 +89,9 @@
           },
           baseUrl: String,
           username: String,
-          password: String
+          password: String,
+          newUser: {type: Object, value: {}},
+          selected: { type: Number, value: 0}
       },
       loggedIn: function() {
           return !!this.userId;
@@ -79,7 +105,7 @@
 
       doRegister: function() {
           this.$.registerAjax.url = this.baseUrl + "/users";
-          this.$.registerAjax.body = {"username": this.username, "password": this.password};
+          this.$.registerAjax.body = {"user": this.newUser};
           this.$.registerAjax.generateRequest();
       },
 
@@ -91,10 +117,9 @@
       },
       _onLoginError: function(event) {
           this.fire('error', {"message": event.detail.error});
-          console.log(event);
       },
       _onRegister: function(event) {
-              console.log(event);
+          this.set('userId', event.detail.response.user.id);
       },
       _onRegisterError: function(event) {
           console.log(event);

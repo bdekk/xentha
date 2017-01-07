@@ -101,6 +101,9 @@
           on-error="_onGameAddError">
       </iron-ajax>
       <h2>Games</h2>
+      <template is="dom-if" if="[[isEmpty(games)]]">
+        <p>No games added yet.</p>
+      </template>
 
       <template is="dom-repeat" items="[[games]]" as="game">
         <div class="flex horizontal game">
@@ -147,6 +150,9 @@
         if(userId) {
           this.getGames();
         }
+      },
+      isEmpty: function(games) {
+        return games.length === 0;
       },
       getGameImage: function(imageSrc) {
         return imageSrc || 'images/game.png';
