@@ -1,0 +1,54 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="xentha-examples">
+  <template>
+    <style include="shared-styles iron-flex iron-flex-alignment">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      img {
+        height: 100%;
+        max-width: 100px;
+        max-height: 100px;
+      }
+    </style>
+
+    <h2>Examples</h2>
+    <div class="layout horizontal">
+      <div class="flex-1">
+        <img src="[[getGameImage(game.image)]]"></img>
+        <!-- <paper-input hidden$={{!inEditMode(editMode)}} label="image" value="[[game.image]]"></paper-input> -->
+      </div>
+      <div class="vertical flex-2">
+          <h3>Example 1</h3>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'xentha-examples',
+      properties: {
+        userId: {
+          type: String
+        }
+      },
+      observers: ['userChanged(userId)'],
+      userChanged: function(userId) {
+        if(userId) {
+        }
+      },
+      getGameImage: function(imageSrc) {
+        return imageSrc || 'images/game.png';
+      }
+    });
+  </script>
+</dom-module>
