@@ -28,7 +28,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="xentha-app">
   <template>
-    <style include="iron-flex iron-flex-alignment">
+    <style include="iron-flex iron-flex-alignment iron-flex-factors">
       :host {
         --app-primary-color: #E55151;
         --app-secondary-color: #fff;
@@ -69,14 +69,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
 
       .content {
-        margin: 0 auto;
         padding: 16px;
       }
 
+      .footer {
+        padding: 1em;
+        border-top: 1px solid var(--app-primary-color);
+      }
+
+      .footer a {
+        text-decoration: none;
+        color: #aaa;
+        padding-right: 26px;
+      }
+
+      .footer a:focus, .footer a:hover {
+        color: var(--app-primary-color);
+      }
 
       paper-toast.red {
         --paper-toast-background-color: #F44336;
         --paper-toast-color: #FFF;
+      }
+
+      .main {
+        min-height: 100vh;
       }
     </style>
 
@@ -88,34 +105,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-      <app-header condenses reveals effects="waterfall">
-        <app-toolbar>
-          <iron-selector selected="{{routeData.page}}" attr-for-selected="name" class="navigation" role="navigation">
-              <span style="flex: 1;"></span>
-              <paper-item name="home">Home</paper-item>
-              <paper-item name="docs">Docs</paper-item>
-              <paper-item name="examples">Examples</paper-item>
-              <paper-item name="login" hidden$="[[loggedIn(userId)]]">Login</paper-item>
-              <paper-item name="profile" hidden$="[[!loggedIn(userId)]]" >Profile</paper-item>
-              <paper-item name="games" hidden$="[[!loggedIn(userId)]]" route="[[subroute]]">Games</paper-item>
-              <span class="flex"></span>
-              <paper-item  hidden$="[[!loggedIn(userId)]]" hidden$="[[!loggedIn(userId)]]" on-tap="logout">Logout</paper-item>
-          </iron-selector>
-        </app-toolbar>
-      </app-header>
-      <div class="content">
-        <iron-pages
-            selected="[[routeData.page]]"
-            attr-for-selected="name"
-            fallback-selection="404"
-            role="main">
-              <xentha-home user-id="[[userId]]" name="home"></xentha-home>
-              <xentha-login base-url="[[baseUrl]]" user-id="{{userId}}" name="login"></xentha-login>
-              <xentha-docs name="docs"></xentha-docs>
-              <xentha-examples name="examples"></xentha-examples>
-              <xentha-games user-id="[[userId]]" base-url="[[baseUrl]]" name="games"></xentha-games>
-              <xentha-profile user-id="[[userId]]" base-url="[[baseUrl]]" name="profile"></xentha-profile>
-        </iron-pages>
+      <div class="layout vertical main">
+        <app-header condenses reveals effects="waterfall">
+          <app-toolbar>
+            <iron-selector selected="{{routeData.page}}" attr-for-selected="name" class="navigation" role="navigation">
+                <span class="flex-1"></span>
+                <paper-item name="home">Home</paper-item>
+                <paper-item name="docs">Docs</paper-item>
+                <paper-item name="examples">Examples</paper-item>
+                <paper-item name="login" hidden$="[[loggedIn(userId)]]">Login</paper-item>
+                <paper-item name="profile" hidden$="[[!loggedIn(userId)]]" >Profile</paper-item>
+                <paper-item name="games" hidden$="[[!loggedIn(userId)]]" route="[[subroute]]">Games</paper-item>
+                <span class="flex"></span>
+                <paper-item  hidden$="[[!loggedIn(userId)]]" hidden$="[[!loggedIn(userId)]]" on-tap="logout">Logout</paper-item>
+            </iron-selector>
+          </app-toolbar>
+        </app-header>
+        <div class="content flex-1">
+          <iron-pages
+              selected="[[routeData.page]]"
+              attr-for-selected="name"
+              fallback-selection="404"
+              role="main">
+                <xentha-home user-id="[[userId]]" name="home"></xentha-home>
+                <xentha-login base-url="[[baseUrl]]" user-id="{{userId}}" name="login"></xentha-login>
+                <xentha-docs name="docs"></xentha-docs>
+                <xentha-examples name="examples"></xentha-examples>
+                <xentha-games user-id="[[userId]]" base-url="[[baseUrl]]" name="games"></xentha-games>
+                <xentha-profile user-id="[[userId]]" base-url="[[baseUrl]]" name="profile"></xentha-profile>
+          </iron-pages>
+        </div>
+        <div class="footer">
+          <a href="http://www.xentha.com">Xentha Gaming Console</a>
+        </div>
       </div>
     <paper-toast class="red" id="errorToast"></paper-toast>
   </template>
