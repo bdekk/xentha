@@ -166,10 +166,15 @@ module.exports = function (wss) {
             }
         });
 
+        /**
+          -identifier room.join
+          -param object {roomCode: String, name: String}
+          -return room.joined
+          -error room.joined.error
+        **/
         messages['room.join'] = function (data) {
             console.log('join', data);
             if (data.roomCode) {
-                //  io_room_controller.join(io.sockets, socket, data);
                 Room.findOne({
                     where: {
                         roomCode: data.roomCode
@@ -245,6 +250,10 @@ module.exports = function (wss) {
         }.bind(this);
 
         /**
+          -identifier room.leave
+          -return room.left
+          -error room.left.error
+
           Removes the socket from the room and removes the player data related to the socket.
           Sends a room.left response to the calling socsket and a room.player.left response to the rest of the room.
         **/
@@ -257,15 +266,22 @@ module.exports = function (wss) {
               roomdata.leave(socket);
               socket.sendData('room.left', {}); //explicit leave response to the client.
             } else {
-              socket.sendData("error", "Could not find player in room.");
+              socket.sendData("room.left.error", "Could not find player in room.");
             }
         }.bind(this);
 
+        /**
+          -identifier game.init
+          - param object {apiKey: String}
+          -return game.start
+          -error game.error
+
+          Call this method when the game is about to start (in a screen socket or itself.).
+          this method will set the game variables, name and signals the players and the game socket that we processed the initialization.
+          now the plyer and the screen can start showing the specific screens.
+        **/
         messages['game.init'] = function (data) {
           console.log('on message game init ', data);
-          // call this method when the game is about to start (in a screen socket or itself.).
-          // this method will set the game variables, name and signals the players and the game socket that we processed the initialization.
-          // now the plyer and the screen can start showing the specific screens.
           Game.findOne({
               where: {
                   apiKey: data.apiKey
@@ -289,12 +305,22 @@ module.exports = function (wss) {
           });
         }.bind(this);
 
+        /**
+          -identifier game.disconnect
+          -return game.disconnect
+
+          Removes the gamedata from the room in which the socket resides.
+        **/
         messages['game.disconnect'] = function (data) {
             roomdata.set(socket, "gameData", undefined);
             socket.broadcastToRoom('game.disconnect', {});
         }.bind(this);
 
         /**
+          -identifier game.score
+          -return game.score.created
+          -error game.score.error
+
             Saves score to the database of the specific game.
             Example:
                 socket.send('game.score', {
@@ -332,7 +358,12 @@ module.exports = function (wss) {
             });
         }.bind(this);
 
-        /** room create, usually done by the website. Upon gaming there will be a client host that is the one that decides (boss) **/
+        /**
+          -identifier room.create
+          -return room.created
+
+          room create, usually done by the website. Upon gaming there will be a client host that is the one that decides (boss)
+        **/
         messages['room.create'] = function (data) {
             Room.create({
                 name: data.name
@@ -351,9 +382,10 @@ module.exports = function (wss) {
             socket.sendTo(host, 'client.controls', data); //send  the host that the room is created.
         }.bind(this);
 
-
-        /** player events **/
-
+        /**
+          -identifier player.disconnect
+          -return player.disconnect (broadcast to room)
+        **/
         messages['player.disconnect'] = function (data) {
             socket.broadcastToRoom('player.disconnect', {}, {
                 exclude: true
