@@ -177,8 +177,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.set('route.path', '');
       },
       _routePageChanged: function(page) {
-        var page = page || 'home';
-        this._pageChanged(page);
+        if(!page || page === "") {
+          this.set('routeData.page', 'home');
+        } else {
+          this._pageChanged(page);
+        }
       },
       _userChanged: function(userId) {
             if(this.userId && this.routeData.page === 'login') {
