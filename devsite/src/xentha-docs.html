@@ -9,23 +9,101 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="xentha-docs">
   <template>
-    <style include="shared-styles">
+    <style include="shared-styles iron-flex iron-flex-alignment">
       :host {
         display: block;
 
         padding: 10px;
       }
+
+      paper-tabs paper-tab.iron-selected {
+        color: var(--app-primary-color);
+      }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color:  var(--app-primary-color);
+        margin-bottom: 1em;
+      }
+
+
+      paper-tabs paper-tab {
+        --paper-tab-ink: var(--app-primary-color);
+      }
+
+      paper-item {
+        color: var(--app-primary-color);
+      }
+
+      div.keys {
+        margin-right: 1em;
+        border-right: 1px solid var(--app-primary-color);
+      }
+
     </style>
       <h2>Developer docs</h2>
+      <paper-tabs selected="{{selected}}" no-slide>
+        <paper-tab>Client</paper-tab>
+        <paper-tab>Game</paper-tab>
+        <paper-tab>API</paper-tab>
+      </paper-tabs>
+      <iron-pages selected="[[selected]]">
+        <div class="layout horizontal">
+          <div class="layout vertical flex-1 keys">
+            <paper-item>room.joined</paper-item>
+            <paper-item>room.joined.error</paper-item>
+          </div>
+          <div class="layout vertical flex">
+            <h2>room.join</h2>
+            <h4>Params</h4>
+            <p><i>{roomCode: String, name: String}</i></p>
+
+            <h4>Return</h4>
+            <p><i>room.joined</i></p>
+
+            <h4>Error</h4>
+            <p><i>room.joined.error</i></p>
+
+            <h4>Code</h4>
+            <pre>Todo</pre>
+          </div>
+        </div>
+        <div class="layout horizontal">
+          <div class="layout vertical flex-1 keys">
+            <paper-item>player.send</paper-item>
+          </div>
+          <div class="layout vertical flex">
+            <h2>player.send</h2>
+            <h4>Params</h4>
+            <p><i>{id: String, data: Object}</i></p>
+
+            <h4>Return</h4>
+            <p><i>-</i></p>
+
+            <h4>Error</h4>
+            <p><i>player.send.error</i></p>
+
+            <h4>Code</h4>
+            <pre>Todo</pre>
+          </div>
+      </iron-pages>
   </template>
 
   <script>
     Polymer({
       is: 'xentha-docs',
+      properties: {
+        selected: {
+          type: Number,
+          value: 0
+        }
+      }
     });
   </script>
 </dom-module>

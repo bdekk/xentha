@@ -2,11 +2,12 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="xentha-games">
   <template>
-    <style include="shared-styles">
+    <style include="shared-styles iron-flex iron-flex-alignment">
       :host {
         display: block;
 
@@ -71,6 +72,7 @@
         on-error="_onGetGamesError">
     </iron-ajax>
       <h2>Games</h2>
+
       <template is="dom-repeat" items="[[games]]" as="game">
         <div class="flex horizontal game">
           <div class="flex-1">
@@ -85,9 +87,11 @@
               <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.url]]"></paper-input>
           </div>
       </template>
-
-      <paper-button hidden$="{{inEditMode(editMode)}}" on-tap="toggleEdit" class="blue">Edit</paper-button>
-      <paper-button hidden$="{{!inEditMode(editMode)}}" on-tap="save">Save</paper-button>
+      <div class="flex layout end">
+        <span class="flex"></span>
+        <paper-button hidden$="{{inEditMode(editMode)}}" on-tap="toggleEdit" class="blue">Edit</paper-button>
+        <paper-button hidden$="{{!inEditMode(editMode)}}" on-tap="save" class="">Save</paper-button>
+      </div>
 
   </template>
 
