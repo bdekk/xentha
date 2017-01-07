@@ -15,6 +15,10 @@
         padding: 10px 20px;
       }
 
+      paper-button {
+        margin-left: 0;
+      }
+
     </style>
     <iron-ajax
         method="POST"
@@ -33,30 +37,30 @@
         on-error="_onRegisterError">
     </iron-ajax>
 
-    <div class="card">
-        <template is="dom-if" if="[[!loggedIn()]]">
-            <paper-input  value="{{username}}" placeholder="Username">
-            </paper-input>
-            <paper-input type="password"  value="{{password}}" placeholder="Password">
-            </paper-input>
-            <paper-button class="blue" on-tap="doLogin" raised>Login</paper-button>
-            <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
-        </template>
 
-        <template is="dom-if" if="[[loggedIn()]]">
-            <p>You are already logged in [[user.username]]</p>
-            <paper-button class="blue" on-tap="doLogout" raised>Logout</paper-button>
-            <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
-        </template>
-    </div>
+    <h2>Login</h2>
+    <template is="dom-if" if="[[!loggedIn()]]">
+        <paper-input  value="{{username}}" placeholder="Username">
+        </paper-input>
+        <paper-input type="password"  value="{{password}}" placeholder="Password">
+        </paper-input>
+        <paper-button on-tap="doLogin" raised>Login</paper-button>
+        <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
+    </template>
+
+    <template is="dom-if" if="[[loggedIn()]]">
+        <p>You are already logged in</p>
+        <paper-button class="blue" on-tap="doLogout" raised>Logout</paper-button>
+        <!-- <paper-button class="green" on-tap="doRegister" raised>Register</paper-button> -->
+    </template>
   </template>
 
   <script>
     Polymer({
       is: 'xentha-login',
       properties: {
-          user: {
-              type: Object,
+          userId: {
+              type: String,
               notify: true
           },
           baseUrl: String,
@@ -64,7 +68,7 @@
           password: String
       },
       loggedIn: function() {
-          return !!this.user;
+          return !!this.userId;
       },
       doLogin: function() {
           this.$.loginAjax.url = this.baseUrl + "/users/login";
@@ -80,10 +84,10 @@
       },
 
       _onLogin: function(event) {
-          this.set('user', event.detail.response.user);
+          this.set('userId', event.detail.response.user.id);
       },
       doLogout: function(event) {
-          this.set('user', null);
+          this.set('userId', null);
       },
       _onLoginError: function(event) {
           this.fire('error', {"message": event.detail.error});

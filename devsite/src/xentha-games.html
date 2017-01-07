@@ -56,6 +56,10 @@
         border-bottom: 1px solid #eee;
         padding-top: 1em;
       }
+
+      paper-button {
+        margin: 0;
+      }
     </style>
 
     <iron-ajax
@@ -66,41 +70,40 @@
         on-response="_onGetGames"
         on-error="_onGetGamesError">
     </iron-ajax>
+      <h2>Games</h2>
+      <template is="dom-repeat" items="[[games]]" as="game">
+        <div class="flex horizontal game">
+          <div class="flex-1">
+            <img src="[[getGameImage(game.image)]]"></img>
+            <!-- <paper-input hidden$={{!inEditMode(editMode)}} label="image" value="[[game.image]]"></paper-input> -->
+          </div>
+          <div class="vertical flex-2">
+              <h3 hidden$={{inEditMode(editMode)}}>[[game.name]]</h3>
+              <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.name]]"></paper-input>
+              <p><strong>apiKey:</strong> [[game.apiKey]]</p>
+              <p hidden$={{inEditMode(editMode)}} ><strong>URL:</strong> <a  target="_blank" href="[[game.url]]/index.html">site</a> <a  target="_blank" href="[[game.url]]/client.html">client</a></p>
+              <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.url]]"></paper-input>
+          </div>
+      </template>
 
-    <div class="card">
-        <template is="dom-repeat" items="[[games]]" as="game">
-          <div class="flex horizontal game">
-            <div class="flex-1">
-              <img src="[[getGameImage(game.image)]]"></img>
-              <!-- <paper-input hidden$={{!inEditMode(editMode)}} label="image" value="[[game.image]]"></paper-input> -->
-            </div>
-            <div class="vertical flex-2">
-                <h3 hidden$={{inEditMode(editMode)}}>[[game.name]]</h3>
-                <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.name]]"></paper-input>
-                <p><strong>apiKey:</strong> [[game.apiKey]]</p>
-                <p hidden$={{inEditMode(editMode)}} ><strong>URL:</strong> <a  target="_blank" href="[[game.url]]/index.html">site</a> <a  target="_blank" href="[[game.url]]/client.html">client</a></p>
-                <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.url]]"></paper-input>
-            </div>
-        </template>
+      <paper-button hidden$="{{inEditMode(editMode)}}" on-tap="toggleEdit" class="blue">Edit</paper-button>
+      <paper-button hidden$="{{!inEditMode(editMode)}}" on-tap="save">Save</paper-button>
 
-        <paper-button hidden$="{{inEditMode(editMode)}}" on-tap="toggleEdit" class="blue">Edit</paper-button>
-        <paper-button hidden$="{{!inEditMode(editMode)}}" on-tap="save" class="green">Save</paper-button>
-    </div>
   </template>
 
   <script>
     Polymer({
       is: 'xentha-games',
       properties: {
-        user: {
-          type: Object
+        userId: {
+          type: String
         },
         games: Array,
         editMode: {type: Boolean, value: false }
       },
-      observers: ['userChanged(user)'],
-      userChanged: function(user) {
-        if(user) {
+      observers: ['userChanged(userId)'],
+      userChanged: function(userId) {
+        if(userId) {
           this.getGames();
         }
       },

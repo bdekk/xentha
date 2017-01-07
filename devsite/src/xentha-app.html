@@ -21,15 +21,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/app-storage/app-localstorage/app-localstorage-document.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="my-icons.html">
 
 <dom-module id="xentha-app">
   <template>
-    <style>
+    <style include="iron-flex iron-flex-alignment">
       :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
+        --app-primary-color: #E55151;
+        --app-secondary-color: #fff;
+        --app-text-color: black;
 
         display: block;
       }
@@ -38,27 +41,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       app-header {
         color: #fff;
-        background-color: var(--app-primary-color);
+        background-color: var(--app-secondary-color);
+        border-bottom: solid 1px #E55151;
       }
       app-header paper-icon-button {
         --paper-icon-button-ink-color: white;
       }
 
-      .drawer-list {
-        margin: 0 20px;
-      }
-
-      .drawer-list a {
-        display: block;
+      app-toolbar paper-item {
+        display: inline-block;
         padding: 0 16px;
         text-decoration: none;
-        color: var(--app-secondary-color);
+        color: var(--app-text-color);
         line-height: 40px;
       }
 
-      .drawer-list a.iron-selected {
-        color: black;
+      app-toolbar paper-item.iron-selected {
+        color: #E55151;
         font-weight: bold;
+      }
+
+      iron-selector.navigation {
+        display: flex;
+        width: 100%;
+        flex-wrap:wrap;
+      }
+
+      .content {
+        margin: 0 auto;
+        padding: 16px;
       }
 
 
@@ -68,7 +79,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <app-localstorage-document key="user" data="{{user}}"></app-localstorage-document>
+    <app-localstorage-document key="userId" data="{{userId}}"></app-localstorage-document>
     <app-location route="{{route}}"></app-location>
     <app-route
         route="{{route}}"
@@ -76,43 +87,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         data="{{routeData}}"
         tail="{{subroute}}"></app-route>
 
-    <app-drawer-layout fullbleed>
-      <!-- Drawer content -->
-      <app-drawer id="drawer">
-        <app-toolbar>Menu</app-toolbar>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="home" href="/home">Home</a>
-          <a name="docs" href="/docs">Docs</a>
-          <a name="login" href="/login">Login</a>
-          <a name="profile" href="/profile">Profile</a>
-          <a name="games" route="[[subroute]]" href="/games">Games</a>
-        </iron-selector>
-      </app-drawer>
-
-      <!-- Main content -->
-      <app-header-layout has-scrolling-region>
-
-        <app-header condenses reveals effects="waterfall">
-          <app-toolbar>
-            <paper-icon-button icon="xentha-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>[[page]]</div>
-
-          </app-toolbar>
-        </app-header>
-
+      <app-header condenses reveals effects="waterfall">
+        <app-toolbar>
+          <iron-selector selected="{{routeData.page}}" attr-for-selected="name" class="navigation" role="navigation">
+              <span style="flex: 1;"></span>
+              <paper-item name="home">Home</paper-item>
+              <paper-item name="docs">Docs</paper-item>
+              <paper-item name="login" hidden$="[[loggedIn(userId)]]">Login</paper-item>
+              <paper-item name="profile" hidden$="[[!loggedIn(userId)]]" >Profile</paper-item>
+              <paper-item name="games" hidden$="[[!loggedIn(userId)]]" route="[[subroute]]">Games</paper-item>
+              <span class="flex"></span>
+              <paper-item  hidden$="[[!loggedIn(userId)]]" hidden$="[[!loggedIn(userId)]]" on-tap="logout">Logout</paper-item>
+          </iron-selector>
+        </app-toolbar>
+      </app-header>
+      <div class="content">
         <iron-pages
             selected="[[routeData.page]]"
             attr-for-selected="name"
             fallback-selection="404"
             role="main">
-          <xentha-home user="[[user]]" name="home"></xentha-home>
-          <xentha-login base-url="[[baseUrl]]" user="{{user}}" name="login"></xentha-login>
-          <xentha-docs name="docs"></xentha-docs>
-          <xentha-games user="[[user]]" base-url="[[baseUrl]]" hidden$="[[!loggedIn()]]" name="games"></xentha-games>
-          <xentha-profile user="[[user]]" base-url="[[baseUrl]]" hidden$="[[!loggedIn()]]" name="profile"></xentha-profile>
+              <xentha-home user-id="[[userId]]" name="home"></xentha-home>
+              <xentha-login base-url="[[baseUrl]]" user-id="{{userId}}" name="login"></xentha-login>
+              <xentha-docs name="docs"></xentha-docs>
+              <xentha-games user-id="[[userId]]" base-url="[[baseUrl]]" name="games"></xentha-games>
+              <xentha-profile user-id="[[userId]]" base-url="[[baseUrl]]" name="profile"></xentha-profile>
         </iron-pages>
-      </app-header-layout>
-    </app-drawer-layout>
+      </div>
     <paper-toast class="red" id="errorToast"></paper-toast>
   </template>
 
@@ -121,38 +122,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       is: 'xentha-app',
 
       properties: {
-        page: {
-          type: String,
-          reflectToAttribute: true,
-          observer: '_pageChanged',
-        },
+        // page: {
+        //   type: String,
+          // reflectToAttribute: true,
+          // observer: '_pageChanged',
+        // },
         baseUrl: {
             type: String,
             value: "http://localhost:3000/api"
         },
-        user: { type: Object }
+        userId: {
+          type: String,
+          observer: "_userChanged",
+          value: null
+        }
       },
 
       observers: [
-        '_routePageChanged(routeData.page)',
-        '_userChanged(user)',
+        '_routePageChanged(routeData.page)'
       ],
       listeners: {
           'error': 'onError'
       },
-      loggedIn: function() {
-          return !!this.user;
+      loggedIn: function(userId) {
+          return !!this.userId;
+      },
+      logout: function() {
+          this.set('userId', null);
+          this.set('route.path', '');
       },
       _routePageChanged: function(page) {
-        this.page = page || 'home';
-
-        if (!this.$.drawer.persistent) {
-          this.$.drawer.close();
-        }
+        var page = page || 'home';
+        this._pageChanged(page);
       },
-      _userChanged: function(user) {
-            this.set('user', user);
-            if(this.user && this.routeData.page === 'login') {
+      _userChanged: function(userId) {
+            if(this.userId && this.routeData.page === 'login') {
                 this.set('route.path', '/home');
             }
       },
