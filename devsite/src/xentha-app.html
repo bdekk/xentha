@@ -115,7 +115,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-item name="examples">Examples</paper-item>
                 <paper-item name="login" hidden$="[[loggedIn(userId)]]">Login</paper-item>
                 <paper-item name="profile" hidden$="[[!loggedIn(userId)]]" >Profile</paper-item>
-                <paper-item name="games" hidden$="[[!loggedIn(userId)]]" route="[[subroute]]">Games</paper-item>
+                <paper-item name="games" hidden$="[[!loggedIn(userId)]]" base-url="[[baseUrl]]" route="[[subroute]]">Games</paper-item>
                 <span class="flex"></span>
                 <paper-item  hidden$="[[!loggedIn(userId)]]" hidden$="[[!loggedIn(userId)]]" on-tap="logout">Logout</paper-item>
             </iron-selector>

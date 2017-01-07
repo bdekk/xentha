@@ -61,6 +61,26 @@
       paper-button {
         margin: 0;
       }
+
+      .add-container {
+        max-height: 500px;
+        padding: 1em;
+
+      	overflow-y: hidden;
+      	transition-property: all;
+      	transition-duration: .5s;
+      	transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+        z-index: 100;
+      }
+
+      .add-container[hidden] {
+        max-height: 0;
+      }
+
+      .wrapper {
+          position: relative;
+      }
+
     </style>
 
     <iron-ajax
@@ -71,28 +91,42 @@
         on-response="_onGetGames"
         on-error="_onGetGamesError">
     </iron-ajax>
+
+      <iron-ajax
+          method="POST"
+          id="addGameAjax"
+          content-type="application/json"
+          handle-as="json"
+          on-response="_onGameAdded"
+          on-error="_onGameAddError">
+      </iron-ajax>
       <h2>Games</h2>
 
       <template is="dom-repeat" items="[[games]]" as="game">
         <div class="flex horizontal game">
           <div class="flex-1">
             <img src="[[getGameImage(game.image)]]"></img>
-            <!-- <paper-input hidden$={{!inEditMode(editMode)}} label="image" value="[[game.image]]"></paper-input> -->
+            <!-- <paper-input hidden$={{!isTrue(editMode)}} label="image" value="[[game.image]]"></paper-input> -->
           </div>
           <div class="vertical flex-2">
-              <h3 hidden$={{inEditMode(editMode)}}>[[game.name]]</h3>
-              <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.name]]"></paper-input>
+              <h3 hidden$={{isTrue(editMode)}}>[[game.name]]</h3>
+              <paper-input hidden$={{!isTrue(editMode)}} value="[[game.name]]"></paper-input>
               <p><strong>apiKey:</strong> [[game.apiKey]]</p>
-              <p hidden$={{inEditMode(editMode)}} ><strong>URL:</strong> <a  target="_blank" href="[[game.url]]/index.html">site</a> <a  target="_blank" href="[[game.url]]/client.html">client</a></p>
-              <paper-input hidden$={{!inEditMode(editMode)}} value="[[game.url]]"></paper-input>
+              <p hidden$={{isTrue(editMode)}} ><strong>URL:</strong> <a  target="_blank" href="[[game.url]]/index.html">site</a> <a  target="_blank" href="[[game.url]]/client.html">client</a></p>
+              <paper-input hidden$={{!isTrue(editMode)}} value="[[game.url]]"></paper-input>
           </div>
       </template>
       <div class="flex layout end">
         <span class="flex"></span>
-        <paper-button hidden$="{{inEditMode(editMode)}}" on-tap="toggleEdit" class="blue">Edit</paper-button>
-        <paper-button hidden$="{{!inEditMode(editMode)}}" on-tap="save" class="">Save</paper-button>
+        <paper-button hidden$="{{isTrue(editMode)}}" on-tap="toggleEdit" class="blue">Edit</paper-button>
+        <paper-button hidden$="{{!isTrue(editMode)}}" on-tap="save" class="">Save</paper-button>
+        <paper-button on-tap="showAdd" class="">Add</paper-button>
       </div>
-
+      <div hidden$="[[!isTrue(addMode)]]" class="add-container">
+        <paper-input value="{{newGame.name}}" label="name"></paper-input>
+        <paper-input value="{{newGame.url}}" label="url"></paper-input>
+        <paper-button on-tap="add">Add</paper-button>
+      </div>
   </template>
 
   <script>
@@ -103,7 +137,10 @@
           type: String
         },
         games: Array,
-        editMode: {type: Boolean, value: false }
+        editMode: {type: Boolean, value: false },
+        newGame: {type: Object, value: {}},
+        addMode: { type: Boolean, value: false },
+        baseUrl: { type: String }
       },
       observers: ['userChanged(userId)'],
       userChanged: function(userId) {
@@ -120,6 +157,22 @@
       _onGetGamesError: function(event) {
         this.fire('error', event.detail.error);
       },
+      showAdd: function() {
+        this.set('addMode', !this.addMode);
+      },
+      add: function() {
+        if(this.newGame.name && this.newGame.url) {
+          this.$.addGameAjax.url = this.baseUrl + '/games';
+          this.$.addGameAjax.body = JSON.stringify({"game": this.newGame});
+          this.$.addGameAjax.generateRequest();
+
+        }
+      },
+      _onGameAdded: function(event) {
+        this.set('newGame', {});
+        this.set('addMode', false);
+        this.getGames();
+      },
       getGames: function() {
           this.$.gamesAjax.url = this.baseUrl + "/games";
           // this.$.gamesAjax.body = JSON.stringify({"user": {"username": this.username, "password": this.password}});
@@ -131,8 +184,8 @@
       save: function() {
         this.toggleEdit();
       },
-      inEditMode: function(editMode) {
-        return editMode;
+      isTrue: function(boolean) {
+        return boolean;
       }
     });
   </script>
