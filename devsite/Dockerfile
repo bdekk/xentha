@@ -20,6 +20,6 @@ COPY . $HOME/devsite
 RUN chown -R app:app $HOME/*
 USER app
 
-EXPOSE 5000
+EXPOSE 8080
 
 CMD ["polymer", "serve"]
