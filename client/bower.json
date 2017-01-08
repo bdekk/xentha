@@ -1,0 +1,25 @@
+{
+  "name": "client",
+  "description": "Client for the Xentha gaming api",
+  "main": "index.js",
+  "authors": [
+    "Bram Dekker"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/bdekk/xentha",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pixi.js": "^3.0.11",
+    "socket.io-client": "^1.4.8",
+    "socket.io": "^1.4.8",
+    "jquery": "^3.1.0"
+  }
+}
+

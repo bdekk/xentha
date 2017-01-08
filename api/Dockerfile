@@ -1,4 +1,4 @@
-FROM node:4.3.2
+FROM node:7.2.0
 
 RUN useradd --user-group --create-home --shell /bin/false app &&\
   npm install --global npm@3.7.5
