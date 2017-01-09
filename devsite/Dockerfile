@@ -7,16 +7,17 @@ RUN useradd --user-group --create-home --shell /bin/false app &&\
 
 ENV HOME=/home/app
 
-COPY package.json bower.json $HOME/devsite/
+COPY package.json polymer.json bower.json $HOME/devsite/
 RUN chown -R app:app $HOME/*
 
 USER app
 WORKDIR $HOME/devsite
 RUN npm install
 RUN bower install
+RUN polymer build
 
 USER root
-COPY . $HOME/devsite
+COPY . $HOME/devsite/build/bundled
 RUN chown -R app:app $HOME/*
 USER app
 
