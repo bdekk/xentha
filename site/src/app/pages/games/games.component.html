@@ -1,14 +1,15 @@
 <section>
-    <div class="mdl-grid" *ngIf="games && games.length > 0">
-        <div *ngFor="let game of games; let i = index" class="mdl-cell mdl-cell--3-col" style="position:relative;" [ngClass]="{'selected': selected == i}">
-            <i style="display: none;" class="material-icons">done</i>
-            <div [ngStyle]="{'background': 'url(' + constants.url + game.image + ') no-repeat #F44336'}" class="mdl-card game-card mdl-shadow--4dp">
-                <div class="mdl-card__title mdl-card--expand">
-                    <h2 class="mdl-card__title-text">{{game.name}}</h2>
-                </div>
-                <div class="mdl-card__supporting-text">{{game.description}}</div>
-            </div>
-        </div>
-    </div>
-    <h4 class="text-center" *ngIf="games && games.length == 0">No games found.</h4>
+  <h2 class="text-center">Games</h2>
+  <div class="mdl-grid" *ngIf="games && games.length > 0">
+      <div *ngFor="let game of games; let i = index" class="mdl-cell mdl-cell--3-col" style="position:relative;" [ngClass]="{'selected': selected == i}">
+          <i style="display: none;" class="material-icons">done</i>
+          <div [ngStyle]="{'background': 'url(' + constants.url + game.image + ') no-repeat #F44336'}" class="mdl-card game-card mdl-shadow--4dp">
+              <div class="mdl-card__title mdl-card--expand">
+                  <h2 class="mdl-card__title-text">{{game.name}}</h2>
+              </div>
+              <div class="mdl-card__supporting-text">{{game.description}}</div>
+          </div>
+      </div>
+  </div>
+  <h4 class="text-center" *ngIf="games && games.length == 0">No games found.</h4>
 </section>

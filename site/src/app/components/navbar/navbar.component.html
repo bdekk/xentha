@@ -7,15 +7,11 @@
     <strong>{{data | date: format}}</strong>
 
     <div class="mdl-layout-spacer"></div>
-    <img src="assets/images/xentha_logo.png" class="navbar-image"/>
+    <!-- <img src="/assets/images/xentha_logo.png" class="navbar-image"/> -->
 
     <div class="mdl-layout-spacer"></div>
     <!-- Navigation -->
     <nav *ngIf="room" class="mdl-navigation">
-      <!-- <a class="mdl-navigation__link" [routerLink]="['/']">HOME</a> -->
-      <!-- <a class="mdl-navigation__link" [routerLink]="['/games']">PLAY</a> -->
-      <!-- <a class="mdl-navigation__link" [routerLink]="['/docs']">DOCS</a> -->
-      <!-- <a class="mdl-navigation__link" [hidden]="authService.getUser()" [routerLink]="['/login']">LOGIN/REGISTER</a> -->
 
       <span *ngIf="room.players" class="mdl-navigation__link">
           <i class="material-icons">face</i>
