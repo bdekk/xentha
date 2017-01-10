@@ -12,9 +12,10 @@ RUN chown -R app:app $HOME/*
 USER app
 WORKDIR $HOME/site
 RUN npm install
+RUN ng build
 
 USER root
-COPY . $HOME/site
+COPY . $HOME/site/dist
 RUN chown -R app:app $HOME/*
 USER app
 
