@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="shared-styles.html">
 
@@ -32,8 +33,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-right: 1px solid var(--app-primary-color);
       }
 
+      a {
+        text-decoration: none;
+      }
+
+      paper-button.right {
+        float: right;
+      }
+
     </style>
-      <h2>Developer docs</h2>
+
+      <div class="layout horizontal">
+        <h2>Developer docs</h2>
+        <span class="flex"></span>
+        <a href="https://github.com/bdekk/xentha/tree/master/api/public/assets">
+          <paper-button raised>Source code</paper-button>
+        </a>
+      </div>
       <paper-tabs selected="{{selected}}" no-slide>
         <paper-tab>Client</paper-tab>
         <paper-tab>Game</paper-tab>
@@ -78,7 +94,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <h4>Code</h4>
             <pre>Todo</pre>
           </div>
+        </div>
       </iron-pages>
+
   </template>
 
   <script>
