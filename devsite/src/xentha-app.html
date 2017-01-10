@@ -116,6 +116,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-item name="login" hidden$="[[loggedIn(userId)]]">Login</paper-item>
                 <paper-item name="profile" hidden$="[[!loggedIn(userId)]]" >Profile</paper-item>
                 <paper-item name="games" hidden$="[[!loggedIn(userId)]]" base-url="[[baseUrl]]" route="[[subroute]]">Games</paper-item>
+                <paper-item name="contact">Contact</paper-item>
                 <span class="flex"></span>
                 <paper-item  hidden$="[[!loggedIn(userId)]]" hidden$="[[!loggedIn(userId)]]" on-tap="logout">Logout</paper-item>
             </iron-selector>
@@ -133,6 +134,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <xentha-examples name="examples"></xentha-examples>
                 <xentha-games user-id="[[userId]]" base-url="[[baseUrl]]" name="games"></xentha-games>
                 <xentha-profile user-id="[[userId]]" base-url="[[baseUrl]]" name="profile"></xentha-profile>
+                <xentha-contact name="contact"></xentha-contact>
           </iron-pages>
         </div>
         <div class="footer">
