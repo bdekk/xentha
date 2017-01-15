@@ -1,0 +1,36 @@
+{
+	"docs": [{
+		"component": "Client",
+		"data": [{
+			"key": "room.joined",
+			"data": {
+				"params": "{roomCode: String, name: String}",
+				"return": "room.joined",
+				"error": "room.joined.error",
+				"code": "Todo"
+			}
+		}, {
+			"key": "player.send",
+			"data": {
+				"params": "{id: String, data: Object}",
+				"return": "-",
+				"error": "player.send.error",
+				"code": "Todo"
+			}
+		}]
+	}, {
+		"component": "Game",
+		"data": [{
+			"key": "game.start",
+			"data": {
+				"params": "{}",
+				"return": "",
+				"error": "",
+				"code": "Todo"
+			}
+		}]
+	}, {
+		"component": "API",
+		"data": [{}]
+	}]
+}
