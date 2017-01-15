@@ -22,13 +22,12 @@
         margin-top: 5em;
       }
 
-      .subscribe input[type=submit] {
+      .subscribe .input-container.button {
         color: #FFF;
         background-color: #2196F3;
-
       }
 
-      .subscribe input {
+      .subscribe .input-container {
         font-weight: 500;
         font-size: 14px;
         line-height: 18px;
@@ -85,6 +84,10 @@
         flex:2;
       }
 
+      a {
+        text-decoration: none;
+      }
+
     </style>
   </head>
   <body>
@@ -100,10 +103,14 @@
         <h3>Subscribe to the newsletter and be on of our early adopters.</h3>
 
         <form id="form" action="https://getsimpleform.com/messages?form_api_token=99a2f23f506e7d90b80e787da24a56f4" method="post">
-          <input name="emailaddress" type="text" placeholder="emailaddress"></input>
-          <input type="submit" value="Subscribe" />
+          <input class="input-container" name="emailaddress" type="text" placeholder="emailaddress"></input>
+          <input class="input-container button" type="submit" value="Subscribe" />
         </form>
         <p>Thank you. - Bram</p>
+      </div>
+      <div class="subscribe">
+        <h3>Any questions? Join us on Slack</h3>
+        <a class="input-container button" href="https://xentha.slack.com"/>XENTHA SLACK</a>
       </div>
     </div>
   </body>
