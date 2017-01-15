@@ -155,7 +155,7 @@
         return games.length === 0;
       },
       getGameImage: function(imageSrc) {
-        return imageSrc || 'images/game.png';
+        return this.baseUrl.replace('/api', '') + imageSrc || 'images/game.png';
       },
       _onGetGames: function(event) {
         this.games = event.detail.response.games;

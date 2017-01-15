@@ -3,7 +3,6 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="code-block.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="xentha-examples">
@@ -23,78 +22,6 @@
     </style>
 
     <h2>Examples</h2>
-    <div class="layout horizontal">
-      <div class="flex-1">
-        <img src="[[getGameImage(game.image)]]"></img>
-        <!-- <paper-input hidden$={{!inEditMode(editMode)}} label="image" value="[[game.image]]"></paper-input> -->
-      </div>
-      <div class="vertical flex-2">
-
-          <h3>Folder structure</h3>
-          <pre>
-            index.html <!-- game -->
-            client.html <!-- client -->
-          </pre>
-
-          <h3>Imports</h3>
-          <p>index.html</p>
-          <code-block language="html">
-            <script src="http://www.xentha.com/assets/x-game-iframe.js"></script>
-          </code-block>
-
-          <p>client.html</p>
-          <code-block language="html">
-            <script src="http://www.xentha.com/assets/x-client-iframe.js"></script>
-          </code-block>
-
-          <h3>Callbacks</h3>
-          <p>index.html</p>
-          <code-block language="html">
-            <script>
-              XENTHA.apiKey = "[[APIKEY]]";  // enter the apiKey that was generated while registering your game (http://developers.xentha.com/games)
-              XENTHA.callbacks['player.joined']= 'playerJoined';  // bind the player.joined id to the playerJoined function
-              XENTHA.callbacks['player.leave']  = 'playerLeft';
-              XENTHA.connect();
-            </script>
-          </code-block>
-
-          <p>client.html</p>
-          <code-block language="html">
-            <script>
-                XENTHA.callbacks['game.nextQuestion']= 'nextQuestion'; // bind the game.nextQuestion id to the nextQuestion function
-                XENTHA.callbacks['game.timeUp']= 'timeUp';
-                XENTHA.connect();
-            </script>
-          </code-block>
-
-          <h3>Receiving events</h3>
-
-          <code-block language="javascript">
-            XENTHA.on('playerJoined', function (data) {
-                var player = data.data.player;
-                this.players.push({"xentha": player, "score": 0});
-            }.bind(this));
-          </code-block>
-
-          <code-block language="javascript">
-            XENTHA.on('playerLeft', function (event) {
-              this.players = this.players.filter(function(player) {
-                  return player.xentha.id !== event.player;
-              });
-
-              if(this.players.length === 0) {
-                XENTHA.send('game.disconnect', {});
-              }
-            }.bind(this));
-          </code-block>
-
-          <h3>Sending events</h3>
-
-          <code-block language="javascript">
-            XENTHA.send("game.nextQuestion", {"question": nQuestion, "answers": answers});
-          </code-block>
-      </div>
-    </div>
   </template>
 
   <script>
