@@ -20,7 +20,6 @@ Teams.Game.prototype = {
     this.propsLayer = this.map.createLayer('backgroundLayer2'); //paths , water , sand
     this.blockedLayer = this.map.createLayer('blockedLayer'); // blocking obstacles.
     this.obstacleLayer = this.map.createLayer('obstacleBackground'); // action triggers.
-
     this.game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
 
     var windowWidth = (window.innerWidth * window.devicePixelRatio);
