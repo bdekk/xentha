@@ -82,10 +82,10 @@ Bussen.Preload.prototype = {
   create: function() {
     this.game.cards = [];
     this.game.cards.back = 'card_back';
-    var spades = ['cardSpades2', 'cardSpades3', 'cardSpades4', 'cardSpades5', 'cardSpades6', 'cardSpades7', 'cardSpades8', 'cardSpades9', 'cardSpades10', 'cardSpadesJ', 'cardSpadesQ', 'cardSpadesK'];
-    var hearts = ['cardHearts2', 'cardHearts3', 'cardHearts4', 'cardHearts5', 'cardHearts6', 'cardHearts7', 'cardHearts8', 'cardHearts9', 'cardHearts10', 'cardHeartsJ', 'cardHeartsQ', 'cardHeartsK'];
-    var clubs = ['cardClubs2', 'cardClubs3', 'cardClubs4', 'cardClubs5', 'cardClubs6', 'cardClubs7', 'cardClubs8', 'cardClubs9', 'cardClubs10', 'cardClubsJ', 'cardClubsQ', 'cardClubsK'];
-    var diamonds = ['cardDiamonds2', 'cardDiamonds3', 'cardDiamonds4', 'cardDiamonds5', 'cardDiamonds6', 'cardDiamonds7', 'cardDiamonds8', 'cardDiamonds9', 'cardDiamonds10', 'cardDiamondsJ', 'cardDiamondsQ', 'cardDiamondsK'];
+    var spades = [{value: 2, sprite: 'cardSpades2'}, {value: 3, sprite: 'cardSpades3'}, {value: 4, sprite: 'cardSpades4'}, {value: 5, sprite: 'cardSpades5'}, {value: 6, sprite: 'cardSpades6'}, {value: 7, sprite: 'cardSpades7'}, {value: 8, sprite: 'cardSpades8'}, {value: 9, sprite: 'cardSpades9'}, {value: 10, sprite: 'cardSpades10'}, {value: 11, sprite: 'cardSpadesJ'}, {value: 12, sprite: 'cardSpadesQ'}, {value: 13, sprite: 'cardSpadesK'}];
+    var hearts = [{value: 2, sprite: 'cardHearts2'}, {value: 3, sprite: 'cardHearts3'}, {value: 4, sprite: 'cardHearts4'}, {value: 5, sprite: 'cardHearts5'}, {value: 6, sprite: 'cardHearts6'}, {value: 7, sprite: 'cardHearts7'}, {value: 8, sprite: 'cardHearts8'}, {value: 9, sprite: 'cardHearts9'}, {value: 10, sprite: 'cardHearts10'}, {value: 11, sprite: 'cardHeartsJ'}, {value: 12, sprite: 'cardHeartsQ'}, {value: 13, sprite: 'cardHeartsK'}];
+    var clubs = [{value: 2, sprite: 'cardClubs2'}, {value: 3, sprite: 'cardClubs3'}, {value: 4, sprite: 'cardClubs4'}, {value: 5, sprite: 'cardClubs5'}, {value: 6, sprite: 'cardClubs6'}, {value: 7, sprite: 'cardClubs7'}, {value: 8, sprite: 'cardClubs8'}, {value: 9, sprite: 'cardClubs9'}, {value: 10, sprite: 'cardClubs10'}, {value: 11, sprite: 'cardClubsJ'}, {value: 12, sprite: 'cardClubsQ'}, {value: 13, sprite: 'cardClubsK'}];
+    var diamonds = [{value: 2, sprite: 'cardDiamonds2'}, {value: 3, sprite: 'cardDiamonds3'}, {value: 4, sprite: 'cardDiamonds4'}, {value: 5, sprite: 'cardDiamonds5'}, {value: 6, sprite: 'cardDiamonds6'}, {value: 7, sprite: 'cardDiamonds7'}, {value: 8, sprite: 'cardDiamonds8'}, {value: 9, sprite: 'cardDiamonds9'}, {value: 10, sprite: 'cardDiamonds10'}, {value: 11, sprite: 'cardDiamondsJ'}, {value: 12, sprite: 'cardDiamondsQ'}, {value: 13, sprite: 'cardDiamondsK'}];
 
     this.game.cards.deck = spades.concat(hearts, clubs, diamonds);
 
