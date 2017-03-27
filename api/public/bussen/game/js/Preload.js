@@ -15,6 +15,7 @@ Bussen.Preload.prototype = {
     this.load.image('start_button', 'assets/img/game/start_button.png');
     this.load.image('rect_players', 'assets/img/game/rect_players.png');
     this.load.image('bussen_logo', 'assets/img/game/bussen.png');
+    this.load.image('background', 'assets/img/background.png');
     this.load.image('chip', 'assets/img/game/chipGreen.png');
 
     this.load.image('card_back', 'assets/img/cards/cardBack_red3.png');

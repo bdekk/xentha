@@ -5,8 +5,10 @@ Bussen.Game = function(){};
 Bussen.Game.prototype = {
   preload: function() {
     this.game.world.alpha = 1;
+    this.game.add.tileSprite(0, 0, 800, 600, 'background');
     // this.backgroundSound = this.game.add.audio('background');
     // this.backgroundSound.loopFull(0.4);
+
     this.game.players = [{"name": "Bram", cards: []}, {"name": "Jarno", cards: []}, {"name": "Rutger", cards: []}, {"name": "Chiel", cards: []}];
     this.game.players = this.addPositions(this.game.players);
 
@@ -30,8 +32,8 @@ Bussen.Game.prototype = {
       deck_sprite.scale.set(0.4);
       deck_sprite.anchor.set(0.5);
 
-      round_text = this.game.add.text(10, 10, "Round: " + this.rounds[this.round], {"fill": "#fff"});
-      round_text.anchor.setTo(0, 0);
+      // round_text = this.game.add.text(10, 10, "Round: " + this.rounds[this.round], {"fill": "#fff"});
+      // round_text.anchor.setTo(0, 0);
 
       this.drawPlayers(this.game.players);
 
@@ -85,6 +87,16 @@ Bussen.Game.prototype = {
       }
       return players;
   },
+  drawRoundIcons: function(rounds, round) {
+      for(var i = 0 ; i < round) {
+        var x = 0 + i * 10;
+        var starSprite = this.game.add.sprite(x, 10, "star");
+        starSprite.scale.set(0.2);
+        starSprite.anchor.set(0);
+        var roundText = this.game.add.text(x, 10, "Round: " + rounds[this.round], {"font": "10px arial", "fill": "#fff"});
+        roundText.anchor.set(0);
+      }
+  },
   drawPlayers: function(players) {
       for(var i = 0; i < players.length; i++) {
           var player = players[i];
@@ -126,6 +138,9 @@ Bussen.Game.prototype = {
           this.drawPlayerCards(player);
           this.drawPlayerAnswer(player);
       }
+
+      // draw round
+      this.drawRoundIcons(this.rounds, this.round);
 
       // draw active player chip
       this.activePlayerChip.position.set(this.game.players[this.activePlayer].ui.position.x, this.game.players[this.activePlayer].ui.position.y + 70);
