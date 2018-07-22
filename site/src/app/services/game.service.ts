@@ -56,6 +56,7 @@ export class GameService {
 
   public delete = (id: number): Observable<boolean> => {
       return this.http.delete(this.url + id)
+          .map((response: Response) => <boolean>response.json().success)
           .catch(this.handleError);
   }
 
