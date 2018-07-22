@@ -1,7 +1,7 @@
 module.exports = {
     entry: "./server.js",
     output: {
-        filename: "./dist/bundle.js",
+        filename: "bundle.js",
     },
     mode: 'development',
     // Enable sourcemaps for debugging webpack's output.

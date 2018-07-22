@@ -5,9 +5,11 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha",
-    "build": "webpack"
+    "build": "webpack",
+    "start": "tsc ./server.ts && nodemon ./server.js",
+    "start-bundle": "node dist/bundle.js"
   },
-  "author": "",
+  "author": "Bram Dekker",
   "license": "BSD-2-Clause",
   "dependencies": {
     "@types/body-parser": "^1.17.0",

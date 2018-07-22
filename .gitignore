@@ -1,6 +1,7 @@
 node_modules/
 documentation/build/
 api/node_modules/
+api/dist/
 site/node_modules/
 client/bower_components/
 client/node_modules/
