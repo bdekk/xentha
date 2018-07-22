@@ -10,10 +10,8 @@ var upload = multer({
 
 router.get('/', function(req, res, next) {
 	return games_controller.get(req, res, next);
-//	res.send('Rooms')
 })
 
-// Car models page
 router.get('/:id', function(req, res, next) {
 	return games_controller.getOne(req, res, next);
 })

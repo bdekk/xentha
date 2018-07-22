@@ -11,7 +11,6 @@ router.get('/:roomId', function(req, res, next) {
 	return room_controller.getOne(req, res, next);
 })
 
-// Car models page
 router.post('/', function(req, res, next) {
 	return room_controller.create(req, res, next);
 })

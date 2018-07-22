@@ -111,8 +111,7 @@ module.exports = function (wss) {
         **/
         socket.sendTo = function (socketId, id, data) {
             var hasSended = false;
-
-            var hostSocket = wss.clients.find(function (client) {
+            var hostSocket = Array.from(wss.clients).find(function (client) {
                 return client.id == socketId;
             });
 

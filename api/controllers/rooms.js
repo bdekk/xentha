@@ -3,7 +3,7 @@ var User = require('../models').User;
 var Room = require('../models').Room;
 
 methods.get = function(req, res, next) {
-	Room.find({}).then(function(rooms) {
+	Room.findAll().then(function(rooms) {
 		return res.send({rooms: rooms});
 	});
 }
@@ -28,8 +28,13 @@ methods.getOne = function(req, res, next) {
 }
 
 methods.create = function(req, res, next) {
-	console.log(req.body);
-	if(req.body.name) {
+	if(req.body.room) {
+		Room.create(req.body.room).then(function(room) {
+			return res.send({room: room});
+		});
+	}
+	//backwards compatibility.
+	 else if(req.body.name) {
 		Room.create({name: req.body.name}).then(function(room) {
 			return res.send({room: room});
 		});

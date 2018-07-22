@@ -22,4 +22,8 @@ router.post('/login', function(req, res, next) {
 	return user_controller.login(req, res, next);
 })
 
+router.delete('/:userId', function (req, res, next) {
+  return user_controller.delete(req,res,next);
+})
+
 module.exports = router
