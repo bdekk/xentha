@@ -1,5 +1,5 @@
-var app = require('./app');
-var models = require("./models");
+var app = require('./src/app/app');
+var models = require("./src/app/models");
 
 //http server with sockets.
 //var ioserver = require('./ioserver');
@@ -11,7 +11,7 @@ var wss = new WebSocketServer({ server: server })
 // io.sockets.on('connection', function ( socket ) {
 //   console.log('client connected ', socket.id);
 // });
-io = require('./ioserver')(wss);
+io = require('./src/app/ioserver')(wss);
 
 models.sequelize.sync().then(function () {
   server.listen(app.get('port'), function() {
